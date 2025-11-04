@@ -17,6 +17,8 @@ public class Profile {
     }
 
     // Finds all notifications for the chosen profile
+    //Make sure any accepted invites are updated appropriately on the database,
+    //not just the local variable
     public ArrayList<Notif> getNotifs(ArrayList<Notif> notifs) {
         ArrayList<Notif> myNotifs = new ArrayList<Notif>();
         for(Notif i : notifs){
@@ -25,6 +27,19 @@ public class Profile {
             }
         }
         return myNotifs;
+    }
+
+    //find organizer's event if it exists
+    //make sure that any actions done to this event are done on the database,
+    //not just the local variable
+    public Event getMyEvent(ArrayList<Event> events) {
+        for(Event i : events){
+            if(i.getOwner().getGUID().equals(this.GUID)){
+                return i;
+            }
+        }
+        //return null if no event found
+        return null;
     }
 
     public String getGUID() {
