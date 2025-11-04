@@ -43,4 +43,10 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="button_event_action">Join</string>
+    <string name="view_event">View</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_date">--/--/----</string>
+    <string name="event_time">--:-- - --:--</string>
+    <string name="event_status">Closes in x days</string>
 </resources>
