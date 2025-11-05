@@ -1,5 +1,8 @@
 package com.example.shopping_basket;
 
+/**
+ * Notif subclass for invites specifically
+ */
 public class Invite extends Notif{
     private boolean responded;
 
@@ -8,11 +11,14 @@ public class Invite extends Notif{
         responded = false;
     }
 
+    /**
+     * This method is used to set the indictor that a response has been given
+     */
     public void respond(){
         responded = true;
     }
 
-    public boolean isResponded() {
+    public boolean getResponded() {
         return responded;
     }
 

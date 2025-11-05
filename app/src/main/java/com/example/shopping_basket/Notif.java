@@ -2,6 +2,10 @@ package com.example.shopping_basket;
 
 import java.util.Calendar;
 
+/**
+ * This class defines a notification sent to a user
+ * Named to avoid conflict with existing Notification class
+ */
 public class Notif {
     // target is GUID of profile notif is sent to
     private String target;

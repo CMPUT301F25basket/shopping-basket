@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
+/**
+ * This class defines a user created event
+ * and tracks all registrants
+ */
 public class Event {
     private Profile owner;
     private String name;
@@ -27,8 +31,17 @@ public class Event {
         this.maxReg = maxReg;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.waitingList = new ArrayList<Profile>();
+        this.inviteList = new ArrayList<Profile>();
+        this.enrollList = new ArrayList<Profile>();
+        this.cancelList = new ArrayList<Profile>();
     }
 
+    /**
+     * this method adds the given profile to the event waiting list
+     * @param profile
+     *     profile to be added
+     */
     public void joinEvent(Profile profile){
         //check if waiting list is at capacity
         if((waitingList.size() >= maxReg) && (maxReg != 0)){
@@ -55,6 +68,12 @@ public class Event {
         waitingList.add(profile);
     }
 
+    /**
+     * This method is for removing a user that cancels their registration
+     * from the waiting list and placing them in the cancelled list
+     * @param profile
+     *     profile to be moved
+     */
     public void leaveEvent(Profile profile){
         //check that user is in waiting list
         for(int i = 0; i < waitingList.size(); i++){
@@ -69,37 +88,57 @@ public class Event {
         //**maybe return 1 on success, -1 on fail**
     }
 
-
+    /**
+     * This method runs the lottery to choose users in the waiting list
+     * up to the max number desired
+     * Functions as long as there is empty slots to fill,
+     * can be called multiple times
+     * @return
+     *     Array of invites to be added to database
+     */
     //Run lottery and notify winners with invites
-    public void runLottery(){
+    public ArrayList<Invite> runLottery(){
         int slots = selectNum - (inviteList.size() + enrollList.size());
         //account for possible errors with altered selectNum value
         if(slots <= 0){
             //return app error that all slots are currently filled
-            return;
+            return null;
         }
-        //if waiting list is empty, return
+        //if waiting list is empty, return null
         if(waitingList.isEmpty()){
-            return;
+            return null;
         }
+
+        ArrayList<Invite> invites = new ArrayList<Invite>();
+        String message = "You have been invited to enroll in " + name;
         //if there are enough slots for everyone in the lottery, simply take them all
-        ArrayList<Profile> newInvite = new ArrayList<Profile>();
         if(slots >= waitingList.size()){
-            newInvite.addAll(waitingList);
             inviteList.addAll(waitingList);
+            for(Profile i : waitingList){
+                invites.add(new Invite(i.getGUID(), message));
+            }
             waitingList.clear();
-            return;
+            return invites;
         }
+
         //otherwise commence lottery
         Random lottery = new Random();
         int winner;
         for(int i = 0; i < slots; i++){
             winner = lottery.nextInt(waitingList.size());
             inviteList.add(waitingList.get(winner));
+            invites.add(new Invite(waitingList.get(winner).getGUID(), message));
             waitingList.remove(winner);
         }
+        return invites;
     }
 
+    /**
+     * This method moves a profile from the waiting list to the enroll list
+     * when a user accepts an invite
+     * @param profile
+     *     profile to move
+     */
     //call on accept by entrant
     public void enroll(Profile profile){
         //check that user was invited and was not uninvited
@@ -115,6 +154,12 @@ public class Event {
         //**maybe return 1 on success, -1 on fail**
     }
 
+    /**
+     * this method moves invited profiles from the waiting list to the cancelled list
+     * either due to a user rejecting an invite, or the organizer removing them
+     * @param profile
+     *     profile t be moved
+     */
     //call on decline by entrant or cancelled invitation by organizer
     public void decline(Profile profile){
         //check that user was invited
@@ -130,6 +175,13 @@ public class Event {
         //**maybe return 1 on success, -1 on fail**
     }
 
+    /**
+     * This methods sends a general notifications to all profiles in the waiting list
+     * @param string
+     *     message to be sent in notification
+     * @return
+     *     array of notif objects to be added to database
+     */
     //Create and return array of targeted notifications to be added to database
     //For waiting list registrants
     public ArrayList<Notif> notifyWaiting(String string){
@@ -140,6 +192,13 @@ public class Event {
         return notifyList;
     }
 
+    /**
+     * This methods sends a general notifications to all profiles in the invite list
+     * @param string
+     *     message to be sent in notification
+     * @return
+     *     array of notif objects to be added to database
+     */
     //Create and return array of targeted notifications to be added to database
     //For invited registrants
     public ArrayList<Notif> notifyInvited(String string){
@@ -150,6 +209,13 @@ public class Event {
         return notifyList;
     }
 
+    /**
+     * This methods sends a general notifications to all profiles in the enrolled list
+     * @param string
+     *     message to be sent in notification
+     * @return
+     *     array of notif objects to be added to database
+     */
     //Create and return array of targeted notifications to be added to database
     //For enrolled registrants
     public ArrayList<Notif> notifyEnrolled(String string){
@@ -160,6 +226,13 @@ public class Event {
         return notifyList;
     }
 
+    /**
+     * This methods sends a general notifications to all profiles in the cancelled list
+     * @param string
+     *     message to be sent in notification
+     * @return
+     *     array of notif objects to be added to database
+     */
     //Create and return array of targeted notifications to be added to database
     //For cancelled registrants
     public ArrayList<Notif> notifyCancelled(String string){
@@ -226,7 +299,23 @@ public class Event {
         this.endDate = endDate;
     }
 
+    public ArrayList<Profile> getWaitingList() {
+        return waitingList;
+    }
+
     public int getWaitListSize() {
         return waitingList.size();
+    }
+
+    public ArrayList<Profile> getInviteList() {
+        return inviteList;
+    }
+
+    public ArrayList<Profile> getEnrollList() {
+        return enrollList;
+    }
+
+    public ArrayList<Profile> getCancelList() {
+        return cancelList;
     }
 }

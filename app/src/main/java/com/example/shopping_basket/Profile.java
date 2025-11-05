@@ -3,6 +3,9 @@ package com.example.shopping_basket;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * This class outlines the unique profile of a user
+ */
 public class Profile {
     private String GUID;
     private String name;
@@ -16,6 +19,13 @@ public class Profile {
         this.email = email;
     }
 
+    /**
+     * This methods finds all relevant notifications for the profile
+     * @param notifs
+     *     array of notifications in the database
+     * @return
+     *     array of notifications targeted to the profile
+     */
     // Finds all notifications for the chosen profile
     //Make sure any accepted invites are updated appropriately on the database,
     //not just the local variable
@@ -29,6 +39,13 @@ public class Profile {
         return myNotifs;
     }
 
+    /**
+     * This method retrieves the user's own event if it exists
+     * @param events
+     *     array of events in the database
+     * @return
+     *     the event that the profile is in charge of
+     */
     //find organizer's event if it exists
     //make sure that any actions done to this event are done on the database,
     //not just the local variable
