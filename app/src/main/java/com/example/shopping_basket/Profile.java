@@ -26,7 +26,6 @@ public class Profile {
      * @return
      *     array of notifications targeted to the profile
      */
-    // Finds all notifications for the chosen profile
     //Make sure any accepted invites are updated appropriately on the database,
     //not just the local variable
     public ArrayList<Notif> getNotifs(ArrayList<Notif> notifs) {
@@ -46,7 +45,6 @@ public class Profile {
      * @return
      *     the event that the profile is in charge of
      */
-    //find organizer's event if it exists
     //make sure that any actions done to this event are done on the database,
     //not just the local variable
     public Event getMyEvent(ArrayList<Event> events) {

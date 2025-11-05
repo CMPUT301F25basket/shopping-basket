@@ -85,18 +85,16 @@ public class Event {
             }
         }
         //if not, return code error
-        //**maybe return 1 on success, -1 on fail**
     }
 
     /**
      * This method runs the lottery to choose users in the waiting list
-     * up to the max number desired
+     * up to the max number desired, then returns invites for database
      * Functions as long as there is empty slots to fill,
      * can be called multiple times
      * @return
      *     Array of invites to be added to database
      */
-    //Run lottery and notify winners with invites
     public ArrayList<Invite> runLottery(){
         int slots = selectNum - (inviteList.size() + enrollList.size());
         //account for possible errors with altered selectNum value
@@ -139,7 +137,6 @@ public class Event {
      * @param profile
      *     profile to move
      */
-    //call on accept by entrant
     public void enroll(Profile profile){
         //check that user was invited and was not uninvited
         for(int i = 0; i < inviteList.size(); i++){
@@ -151,7 +148,6 @@ public class Event {
             }
         }
         //if not, return app error that invitation has expired
-        //**maybe return 1 on success, -1 on fail**
     }
 
     /**
@@ -160,7 +156,6 @@ public class Event {
      * @param profile
      *     profile t be moved
      */
-    //call on decline by entrant or cancelled invitation by organizer
     public void decline(Profile profile){
         //check that user was invited
         for(int i = 0; i < inviteList.size(); i++){
@@ -172,7 +167,6 @@ public class Event {
             }
         }
         //if not, return code error
-        //**maybe return 1 on success, -1 on fail**
     }
 
     /**
@@ -182,8 +176,6 @@ public class Event {
      * @return
      *     array of notif objects to be added to database
      */
-    //Create and return array of targeted notifications to be added to database
-    //For waiting list registrants
     public ArrayList<Notif> notifyWaiting(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : waitingList){
@@ -199,8 +191,6 @@ public class Event {
      * @return
      *     array of notif objects to be added to database
      */
-    //Create and return array of targeted notifications to be added to database
-    //For invited registrants
     public ArrayList<Notif> notifyInvited(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : inviteList){
@@ -216,8 +206,6 @@ public class Event {
      * @return
      *     array of notif objects to be added to database
      */
-    //Create and return array of targeted notifications to be added to database
-    //For enrolled registrants
     public ArrayList<Notif> notifyEnrolled(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : enrollList){
@@ -233,8 +221,6 @@ public class Event {
      * @return
      *     array of notif objects to be added to database
      */
-    //Create and return array of targeted notifications to be added to database
-    //For cancelled registrants
     public ArrayList<Notif> notifyCancelled(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : cancelList){

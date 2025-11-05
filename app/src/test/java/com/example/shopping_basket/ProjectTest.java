@@ -36,6 +36,7 @@ public class ProjectTest {
         return testNotif;
     }
 
+    //Profile tests
     @Test
     public void testGetNotifs(){
         ArrayList<Notif> notifs = testNotifData();
@@ -49,8 +50,17 @@ public class ProjectTest {
     public void testGetMyEvent(){
         ArrayList<Profile> profiles = testProfileData();
         ArrayList<Event> events = testEventData(profiles);
+        Event check = profiles.get(1).getMyEvent(events);
+        assertEquals(2, check.getSelectNum());
+        assertEquals(3, check.getMaxReg());
+        check = profiles.get(0).getMyEvent(events);
+        assertNull(check);
+        check = profiles.get(3).getMyEvent(events);
+        assertEquals("Test Event 2", check.getName());
+        assertEquals("This is a test event", check.getDesc());
     }
 
+    //Event tests
     @Test
     public void testJoinEvent(){
         ArrayList<Profile> profiles = testProfileData();
@@ -96,7 +106,7 @@ public class ProjectTest {
         events.get(0).joinEvent(profiles.get(3));
         events.get(1).joinEvent(profiles.get(0));
 
-        //should only be 2 winners, only 3 to choose, and 2 invites sent
+        //should only be 2 winners, 1 loser , and 2 invites sent
         ArrayList<Invite> invites = events.get(0).runLottery();
         assertEquals(2, events.get(0).getInviteList().size());
         assertEquals(1, events.get(0).getWaitListSize());
@@ -124,16 +134,62 @@ public class ProjectTest {
 
     @Test
     public void testEnroll(){
+        ArrayList<Profile> profiles = testProfileData();
+        ArrayList<Event> events = testEventData(profiles);
+        events.get(0).joinEvent(profiles.get(0));
+        events.get(0).runLottery();
+        events.get(0).enroll(profiles.get(0));
+        assertEquals(1, events.get(0).getEnrollList().size());
+        assertEquals(0, events.get(0).getWaitListSize());
 
+        //check that users can only enroll once
+        events.get(0).enroll(profiles.get(0));
+        assertEquals(1, events.get(0).getEnrollList().size());
+        assertEquals(0, events.get(0).getWaitListSize());
+
+        //check that uninvited users cannot enroll
+        events.get(0).enroll(profiles.get(1));
+        assertEquals(1, events.get(0).getEnrollList().size());
+        assertEquals(0, events.get(0).getWaitListSize());
     }
 
     @Test
     public void testDecline(){
+        ArrayList<Profile> profiles = testProfileData();
+        ArrayList<Event> events = testEventData(profiles);
+        events.get(0).joinEvent(profiles.get(0));
+        events.get(0).runLottery();
+        events.get(0).decline(profiles.get(0));
+        assertEquals(1, events.get(0).getCancelList().size());
+        assertEquals(0, events.get(0).getWaitListSize());
 
+        //check that users can only decline once
+        events.get(0).decline(profiles.get(0));
+        assertEquals(1, events.get(0).getCancelList().size());
+        assertEquals(0, events.get(0).getWaitListSize());
+
+        //check that only invited users can decline
+        events.get(0).decline(profiles.get(1));
+        assertEquals(1, events.get(0).getCancelList().size());
+        assertEquals(0, events.get(0).getWaitListSize());
     }
 
     @Test
     public void testNotify(){
-
+        ArrayList<Profile> profiles = testProfileData();
+        ArrayList<Event> events = testEventData(profiles);
+        events.get(0).joinEvent(profiles.get(0));
+        events.get(0).joinEvent(profiles.get(1));
+        events.get(0).joinEvent(profiles.get(2));
+        ArrayList<Notif> notifs = new ArrayList<Notif>();
+        notifs = events.get(0).notifyWaiting("Hello");
+        assertEquals(3, notifs.size());
+        assertEquals("Hello", notifs.get(0).getMessage());
+        assertEquals("1", notifs.get(1).getTarget());
+        assertEquals("2", notifs.get(2).getTarget());
+        events.get(1).joinEvent(profiles.get(3));
+        events.get(1).runLottery();
+        notifs = events.get(1).notifyInvited("Hello");
+        assertEquals(1, notifs.size());
     }
 }
