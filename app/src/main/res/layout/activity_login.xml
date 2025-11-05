@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/titleSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -30,7 +30,7 @@
             android:textSize="36sp" />
 
         <EditText
-            android:id="@+id/edit_text_login_info"
+            android:id="@+id/editTextLoginInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -45,14 +45,14 @@
             android:layout_marginTop="24dp">
 
             <Button
-                android:id="@+id/button_login"
+                android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign in" />
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/button_to_signup"
+                android:id="@+id/buttonToSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
