@@ -10,9 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.ViewHolder> {
     private ArrayList<Event> events;
@@ -38,6 +36,9 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             eventCardStatus = itemView.findViewById(R.id.eventCardStatus);
             viewButton = itemView.findViewById(R.id.buttonView);
             eventActionButton = itemView.findViewById(R.id.buttonEventAction);
+
+            // TODO: Set onClickListener here to navigate to the event detail page (not necessarily have to click "View" button.
+            //       Might also remove "Join" button, since it's not necessary.
         }
     }
     @NonNull
@@ -52,13 +53,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         Event eventItem = events.get(position);
 
         holder.eventCardName.setText(eventItem.getName());
-        Date eventDate = eventItem.getStartDate().getTime();
-        String eventDateString = new SimpleDateFormat("MM/dd/yyyy").format(eventDate);
-        String startDateTime = new SimpleDateFormat("HH:mm").format(eventDate); // NOTE: Figure out how to use AM/PM => Use private method
-        Date endDate = eventItem.getEndDate().getTime();
-        String endDateTime = new SimpleDateFormat("HH:mm").format(endDate);
-        String eventDuration = "";
-        holder.eventCardDate.setText(eventDateString);
+        // TODO: Implement the rest in accord to Event fields
+
     }
 
     @Override

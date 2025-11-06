@@ -1,9 +1,10 @@
 package com.example.shopping_basket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Event {
+public class Event implements Serializable {
     private Profile owner;
     private String name;
     private String desc;
