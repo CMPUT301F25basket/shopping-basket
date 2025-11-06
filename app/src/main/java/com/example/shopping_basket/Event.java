@@ -1,9 +1,11 @@
 package com.example.shopping_basket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
+public class Event implements Serializable {
 /**
  * This class defines a user created event
  * and tracks all registrants
