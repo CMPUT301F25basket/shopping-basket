@@ -8,16 +8,16 @@
     <fragment
         android:id="@+id/eventCreationFragment"
         android:name="com.example.shopping_basket.EventCreationFragment"
-        android:label="fragment_event_creation"
+        android:label="Create event"
         tools:layout="@layout/fragment_event_creation" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.shopping_basket.HomeFragment"
-        android:label="fragment_home"
+        android:label="Events"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/inboxFragment"
         android:name="com.example.shopping_basket.InboxFragment"
-        android:label="fragment_inbox"
+        android:label="Inbox"
         tools:layout="@layout/fragment_inbox" />
 </navigation>

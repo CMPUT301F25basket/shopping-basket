@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".InboxFragment"
-    tools:listitem="@layout/fragment_inbox_item" />
+    tools:listitem="@layout/fragment_inbox_item"
+    android:layout_marginTop="?attr/actionBarSize"/>

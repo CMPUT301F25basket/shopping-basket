@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventQRFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/roboto_light"
+            android:text="Go to your event"
+            android:textColor="@color/oxford_blue"
+            android:textSize="24sp"
+            app:icon="@android:drawable/ic_menu_revert"
+            app:iconPadding="4dp"
+            app:iconSize="32dp"
+            app:iconTint="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Event created!"
+                android:textAlignment="center"
+                android:textSize="32sp"
+                android:layout_marginBottom="8dp"/>
+
+            <ImageView
+                android:id="@+id/eventQR"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your event is now live!\nShare this QR codeto let\npeople register."
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+        </LinearLayout>
+</FrameLayout>

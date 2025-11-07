@@ -25,6 +25,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:titleTextColor="@color/white"
                 app:layout_scrollFlags="noScroll"/>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -41,6 +42,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/oxford_blue"
+        app:itemBackground="@drawable/bottom_nav_selector"
+        app:itemGravity="center"
+        app:itemIconSize="32dp"
+        app:itemIconTint="@color/white"
+        app:itemPaddingTop="8dp"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -3,8 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="oxford_blue">#FF212A37</color>
+    <color name="oxford_dark">#10151B</color>
     <color name="error">#FFED4337</color>
     <color name="oxford_grey">#FFB8BBBF</color>
     <color name="oxford_light">#FFEEEEEF</color>
     <color name="oxford_lighter">#FFEBECED</color>
+    <color name="light_blue">#FFA3C5DB</color>
 </resources>

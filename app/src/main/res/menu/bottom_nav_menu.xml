@@ -4,11 +4,14 @@
 
     <item
         android:id="@+id/home"
+        android:icon="@drawable/calendar_svgrepo_com"
         android:title="Events" />
     <item
         android:id="@+id/myEvent"
+        android:icon="@drawable/add_circle_svgrepo_com"
         android:title="My Event" />
     <item
         android:id="@+id/inbox"
+        android:icon="@drawable/inbox_line_svgrepo_com"
         android:title="Inbox" />
 </menu>
