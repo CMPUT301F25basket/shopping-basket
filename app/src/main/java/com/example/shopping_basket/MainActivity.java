@@ -70,6 +70,8 @@ public class    MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_profile) {
+            ProfileFragment profileDialog = new ProfileFragment();
+            profileDialog.show(getSupportFragmentManager(), "ProfileDialogFragment");
             return true;
         }
         else if (id == R.id.action_send ) {

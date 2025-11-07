@@ -4,7 +4,6 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 /**
@@ -59,7 +58,7 @@ public class Event implements Serializable {
         }
         //check if user is already registered
         for(int i = 0; i < waitingList.size(); i++){
-            if(waitingList.get(i).getGUID().equals(profile.getGUID())){
+            if(waitingList.get(i).getGuid().equals(profile.getGuid())){
                 //show code error that user is already registered
                 //**maybe return 1 on success, -1 on fail**
                 return;
@@ -67,7 +66,7 @@ public class Event implements Serializable {
         }
         //check if user previously cancelled
         for(int i = 0; i < cancelList.size(); i++){
-            if(cancelList.get(i).getGUID().equals(profile.getGUID())){
+            if(cancelList.get(i).getGuid().equals(profile.getGuid())){
                 //remove user from cancel list
                 cancelList.remove(i);
                 break;
@@ -86,7 +85,7 @@ public class Event implements Serializable {
     public void leaveEvent(Profile profile){
         //check that user is in waiting list
         for(int i = 0; i < waitingList.size(); i++){
-            if(waitingList.get(i).getGUID().equals(profile.getGUID())){
+            if(waitingList.get(i).getGuid().equals(profile.getGuid())){
                 //if user found, transfer from invite list to enrolled
                 cancelList.add(profile);
                 waitingList.remove(i);
@@ -122,7 +121,7 @@ public class Event implements Serializable {
         if(slots >= waitingList.size()){
             inviteList.addAll(waitingList);
             for(Profile i : waitingList){
-                invites.add(new Invite(i.getGUID(), message));
+                invites.add(new Invite(i.getGuid(), message));
             }
             waitingList.clear();
             return invites;
@@ -134,7 +133,7 @@ public class Event implements Serializable {
         for(int i = 0; i < slots; i++){
             winner = lottery.nextInt(waitingList.size());
             inviteList.add(waitingList.get(winner));
-            invites.add(new Invite(waitingList.get(winner).getGUID(), message));
+            invites.add(new Invite(waitingList.get(winner).getGuid(), message));
             waitingList.remove(winner);
         }
         return invites;
@@ -149,7 +148,7 @@ public class Event implements Serializable {
     public void enroll(Profile profile){
         //check that user was invited and was not uninvited
         for(int i = 0; i < inviteList.size(); i++){
-            if(inviteList.get(i).getGUID().equals(profile.getGUID())){
+            if(inviteList.get(i).getGuid().equals(profile.getGuid())){
                 //if user found, transfer from invite list to enrolled
                 enrollList.add(profile);
                 inviteList.remove(i);
@@ -168,7 +167,7 @@ public class Event implements Serializable {
     public void decline(Profile profile){
         //check that user was invited
         for(int i = 0; i < inviteList.size(); i++){
-            if(inviteList.get(i).getGUID().equals(profile.getGUID())){
+            if(inviteList.get(i).getGuid().equals(profile.getGuid())){
                 //if user found, transfer from invite list to cancelled
                 cancelList.add(profile);
                 inviteList.remove(i);
@@ -188,7 +187,7 @@ public class Event implements Serializable {
     public ArrayList<Notif> notifyWaiting(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : waitingList){
-            notifyList.add(new Notif(i.getGUID(), string));
+            notifyList.add(new Notif(i.getGuid(), string));
         }
         return notifyList;
     }
@@ -203,7 +202,7 @@ public class Event implements Serializable {
     public ArrayList<Notif> notifyInvited(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : inviteList){
-            notifyList.add(new Notif(i.getGUID(), string));
+            notifyList.add(new Notif(i.getGuid(), string));
         }
         return notifyList;
     }
@@ -218,7 +217,7 @@ public class Event implements Serializable {
     public ArrayList<Notif> notifyEnrolled(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : enrollList){
-            notifyList.add(new Notif(i.getGUID(), string));
+            notifyList.add(new Notif(i.getGuid(), string));
         }
         return notifyList;
     }
@@ -233,7 +232,7 @@ public class Event implements Serializable {
     public ArrayList<Notif> notifyCancelled(String string){
         ArrayList<Notif> notifyList = new ArrayList<Notif>();
         for(Profile i : cancelList){
-            notifyList.add(new Notif(i.getGUID(), string));
+            notifyList.add(new Notif(i.getGuid(), string));
         }
         return notifyList;
     }
