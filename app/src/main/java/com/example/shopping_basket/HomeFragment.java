@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
 
         eventAdapter = new EventCardAdapter(events);
         binding.eventCardList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.eventCardList.setAdapter(eventAdapter);
         loadEvents();
     }
 
