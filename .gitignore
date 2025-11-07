@@ -1,3 +1,6 @@
 ﻿local.properties
 google-services.json
 GoogleService-Info.plist
+/build
+/app/build
+/captures
