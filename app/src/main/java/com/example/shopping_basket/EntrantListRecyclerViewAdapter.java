@@ -26,14 +26,14 @@ public class EntrantListRecyclerViewAdapter extends RecyclerView.Adapter<Entrant
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        return new ViewHolder(EntrantItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
+        return new ViewHolder(EntrantItemBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+
         holder.mIdView.setText(mValues.get(position).id);
     }
 

@@ -25,16 +25,15 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<InboxRecycler
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        return new ViewHolder(FragmentInboxItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
+        return new ViewHolder(FragmentInboxItemBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        // holder.mIdView.setText(mValues.get(position).id);
-        // holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).id);
+        holder.mContentView.setText(mValues.get(position).content);
     }
 
     @Override
@@ -49,9 +48,10 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<InboxRecycler
 
         public ViewHolder(FragmentInboxItemBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.inboxContent;
-            mContentView = binding.time;
+            mIdView = binding.inboxItemMessage;  // maps to @+id/inbox_item_message
+            mContentView = binding.inboxItemTime; // maps to @+id/inbox_item_time
         }
+
 
         @Override
         public String toString() {
