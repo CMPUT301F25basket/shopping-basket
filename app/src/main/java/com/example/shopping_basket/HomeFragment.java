@@ -15,14 +15,13 @@ import android.view.ViewGroup;
  */
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // TODO IMPLEMENTATION: Rename parameter arguments, choose names that match
+    private static final String ARG_EVENT_TYPE = "event_type";
+    private static final String ARG_USER_ID = "user_id";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // TODO IMPLEMENTATION: Rename and change types of parameters
+    private String eventType;
+    private String userId;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -32,16 +31,16 @@ public class HomeFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param eventType Type of event to display.
+     * @param userId Current user’s ID.
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    // TODO IMPLEMENTATION: Rename and change types and number of parameters
+    public static HomeFragment newInstance(String eventType, String userId) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_EVENT_TYPE, eventType);
+        args.putString(ARG_USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,8 +49,8 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            eventType = getArguments().getString(ARG_EVENT_TYPE);
+            userId = getArguments().getString(ARG_USER_ID);
         }
     }
 

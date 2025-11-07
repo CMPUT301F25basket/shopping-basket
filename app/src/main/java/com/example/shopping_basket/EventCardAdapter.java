@@ -10,9 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.ViewHolder> {
     private ArrayList<Event> events;
@@ -27,19 +25,31 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         private TextView eventCardDate;
         private TextView eventCardDuration;
         private TextView eventCardStatus;
-        private Button viewButton;
-        private Button eventActionButton;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            eventCardPoster = itemView.findViewById(R.id.eventCardPoster);
-            eventCardName = itemView.findViewById(R.id.eventCardName);
-            eventCardDate = itemView.findViewById(R.id.eventCardDate);
-            eventCardDuration = itemView.findViewById(R.id.eventCardDuration);
-            eventCardStatus = itemView.findViewById(R.id.eventCardStatus);
-            viewButton = itemView.findViewById(R.id.buttonView);
-            eventActionButton = itemView.findViewById(R.id.buttonEventAction);
+            eventCardPoster = itemView.findViewById(R.id.event_card_poster);
+            eventCardName = itemView.findViewById(R.id.event_card_name);
+            eventCardDate = itemView.findViewById(R.id.event_card_registration_period);
+            eventCardDuration = itemView.findViewById(R.id.event_card_time);
+            eventCardStatus = itemView.findViewById(R.id.event_card_status);
+
+            // TODO IMPLEMENTATION:
+            itemView.setOnClickListener(v -> {
+                // Navigate to event detail screen
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Event selectedEvent = ((EventCardAdapter)
+                            ((RecyclerView) itemView.getParent()).getAdapter()).events.get(position);
+                    android.widget.Toast.makeText(
+                            itemView.getContext(),
+                            "Clicked: " + selectedEvent.getName(),
+                            android.widget.Toast.LENGTH_SHORT
+                    ).show();
+                }
+            });
         }
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,14 +62,32 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         Event eventItem = events.get(position);
 
         holder.eventCardName.setText(eventItem.getName());
-        Date eventDate = eventItem.getStartDate().getTime();
-        String eventDateString = new SimpleDateFormat("MM/dd/yyyy").format(eventDate);
-        String startDateTime = new SimpleDateFormat("HH:mm").format(eventDate); // NOTE: Figure out how to use AM/PM => Use private method
-        Date endDate = eventItem.getEndDate().getTime();
-        String endDateTime = new SimpleDateFormat("HH:mm").format(endDate);
-        String eventDuration = "";
-        holder.eventCardDate.setText(eventDateString);
+
+        // TODO IMPLEMENTATION:
+        if (eventItem.getStartDate() != null && eventItem.getEndDate() != null) {
+            java.text.SimpleDateFormat dateFormat =
+                    new java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault());
+            java.text.SimpleDateFormat timeFormat =
+                    new java.text.SimpleDateFormat("h:mm a", java.util.Locale.getDefault());
+
+            String dateText = dateFormat.format(eventItem.getStartDate().getTime()) + " - " +
+                    dateFormat.format(eventItem.getEndDate().getTime());
+            holder.eventCardDate.setText(dateText);
+
+            String durationText = timeFormat.format(eventItem.getStartDate().getTime()) + " - " +
+                    timeFormat.format(eventItem.getEndDate().getTime());
+            holder.eventCardDuration.setText(durationText);
+
+            long diffMillis = eventItem.getEndDate().getTimeInMillis() - System.currentTimeMillis();
+            long daysLeft = Math.max(0, diffMillis / (24 * 60 * 60 * 1000));
+            holder.eventCardStatus.setText("Closes in " + daysLeft + " days");
+        } else {
+            holder.eventCardDate.setText("Date TBD");
+            holder.eventCardDuration.setText("");
+            holder.eventCardStatus.setText("Status unknown");
+        }
     }
+
 
     @Override
     public int getItemCount() {

@@ -1,14 +1,14 @@
 package com.example.shopping_basket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
-
 /**
  * This class defines a user created event
  * and tracks all registrants
  */
-public class Event {
+public class Event implements Serializable {
     private Profile owner;
     private String name;
     private String desc;
