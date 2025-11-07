@@ -25,8 +25,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         private TextView eventCardDate;
         private TextView eventCardDuration;
         private TextView eventCardStatus;
-        private Button viewButton;
-        private Button eventActionButton;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventCardPoster = itemView.findViewById(R.id.eventCardPoster);
@@ -34,8 +32,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             eventCardDate = itemView.findViewById(R.id.eventCardDate);
             eventCardDuration = itemView.findViewById(R.id.eventCardDuration);
             eventCardStatus = itemView.findViewById(R.id.eventCardStatus);
-            viewButton = itemView.findViewById(R.id.buttonView);
-            eventActionButton = itemView.findViewById(R.id.buttonEventAction);
 
             // TODO: Set onClickListener here to navigate to the event detail page (not necessarily have to click "View" button.
             //       Might also remove "Join" button, since it's not necessary.

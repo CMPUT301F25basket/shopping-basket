@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventDetailFragment">
-
+    tools:context=".MyEventFragment">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true" >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +16,7 @@
             >
 
             <ImageView
-                android:id="@+id/eventPoster"
+                android:id="@+id/myEventPoster"
                 android:layout_width="match_parent"
                 android:layout_height="330dp"
                 android:src="@drawable/image_placeholder" />
@@ -30,14 +28,29 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="4dp">
 
-                <TextView
-                    android:id="@+id/eventName"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="Event Name"
-                    android:textSize="32sp" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/myEventName"
+                        android:layout_width="213dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Event Name"
+                        android:textSize="32sp" />
+
+                    <Button
+                        android:id="@+id/buttonLottery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Commence lottery" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -46,39 +59,39 @@
                     android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:id="@+id/eventDate"
+                        android:id="@+id/myEventDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto"
                         android:text="@string/event_date"
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/eventDuration"
+                        android:id="@+id/myEventDuration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto"
                         android:text="@string/event_time"
                         android:textAlignment="viewEnd"
                         android:textSize="16sp" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/eventStatus"
+                    android:id="@+id/myEventStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto"
                     android:text="@string/event_status"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/registrationCount"
+                    android:id="@+id/myEventRegistrationCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto"
                     android:text="y users have registered for this event"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -97,20 +110,20 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
-                    android:id="@+id/eventDescription"
+                    android:id="@+id/myEventDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto"
                     android:text="Event Description"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/eventGuideline"
+                    android:id="@+id/myEventGuideline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto"
                     android:text="Criteria and Guidelines"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -118,31 +131,38 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingHorizontal="16dp">
 
                 <Button
-                    android:id="@+id/buttonBackToHome"
-                    android:layout_width="418dp"
+                    android:id="@+id/buttonEnrolledEntrants"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/oxford_grey"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="Back"
+                    android:backgroundTint="@color/light_blue"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="View enrolled entrants"
                     android:textColor="@color/oxford_blue"
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/buttonRegister"
-                    android:layout_width="418dp"
+                    android:id="@+id/buttonSelectedEntrants"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/light_blue"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="Register"
-                    android:textColor="@color/oxford_blue"
+                    android:fontFamily="@font/roboto"
+                    android:text="View selected entrants"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/buttonUnselectedEntrants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
+                    android:text="View unselected entrants"
                     android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>

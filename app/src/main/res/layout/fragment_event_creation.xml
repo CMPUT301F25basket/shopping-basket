@@ -18,53 +18,58 @@
             android:id="@+id/text_input_event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
             android:ems="10"
+            android:fontFamily="@font/roboto"
             android:hint="@string/event_name"
             android:inputType="text"
-            android:textSize="17sp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="4dp"/>
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/text_input_event_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:ems="10"
+            android:fontFamily="@font/roboto"
             android:gravity="start|top"
             android:hint="Event description"
             android:inputType="textMultiLine"
-            android:textSize="17sp"
-            android:layout_marginBottom="4dp"/>
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/text_input_event_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:ems="10"
+            android:fontFamily="@font/roboto"
             android:hint="Registration start"
             android:inputType="date"
-            android:textSize="17sp"
-            android:layout_marginBottom="4dp"/>
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/text_input_event_end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:ems="10"
+            android:fontFamily="@font/roboto"
             android:hint="Registration end"
             android:inputType="date"
-            android:textSize="17sp"
-            android:layout_marginBottom="4dp"/>
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/text_input_event_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:textSize="17sp"
             android:layout_marginBottom="4dp"
-            android:hint="Event duration"/>
+            android:ems="10"
+            android:fontFamily="@font/roboto"
+            android:hint="Event duration"
+            android:inputType="time"
+            android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,10 +80,11 @@
                 android:id="@+id/checkBoxRequireLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/roboto"
                 android:hint="Require location"
                 android:text="Require location"
-                android:textSize="17sp"
-                android:layout_marginBottom="4dp"/>
+                android:textSize="17sp" />
 
             <EditText
                 android:id="@+id/text_input_location"
@@ -103,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/roboto"
                 android:text="Limit number of entrants (optional):"
                 android:textSize="17sp" />
 
@@ -113,6 +120,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:fontFamily="@font/roboto"
                 android:hint="No selection"
                 android:inputType="number"
                 android:textSize="16sp" />
@@ -130,6 +138,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="4dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/roboto"
                 android:text="Set event poster"
                 android:textSize="17sp" />
 
@@ -139,6 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/roboto"
                 android:text="Upload"
                 android:textSize="17sp"
                 app:icon="@drawable/upload"
@@ -170,6 +180,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_blue"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Create"
                 android:textColor="@color/oxford_blue"
                 android:textSize="16sp" />

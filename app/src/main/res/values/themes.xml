@@ -6,6 +6,4 @@
         <item name="colorPrimary">@color/oxford_blue</item>
         <item name="android:windowBackground">@color/oxford_lighter</item>
     </style>
-
-    <style name="Theme.Shoppingbasket" parent="Base.Theme.Shoppingbasket" />
 </resources>
