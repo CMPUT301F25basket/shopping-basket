@@ -46,14 +46,13 @@ public class CalendarUtils {
 
         timePicker.show();
     }
-    public static Calendar stringToCalendar(String dateString, String format) {
+    public static Date stringToDate(String dateString, String format) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-            Date date = sdf.parse(dateString);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            return calendar;
+            // This directly returns the Date object after parsing.
+            return sdf.parse(dateString);
         } catch (ParseException e) {
+            // It's good practice to log the error to see what went wrong.
             e.printStackTrace();
             return null;
         }

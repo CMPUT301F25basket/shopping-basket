@@ -3,6 +3,7 @@ package com.example.shopping_basket;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 /**
  * This class defines a user created event
@@ -15,8 +16,8 @@ public class Event implements Serializable {
     private int selectNum;
     //
     private int maxReg;
-    private Calendar startDate;
-    private Calendar endDate;
+    private Date startDate;
+    private Date endDate;
     //private ----- poster;
     private String eventTime;
     private ArrayList<Profile> waitingList;
@@ -24,7 +25,9 @@ public class Event implements Serializable {
     private ArrayList<Profile> enrollList;
     private ArrayList<Profile> cancelList;
 
-    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Calendar startDate, Calendar endDate, String eventTime){
+    public Event() {}
+
+    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
         this.owner = owner;
         this.name = name;
         this.desc = desc;
@@ -271,19 +274,19 @@ public class Event implements Serializable {
         this.maxReg = maxReg;
     }
 
-    public Calendar getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Calendar startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public Calendar getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Calendar endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

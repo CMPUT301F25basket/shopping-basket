@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.shopping_basket.placeholder.PlaceholderContent;
-
 /**
  * A fragment representing a list of Items.
  */
@@ -64,7 +62,6 @@ public class EntrantListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new EntrantListRecyclerViewAdapter(PlaceholderContent.ITEMS));
         }
         return view;
     }

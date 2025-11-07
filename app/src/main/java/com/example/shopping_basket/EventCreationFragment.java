@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import static androidx.navigation.Navigation.findNavController;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,9 +20,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +68,8 @@ public class EventCreationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentEventCreationBinding.bind(view);
+        setupCheckboxListener();
+        setupClickListeners();
     }
 
     private void setupCheckboxListener() {
@@ -83,9 +87,7 @@ public class EventCreationFragment extends Fragment {
 
     private void setupClickListeners() {
         binding.buttonCreateToHome.setOnClickListener(v -> {
-            assert getActivity() != null;
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            fm.popBackStack();
+            findNavController(v).navigate(R.id.homeFragment);
         });
 
         binding.buttonCreateEvent.setOnClickListener(v -> {
@@ -127,8 +129,8 @@ public class EventCreationFragment extends Fragment {
 
         boolean requireLocation = binding.checkboxRequireLocation.isChecked();
 
-        Calendar startDate = CalendarUtils.stringToCalendar(startDateStr, "MM/dd/yyyy");
-        Calendar endDate = CalendarUtils.stringToCalendar(endDateStr, "MM/dd/yyyy");
+        Date startDate = CalendarUtils.stringToDate(startDateStr, "MM/dd/yyyy");
+        Date endDate = CalendarUtils.stringToDate(endDateStr, "MM/dd/yyyy");
 
         Event event = new Event(null, eventName, eventDesc, 0, entrantLimit, startDate, endDate, eventTimeStr);
         uploadToFirebase(event);

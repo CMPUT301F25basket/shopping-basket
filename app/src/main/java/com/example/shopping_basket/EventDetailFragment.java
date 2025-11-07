@@ -16,6 +16,7 @@ import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -73,9 +74,9 @@ public class EventDetailFragment extends Fragment {
         updateRegisterButtonState();
     }
 
-    private String dateFormatter(Calendar c) {
+    private String dateFormatter(Date d) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-        return sdf.format(c.getTime());
+        return sdf.format(d.getTime());
     }
 
     private void setupEventDetail() {

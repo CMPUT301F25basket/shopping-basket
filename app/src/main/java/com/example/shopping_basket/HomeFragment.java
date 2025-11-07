@@ -2,11 +2,21 @@ package com.example.shopping_basket;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.shopping_basket.databinding.FragmentHomeBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,13 +25,9 @@ import android.view.ViewGroup;
  */
 public class HomeFragment extends Fragment {
 
-    // TODO IMPLEMENTATION: Rename parameter arguments, choose names that match
-    private static final String ARG_EVENT_TYPE = "event_type";
-    private static final String ARG_USER_ID = "user_id";
-
-    // TODO IMPLEMENTATION: Rename and change types of parameters
-    private String eventType;
-    private String userId;
+    private FragmentHomeBinding binding;
+    private EventCardAdapter eventAdapter;
+    private ArrayList<Event> events = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -37,21 +43,7 @@ public class HomeFragment extends Fragment {
      */
     // TODO IMPLEMENTATION: Rename and change types and number of parameters
     public static HomeFragment newInstance(String eventType, String userId) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_EVENT_TYPE, eventType);
-        args.putString(ARG_USER_ID, userId);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            eventType = getArguments().getString(ARG_EVENT_TYPE);
-            userId = getArguments().getString(ARG_USER_ID);
-        }
+        return new HomeFragment();
     }
 
     @Override
@@ -59,5 +51,32 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentHomeBinding.bind(view);
+
+        eventAdapter = new EventCardAdapter(events);
+        binding.eventCardList.setLayoutManager(new LinearLayoutManager(getContext()));
+        loadEvents();
+    }
+
+    private void loadEvents() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("events")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    events.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Event event = document.toObject(Event.class);
+                        events.add(event);
+                    }
+                    eventAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error loading events: " + e.getMessage());
+                });
     }
 }

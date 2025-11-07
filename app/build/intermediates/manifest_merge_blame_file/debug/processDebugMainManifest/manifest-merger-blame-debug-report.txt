@@ -8,201 +8,335 @@
 8        android:minSdkVersion="24"
 9        android:targetSdkVersion="36" />
 10
-11    <uses-permission android:name="android.permission.CAMERA" /> <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
-11-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:22:5-65
-11-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:22:22-62
-12    <uses-feature
-12-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:25:5-27:36
-13        android:name="android.hardware.camera"
-13-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:26:9-47
-14        android:required="false" />
-14-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:27:9-33
-15    <uses-feature
-15-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:28:5-30:36
-16        android:name="android.hardware.camera.front"
-16-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:29:9-53
-17        android:required="false" /> <!-- TODO replace above two with next line after Android 4.2 -->
-17-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:30:9-33
-18    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
-19    <uses-feature
-19-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:33:5-35:36
-20        android:name="android.hardware.camera.autofocus"
-20-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:34:9-57
-21        android:required="false" />
-21-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:35:9-33
-22    <uses-feature
-22-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:36:5-38:36
-23        android:name="android.hardware.camera.flash"
-23-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:37:9-53
-24        android:required="false" />
-24-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:38:9-33
-25    <uses-feature
-25-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:39:5-41:36
-26        android:name="android.hardware.screen.landscape"
-26-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:40:9-57
-27        android:required="false" />
-27-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:41:9-33
-28    <uses-feature
-28-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:42:5-44:36
-29        android:name="android.hardware.wifi"
-29-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:43:9-45
-30        android:required="false" />
-30-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:44:9-33
-31
-32    <permission
-32-->[androidx.core:core:1.13.1] C:\Users\abbas\.gradle\caches\8.13\transforms\6c96168e9082fa6d426fc380f0a721c0\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
-33        android:name="com.example.shopping_basket.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-33-->[androidx.core:core:1.13.1] C:\Users\abbas\.gradle\caches\8.13\transforms\6c96168e9082fa6d426fc380f0a721c0\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
-34        android:protectionLevel="signature" />
-34-->[androidx.core:core:1.13.1] C:\Users\abbas\.gradle\caches\8.13\transforms\6c96168e9082fa6d426fc380f0a721c0\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
-35
-36    <uses-permission android:name="com.example.shopping_basket.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-36-->[androidx.core:core:1.13.1] C:\Users\abbas\.gradle\caches\8.13\transforms\6c96168e9082fa6d426fc380f0a721c0\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
-36-->[androidx.core:core:1.13.1] C:\Users\abbas\.gradle\caches\8.13\transforms\6c96168e9082fa6d426fc380f0a721c0\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
-37
-38    <application
-38-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:5:5-27:19
-39        android:allowBackup="true"
-39-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:6:9-35
-40        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-40-->[androidx.core:core:1.13.1] C:\Users\abbas\.gradle\caches\8.13\transforms\6c96168e9082fa6d426fc380f0a721c0\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
-41        android:dataExtractionRules="@xml/data_extraction_rules"
-41-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:7:9-65
-42        android:debuggable="true"
-43        android:extractNativeLibs="false"
-44        android:fullBackupContent="@xml/backup_rules"
-44-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:8:9-54
-45        android:icon="@mipmap/ic_launcher"
-45-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:9:9-43
-46        android:label="@string/app_name"
-46-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:10:9-41
-47        android:roundIcon="@mipmap/ic_launcher_round"
-47-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:11:9-54
-48        android:supportsRtl="true"
-48-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:12:9-35
-49        android:testOnly="true"
-50        android:theme="@style/Theme.Shoppingbasket" >
-50-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:13:9-52
-51        <activity
-51-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:14:9-23:20
-52            android:name="com.example.shopping_basket.MainActivity"
-52-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:15:13-41
-53            android:exported="true"
-53-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:16:13-36
-54            android:theme="@style/Theme.Shoppingbasket" >
-54-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:17:13-56
-55            <intent-filter>
-55-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:18:13-22:29
-56                <action android:name="android.intent.action.MAIN" />
-56-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:19:17-69
-56-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:19:25-66
-57
-58                <category android:name="android.intent.category.LAUNCHER" />
-58-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:21:17-77
-58-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:21:27-74
-59            </intent-filter>
-60        </activity>
-61
-62        <meta-data
-62-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:24:9-26:57
-63            android:name="preloaded_fonts"
-63-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:25:13-43
-64            android:resource="@array/preloaded_fonts" />
-64-->C:\Users\abbas\AndroidStudioProjects\shopping-basket\app\src\main\AndroidManifest.xml:26:13-54
-65
-66        <activity
-66-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:47:9-53:63
-67            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-67-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:48:13-74
-68            android:clearTaskOnLaunch="true"
-68-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:49:13-45
-69            android:screenOrientation="sensorLandscape"
-69-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:50:13-56
-70            android:stateNotNeeded="true"
-70-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:51:13-42
-71            android:theme="@style/zxing_CaptureTheme"
-71-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:52:13-54
-72            android:windowSoftInputMode="stateAlwaysHidden" />
-72-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\331c2cfb90f63a978baf992d0b47654c\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:53:13-60
-73
-74        <provider
-74-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-75            android:name="androidx.startup.InitializationProvider"
-75-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-76            android:authorities="com.example.shopping_basket.androidx-startup"
-76-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-77            android:exported="false" >
-77-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-78            <meta-data
-78-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-79                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-79-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-80                android:value="androidx.startup" />
-80-->[androidx.emoji2:emoji2:1.3.0] C:\Users\abbas\.gradle\caches\8.13\transforms\378477430dcf22cc17b48aaf48fd68bc\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-81            <meta-data
-81-->[androidx.lifecycle:lifecycle-process:2.9.0] C:\Users\abbas\.gradle\caches\8.13\transforms\f818a005b9cdfbd090760abec665ecd5\transformed\lifecycle-process-2.9.0\AndroidManifest.xml:29:13-31:52
-82                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-82-->[androidx.lifecycle:lifecycle-process:2.9.0] C:\Users\abbas\.gradle\caches\8.13\transforms\f818a005b9cdfbd090760abec665ecd5\transformed\lifecycle-process-2.9.0\AndroidManifest.xml:30:17-78
-83                android:value="androidx.startup" />
-83-->[androidx.lifecycle:lifecycle-process:2.9.0] C:\Users\abbas\.gradle\caches\8.13\transforms\f818a005b9cdfbd090760abec665ecd5\transformed\lifecycle-process-2.9.0\AndroidManifest.xml:31:17-49
-84            <meta-data
-84-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
-85                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-85-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
-86                android:value="androidx.startup" />
-86-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
-87        </provider>
-88
-89        <uses-library
-89-->[androidx.window:window:1.0.0] C:\Users\abbas\.gradle\caches\8.13\transforms\367ce33b763f7b19fa9e2e7b726af227\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
-90            android:name="androidx.window.extensions"
-90-->[androidx.window:window:1.0.0] C:\Users\abbas\.gradle\caches\8.13\transforms\367ce33b763f7b19fa9e2e7b726af227\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
-91            android:required="false" />
-91-->[androidx.window:window:1.0.0] C:\Users\abbas\.gradle\caches\8.13\transforms\367ce33b763f7b19fa9e2e7b726af227\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
-92        <uses-library
-92-->[androidx.window:window:1.0.0] C:\Users\abbas\.gradle\caches\8.13\transforms\367ce33b763f7b19fa9e2e7b726af227\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
-93            android:name="androidx.window.sidecar"
-93-->[androidx.window:window:1.0.0] C:\Users\abbas\.gradle\caches\8.13\transforms\367ce33b763f7b19fa9e2e7b726af227\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
-94            android:required="false" />
-94-->[androidx.window:window:1.0.0] C:\Users\abbas\.gradle\caches\8.13\transforms\367ce33b763f7b19fa9e2e7b726af227\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
-95
-96        <receiver
-96-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
-97            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-97-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
-98            android:directBootAware="false"
-98-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
-99            android:enabled="true"
-99-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
-100            android:exported="true"
-100-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
-101            android:permission="android.permission.DUMP" >
-101-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
-102            <intent-filter>
-102-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
-103                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-103-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
-103-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
-104            </intent-filter>
-105            <intent-filter>
-105-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
-106                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-106-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
-106-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
-107            </intent-filter>
-108            <intent-filter>
-108-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
-109                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-109-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
-109-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
-110            </intent-filter>
-111            <intent-filter>
-111-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
-112                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-112-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
-112-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\abbas\.gradle\caches\8.13\transforms\d92d8869a3747c2b10340c1fbb3395e9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
-113            </intent-filter>
-114        </receiver>
-115    </application>
-116
-117</manifest>
+11    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+12    <!-- <uses-sdk android:minSdkVersion="21" /> -->
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:10:5-79
+13-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:10:22-76
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:11:5-67
+14-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:11:22-64
+15    <uses-permission android:name="android.permission.WAKE_LOCK" />
+15-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:25:5-68
+15-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:25:22-65
+16    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+16-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:26:5-110
+16-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:26:22-107
+17    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+17-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:25:5-79
+17-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:25:22-76
+18    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" />
+18-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:26:5-88
+18-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:26:22-85
+19    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />
+19-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:27:5-82
+19-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:27:22-79
+20
+21    <permission
+21-->[androidx.core:core:1.13.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/09c331ac7df624c402f5a79884aeeb04/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+22        android:name="com.example.shopping_basket.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22-->[androidx.core:core:1.13.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/09c331ac7df624c402f5a79884aeeb04/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+23        android:protectionLevel="signature" />
+23-->[androidx.core:core:1.13.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/09c331ac7df624c402f5a79884aeeb04/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+24
+25    <uses-permission android:name="com.example.shopping_basket.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25-->[androidx.core:core:1.13.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/09c331ac7df624c402f5a79884aeeb04/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+25-->[androidx.core:core:1.13.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/09c331ac7df624c402f5a79884aeeb04/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+26    <uses-permission android:name="android.permission.CAMERA" /> <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+26-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:22:5-65
+26-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:22:22-62
+27    <uses-feature
+27-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:25:5-27:36
+28        android:name="android.hardware.camera"
+28-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:26:9-47
+29        android:required="false" />
+29-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:27:9-33
+30    <uses-feature
+30-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:28:5-30:36
+31        android:name="android.hardware.camera.front"
+31-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:29:9-53
+32        android:required="false" /> <!-- TODO replace above two with next line after Android 4.2 -->
+32-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:30:9-33
+33    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+34    <uses-feature
+34-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:33:5-35:36
+35        android:name="android.hardware.camera.autofocus"
+35-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:34:9-57
+36        android:required="false" />
+36-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:35:9-33
+37    <uses-feature
+37-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:36:5-38:36
+38        android:name="android.hardware.camera.flash"
+38-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:37:9-53
+39        android:required="false" />
+39-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:38:9-33
+40    <uses-feature
+40-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:39:5-41:36
+41        android:name="android.hardware.screen.landscape"
+41-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:40:9-57
+42        android:required="false" />
+42-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:41:9-33
+43    <uses-feature
+43-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:42:5-44:36
+44        android:name="android.hardware.wifi"
+44-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:43:9-45
+45        android:required="false" />
+45-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:44:9-33
+46
+47    <application
+47-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:5:5-27:19
+48        android:allowBackup="true"
+48-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:6:9-35
+49        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+49-->[androidx.core:core:1.13.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/09c331ac7df624c402f5a79884aeeb04/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+50        android:dataExtractionRules="@xml/data_extraction_rules"
+50-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:7:9-65
+51        android:debuggable="true"
+52        android:extractNativeLibs="false"
+53        android:fullBackupContent="@xml/backup_rules"
+53-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:8:9-54
+54        android:icon="@mipmap/ic_launcher"
+54-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:9:9-43
+55        android:label="@string/app_name"
+55-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:10:9-41
+56        android:roundIcon="@mipmap/ic_launcher_round"
+56-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:11:9-54
+57        android:supportsRtl="true"
+57-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:12:9-35
+58        android:testOnly="true"
+59        android:theme="@style/Theme.Shoppingbasket" >
+59-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:13:9-52
+60        <activity
+60-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:14:9-23:20
+61            android:name="com.example.shopping_basket.MainActivity"
+61-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:15:13-41
+62            android:exported="true"
+62-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:16:13-36
+63            android:theme="@style/Theme.Shoppingbasket" >
+63-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:17:13-56
+64            <intent-filter>
+64-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:18:13-22:29
+65                <action android:name="android.intent.action.MAIN" />
+65-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:19:17-69
+65-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:19:25-66
+66
+67                <category android:name="android.intent.category.LAUNCHER" />
+67-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:21:17-77
+67-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:21:27-74
+68            </intent-filter>
+69        </activity>
+70
+71        <meta-data
+71-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:24:9-26:57
+72            android:name="preloaded_fonts"
+72-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:25:13-43
+73            android:resource="@array/preloaded_fonts" />
+73-->/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/AndroidManifest.xml:26:13-54
+74
+75        <service
+75-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:14:9-23:19
+76            android:name="com.google.firebase.components.ComponentDiscoveryService"
+76-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:15:13-84
+77            android:directBootAware="true"
+77-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:32:13-43
+78            android:exported="false" >
+78-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:16:13-37
+79            <meta-data
+79-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:17:13-19:85
+80                android:name="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+80-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:18:17-122
+81                android:value="com.google.firebase.components.ComponentRegistrar" />
+81-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:19:17-82
+82            <meta-data
+82-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:20:13-22:85
+83                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+83-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:21:17-111
+84                android:value="com.google.firebase.components.ComponentRegistrar" />
+84-->[com.google.firebase:firebase-firestore:26.0.2] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/eb00dd3c38db5828c7e0e52fc8c4388c/transformed/firebase-firestore-26.0.2/AndroidManifest.xml:22:17-82
+85            <meta-data
+85-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:33:13-35:85
+86                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+86-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:34:17-139
+87                android:value="com.google.firebase.components.ComponentRegistrar" />
+87-->[com.google.android.gms:play-services-measurement-api:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/c6a8867c4bcdf7de764179ea11ac3515/transformed/play-services-measurement-api-23.0.0/AndroidManifest.xml:35:17-82
+88            <meta-data
+88-->[com.google.firebase:firebase-installations:19.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/886477bf27a5f2788aafd1330ca73cca/transformed/firebase-installations-19.0.1/AndroidManifest.xml:15:13-17:85
+89                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+89-->[com.google.firebase:firebase-installations:19.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/886477bf27a5f2788aafd1330ca73cca/transformed/firebase-installations-19.0.1/AndroidManifest.xml:16:17-130
+90                android:value="com.google.firebase.components.ComponentRegistrar" />
+90-->[com.google.firebase:firebase-installations:19.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/886477bf27a5f2788aafd1330ca73cca/transformed/firebase-installations-19.0.1/AndroidManifest.xml:17:17-82
+91            <meta-data
+91-->[com.google.firebase:firebase-installations:19.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/886477bf27a5f2788aafd1330ca73cca/transformed/firebase-installations-19.0.1/AndroidManifest.xml:18:13-20:85
+92                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+92-->[com.google.firebase:firebase-installations:19.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/886477bf27a5f2788aafd1330ca73cca/transformed/firebase-installations-19.0.1/AndroidManifest.xml:19:17-127
+93                android:value="com.google.firebase.components.ComponentRegistrar" />
+93-->[com.google.firebase:firebase-installations:19.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/886477bf27a5f2788aafd1330ca73cca/transformed/firebase-installations-19.0.1/AndroidManifest.xml:20:17-82
+94            <meta-data
+94-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:35:13-37:85
+95                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+95-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:36:17-109
+96                android:value="com.google.firebase.components.ComponentRegistrar" />
+96-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:37:17-82
+97        </service>
+98
+99        <receiver
+99-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:29:9-33:20
+100            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+100-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:30:13-85
+101            android:enabled="true"
+101-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:31:13-35
+102            android:exported="false" >
+102-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:32:13-37
+103        </receiver>
+104
+105        <service
+105-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:35:9-38:40
+106            android:name="com.google.android.gms.measurement.AppMeasurementService"
+106-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:36:13-84
+107            android:enabled="true"
+107-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:37:13-35
+108            android:exported="false" />
+108-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:38:13-37
+109        <service
+109-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:39:9-43:72
+110            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+110-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:40:13-87
+111            android:enabled="true"
+111-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:41:13-35
+112            android:exported="false"
+112-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:42:13-37
+113            android:permission="android.permission.BIND_JOB_SERVICE" />
+113-->[com.google.android.gms:play-services-measurement:23.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8fb19970565853b259f8b4253b0ff734/transformed/play-services-measurement-23.0.0/AndroidManifest.xml:43:13-69
+114
+115        <provider
+115-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:23:9-28:39
+116            android:name="com.google.firebase.provider.FirebaseInitProvider"
+116-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:24:13-77
+117            android:authorities="com.example.shopping_basket.firebaseinitprovider"
+117-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:25:13-72
+118            android:directBootAware="true"
+118-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:26:13-43
+119            android:exported="false"
+119-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:27:13-37
+120            android:initOrder="100" />
+120-->[com.google.firebase:firebase-common:22.0.1] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/fc7e2841fbcba46d1a04a53876574cd3/transformed/firebase-common-22.0.1/AndroidManifest.xml:28:13-36
+121
+122        <uses-library
+122-->[androidx.privacysandbox.ads:ads-adservices:1.1.0-beta11] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/a2a476307251231c297f2f3228763816/transformed/ads-adservices-1.1.0-beta11/AndroidManifest.xml:23:9-25:40
+123            android:name="android.ext.adservices"
+123-->[androidx.privacysandbox.ads:ads-adservices:1.1.0-beta11] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/a2a476307251231c297f2f3228763816/transformed/ads-adservices-1.1.0-beta11/AndroidManifest.xml:24:13-50
+124            android:required="false" />
+124-->[androidx.privacysandbox.ads:ads-adservices:1.1.0-beta11] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/a2a476307251231c297f2f3228763816/transformed/ads-adservices-1.1.0-beta11/AndroidManifest.xml:25:13-37
+125
+126        <provider
+126-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+127            android:name="androidx.startup.InitializationProvider"
+127-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+128            android:authorities="com.example.shopping_basket.androidx-startup"
+128-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+129            android:exported="false" >
+129-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+130            <meta-data
+130-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+131                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+131-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+132                android:value="androidx.startup" />
+132-->[androidx.emoji2:emoji2:1.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/8f5955e34769e85346cd1da3cb2a978e/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+133            <meta-data
+133-->[androidx.lifecycle:lifecycle-process:2.9.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/75997faec5c26a986330a6cbc1245266/transformed/lifecycle-process-2.9.0/AndroidManifest.xml:29:13-31:52
+134                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+134-->[androidx.lifecycle:lifecycle-process:2.9.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/75997faec5c26a986330a6cbc1245266/transformed/lifecycle-process-2.9.0/AndroidManifest.xml:30:17-78
+135                android:value="androidx.startup" />
+135-->[androidx.lifecycle:lifecycle-process:2.9.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/75997faec5c26a986330a6cbc1245266/transformed/lifecycle-process-2.9.0/AndroidManifest.xml:31:17-49
+136            <meta-data
+136-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:29:13-31:52
+137                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+137-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:30:17-85
+138                android:value="androidx.startup" />
+138-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:31:17-49
+139        </provider>
+140
+141        <uses-library
+141-->[androidx.window:window:1.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/006d033bfce57a36004dc57c5d1b0238/transformed/window-1.0.0/AndroidManifest.xml:25:9-27:40
+142            android:name="androidx.window.extensions"
+142-->[androidx.window:window:1.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/006d033bfce57a36004dc57c5d1b0238/transformed/window-1.0.0/AndroidManifest.xml:26:13-54
+143            android:required="false" />
+143-->[androidx.window:window:1.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/006d033bfce57a36004dc57c5d1b0238/transformed/window-1.0.0/AndroidManifest.xml:27:13-37
+144        <uses-library
+144-->[androidx.window:window:1.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/006d033bfce57a36004dc57c5d1b0238/transformed/window-1.0.0/AndroidManifest.xml:28:9-30:40
+145            android:name="androidx.window.sidecar"
+145-->[androidx.window:window:1.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/006d033bfce57a36004dc57c5d1b0238/transformed/window-1.0.0/AndroidManifest.xml:29:13-51
+146            android:required="false" />
+146-->[androidx.window:window:1.0.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/006d033bfce57a36004dc57c5d1b0238/transformed/window-1.0.0/AndroidManifest.xml:30:13-37
+147
+148        <activity
+148-->[com.google.android.gms:play-services-base:18.5.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/f886c98690e469ef760c8cd12b428842/transformed/play-services-base-18.5.0/AndroidManifest.xml:5:9-173
+149            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+149-->[com.google.android.gms:play-services-base:18.5.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/f886c98690e469ef760c8cd12b428842/transformed/play-services-base-18.5.0/AndroidManifest.xml:5:19-85
+150            android:exported="false"
+150-->[com.google.android.gms:play-services-base:18.5.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/f886c98690e469ef760c8cd12b428842/transformed/play-services-base-18.5.0/AndroidManifest.xml:5:146-170
+151            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+151-->[com.google.android.gms:play-services-base:18.5.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/f886c98690e469ef760c8cd12b428842/transformed/play-services-base-18.5.0/AndroidManifest.xml:5:86-145
+152
+153        <meta-data
+153-->[com.google.android.gms:play-services-basement:18.8.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/901511a9cae18b1b16ea03d452fbd7a6/transformed/play-services-basement-18.8.0/AndroidManifest.xml:21:9-23:69
+154            android:name="com.google.android.gms.version"
+154-->[com.google.android.gms:play-services-basement:18.8.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/901511a9cae18b1b16ea03d452fbd7a6/transformed/play-services-basement-18.8.0/AndroidManifest.xml:22:13-58
+155            android:value="@integer/google_play_services_version" />
+155-->[com.google.android.gms:play-services-basement:18.8.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/901511a9cae18b1b16ea03d452fbd7a6/transformed/play-services-basement-18.8.0/AndroidManifest.xml:23:13-66
+156
+157        <activity
+157-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:47:9-53:63
+158            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+158-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:48:13-74
+159            android:clearTaskOnLaunch="true"
+159-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:49:13-45
+160            android:screenOrientation="sensorLandscape"
+160-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:50:13-56
+161            android:stateNotNeeded="true"
+161-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:51:13-42
+162            android:theme="@style/zxing_CaptureTheme"
+162-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:52:13-54
+163            android:windowSoftInputMode="stateAlwaysHidden" />
+163-->[com.journeyapps:zxing-android-embedded:4.3.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/3736c7b7dadc24fc091c28fbde6bc145/transformed/zxing-android-embedded-4.3.0/AndroidManifest.xml:53:13-60
+164
+165        <receiver
+165-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:34:9-52:20
+166            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+166-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:35:13-76
+167            android:directBootAware="false"
+167-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:36:13-44
+168            android:enabled="true"
+168-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:37:13-35
+169            android:exported="true"
+169-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:38:13-36
+170            android:permission="android.permission.DUMP" >
+170-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:39:13-57
+171            <intent-filter>
+171-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:40:13-42:29
+172                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+172-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:17-91
+172-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:25-88
+173            </intent-filter>
+174            <intent-filter>
+174-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:43:13-45:29
+175                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+175-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:17-85
+175-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:25-82
+176            </intent-filter>
+177            <intent-filter>
+177-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:46:13-48:29
+178                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+178-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:17-88
+178-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:25-85
+179            </intent-filter>
+180            <intent-filter>
+180-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:49:13-51:29
+181                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+181-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:17-95
+181-->[androidx.profileinstaller:profileinstaller:1.4.0] /Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/0ad15c5b003408f82e40e43748d894f5/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:25-92
+182            </intent-filter>
+183        </receiver>
+184    </application>
+185
+186</manifest>

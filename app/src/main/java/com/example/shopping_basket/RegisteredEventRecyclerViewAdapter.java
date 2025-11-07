@@ -7,21 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.shopping_basket.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.shopping_basket.databinding.RegisteredEventItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class RegisteredEventRecyclerViewAdapter extends RecyclerView.Adapter<RegisteredEventRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private ArrayList<Event> registeredEvents;
 
-    public RegisteredEventRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public RegisteredEventRecyclerViewAdapter(ArrayList<Event> registeredEvents) {
+        this.registeredEvents = registeredEvents;
     }
 
     @Override
@@ -33,20 +32,16 @@ public class RegisteredEventRecyclerViewAdapter extends RecyclerView.Adapter<Reg
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return registeredEvents.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
-        public PlaceholderItem mItem;
 
         public ViewHolder(RegisteredEventItemBinding binding) {
             super(binding.getRoot());

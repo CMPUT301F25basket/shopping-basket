@@ -66,9 +66,9 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         // TODO IMPLEMENTATION:
         if (eventItem.getStartDate() != null && eventItem.getEndDate() != null) {
             java.text.SimpleDateFormat dateFormat =
-                    new java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault());
+                    new java.text.SimpleDateFormat("MMM/dd/yyyy", java.util.Locale.getDefault());
             java.text.SimpleDateFormat timeFormat =
-                    new java.text.SimpleDateFormat("h:mm a", java.util.Locale.getDefault());
+                    new java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault());
 
             String dateText = dateFormat.format(eventItem.getStartDate().getTime()) + " - " +
                     dateFormat.format(eventItem.getEndDate().getTime());
@@ -78,8 +78,11 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
                     timeFormat.format(eventItem.getEndDate().getTime());
             holder.eventCardDuration.setText(durationText);
 
-            long diffMillis = eventItem.getEndDate().getTimeInMillis() - System.currentTimeMillis();
-            long daysLeft = Math.max(0, diffMillis / (24 * 60 * 60 * 1000));
+
+            long diffMillis = eventItem.getEndDate().getTime() - System.currentTimeMillis();
+            long daysLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffMillis);
+
+            daysLeft = Math.max(0, diffMillis / (24 * 60 * 60 * 1000));
             holder.eventCardStatus.setText("Closes in " + daysLeft + " days");
         } else {
             holder.eventCardDate.setText("Date TBD");
