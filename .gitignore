@@ -4,3 +4,4 @@ GoogleService-Info.plist
 /build
 /app/build
 /captures
+.gradle
