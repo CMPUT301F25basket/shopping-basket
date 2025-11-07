@@ -103,7 +103,7 @@ public class EventDetailFragment extends Fragment {
             binding.buttonRegisterEvent.setText("Unregister");
         } else {
             // User is not registered, so show "Register" state
-            binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), com.google.android.material.R.color.design_default_color_primary)); // Or your default button color
+            binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.light_blue));
             binding.buttonRegisterEvent.setText("Register");
         }
         // Update the count of registered users
