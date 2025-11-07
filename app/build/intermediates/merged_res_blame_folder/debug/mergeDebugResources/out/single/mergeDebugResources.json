@@ -1,0 +1,226 @@
+[
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_registered_event_item.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/registered_event_item.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_entrant_list.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_entrant_list.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_content_main.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/content_main.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_login_signup.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_login_signup.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_activity_login.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_home.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_calendar_svgrepo_com.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/calendar_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_bottom_nav_selector.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/bottom_nav_selector.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/font_roboto.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/font/roboto.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_event_creation.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_event_creation.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_lottery.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_lottery.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_registered_events.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_registered_events.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_rounded_32.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/rounded_32.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_upload.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/upload.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_inbox_item.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_inbox_item.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_inbox_line_svgrepo_com.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/inbox_line_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_activity_signup.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/activity_signup.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_add_circle_svgrepo_com.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/add_circle_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_inbox.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_inbox.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_user_circle_svgrepo_com.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/user_circle_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_event_detail.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_event_detail.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/menu_menu_main.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/menu/menu_main.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_plain_svgrepo_com.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/plain_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_rounded_8.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/rounded_8.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_reply_svgrepo_com.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/reply_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/xml_backup_rules.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_activity_main.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/font_roboto_light.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/font/roboto_light.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_image_placeholder.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/image_placeholder.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_edit_profile.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_edit_profile.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_rounded_24.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/rounded_24.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_my_event.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_my_event.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_send_notification.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_send_notification.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_event_overview_card.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/event_overview_card.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/font_roboto_thin.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/font/roboto_thin.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/font_roboto_medium.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/font/roboto_medium.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_profile.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.shopping_basket.app-main-66:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/font_roboto_bold.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/font/roboto_bold.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_fragment_event_qr.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/fragment_event_qr.xml"
+    },
+    {
+        "merged": "com.example.shopping_basket.app-debug-64:/layout_entrant_item.xml.flat",
+        "source": "com.example.shopping_basket.app-main-66:/layout/entrant_item.xml"
+    }
+]
