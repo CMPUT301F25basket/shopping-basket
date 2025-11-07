@@ -13,7 +13,7 @@
         android:layout_marginTop="?attr/actionBarSize">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_qr_to_my_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -33,7 +33,7 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/created_short_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -43,13 +43,13 @@
                 android:textSize="32sp" />
 
             <ImageView
-                android:id="@+id/eventQR"
+                android:id="@+id/event_qr"
                 android:layout_width="320dp"
                 android:layout_height="320dp"
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/created_long_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

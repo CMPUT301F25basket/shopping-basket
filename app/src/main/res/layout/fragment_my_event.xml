@@ -16,7 +16,7 @@
             >
 
             <ImageView
-                android:id="@+id/myEventPoster"
+                android:id="@+id/my_event_poster"
                 android:layout_width="match_parent"
                 android:layout_height="330dp"
                 android:src="@drawable/image_placeholder" />
@@ -36,7 +36,7 @@
                     android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:id="@+id/myEventName"
+                        android:id="@+id/my_event_name"
                         android:layout_width="213dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_bold"
@@ -44,7 +44,7 @@
                         android:textSize="32sp" />
 
                     <Button
-                        android:id="@+id/buttonLottery"
+                        android:id="@+id/button_open_lottery"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -59,7 +59,7 @@
                     android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:id="@+id/myEventDate"
+                        android:id="@+id/my_event_registration_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -68,7 +68,7 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/myEventDuration"
+                        android:id="@+id/my_event_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -79,7 +79,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/myEventStatus"
+                    android:id="@+id/my_event_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -88,7 +88,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/myEventRegistrationCount"
+                    android:id="@+id/my_event_registration_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
@@ -110,7 +110,7 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
-                    android:id="@+id/myEventDescription"
+                    android:id="@+id/my_event_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
@@ -119,7 +119,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/myEventGuideline"
+                    android:id="@+id/my_event_guideline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -135,7 +135,7 @@
                 android:paddingHorizontal="16dp">
 
                 <Button
-                    android:id="@+id/buttonEnrolledEntrants"
+                    android:id="@+id/button_to_enrolled_entrants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -147,7 +147,7 @@
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/buttonSelectedEntrants"
+                    android:id="@+id/button_to_selected_entrants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -157,7 +157,7 @@
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/buttonUnselectedEntrants"
+                    android:id="@+id/button_to_unselected_entrants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

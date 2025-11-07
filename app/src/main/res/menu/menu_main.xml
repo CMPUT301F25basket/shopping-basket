@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.shopping_basket.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/action_profile"
+        android:icon="@drawable/user_circle_svgrepo_com"
+        android:title="@string/action_profile"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_send"
+        android:icon="@drawable/plain_svgrepo_com"
+        android:title="@string/action_send"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 </menu>

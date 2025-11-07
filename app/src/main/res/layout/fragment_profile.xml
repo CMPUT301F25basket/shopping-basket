@@ -8,65 +8,80 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:paddingHorizontal="24dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/user_name"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_light" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_light" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="45dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/roboto_light"
-                android:text="Registration history" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:fontFamily="@font/roboto_medium"
-                android:text="Delete profile" />
+                android:textSize="24sp" />
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/profile_email"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/roboto_light"
-                android:text="Edit profile" />
+                android:fontFamily="@font/roboto_light" />
+
+            <TextView
+                android:id="@+id/profile_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_light" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_to_registration_history"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_light"
+            android:text="Registration history" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_delete_profile"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/oxford_grey"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Delete profile"
+            android:textColor="@color/error"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/button_edit_profile"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/oxford_grey"
+            android:fontFamily="@font/roboto_light"
+            android:text="Edit profile"
+            android:textColor="@color/oxford_blue"
+            android:textSize="16sp" />
+    </LinearLayout>
 </LinearLayout>

@@ -7,7 +7,7 @@
     android:id="@+id/inboxItemFragment">
 
     <TextView
-        android:id="@+id/inbox_content"
+        android:id="@+id/inbox_item_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
@@ -15,7 +15,7 @@
         android:fontFamily="@font/roboto"/>
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/inbox_item_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"

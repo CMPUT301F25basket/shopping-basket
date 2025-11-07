@@ -7,7 +7,7 @@
     android:id="@+id/homeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventCardView"
+        android:id="@+id/event_card_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
