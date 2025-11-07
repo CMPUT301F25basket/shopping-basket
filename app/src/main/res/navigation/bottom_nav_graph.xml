@@ -9,15 +9,41 @@
         android:id="@+id/eventCreationFragment"
         android:name="com.example.shopping_basket.EventCreationFragment"
         android:label="Create event"
-        tools:layout="@layout/fragment_event_creation" />
+        tools:layout="@layout/fragment_event_creation" >
+        <action
+            android:id="@+id/action_eventCreationFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.shopping_basket.HomeFragment"
         android:label="Events"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_eventCreationFragment"
+            app:destination="@id/eventCreationFragment"
+            app:popUpTo="@id/eventCreationFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_inboxFragment"
+            app:destination="@id/inboxFragment"
+            app:popUpTo="@id/inboxFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/inboxFragment"
         android:name="com.example.shopping_basket.InboxFragment"
         android:label="Inbox"
-        tools:layout="@layout/fragment_inbox" />
+        tools:layout="@layout/fragment_inbox" >
+        <action
+            android:id="@+id/action_inboxFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_homeFragment"
+        app:destination="@id/homeFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="true" />
 </navigation>

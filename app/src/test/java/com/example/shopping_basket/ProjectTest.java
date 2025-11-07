@@ -23,8 +23,8 @@ public class ProjectTest {
 
     private ArrayList<Event> testEventData(ArrayList<Profile> profileData){
         ArrayList<Event> testEvents = new ArrayList<Event>();
-        testEvents.add(new Event(profileData.get(1), "Test Event", "This is a test event", 2, 3, null, null));
-        testEvents.add(new Event(profileData.get(3), "Test Event 2", "This is a test event", 3, 0, null, null));
+        testEvents.add(new Event(profileData.get(1), "Test Event", "This is a test event", 2, 3, null, null, null));
+        testEvents.add(new Event(profileData.get(3), "Test Event 2", "This is a test event", 3, 0, null, null, null));
         return testEvents;
     }
 

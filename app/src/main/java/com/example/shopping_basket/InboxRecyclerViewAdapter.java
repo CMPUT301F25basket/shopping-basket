@@ -6,21 +6,19 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.shopping_basket.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.shopping_basket.databinding.FragmentInboxItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<InboxRecyclerViewAdapter.ViewHolder> {
+    private ArrayList<Notif> inbox;
 
-    private final List<PlaceholderItem> mValues;
-
-    public InboxRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public InboxRecyclerViewAdapter(ArrayList<Notif> inbox) {
+        this.inbox = inbox;
     }
 
     @Override
@@ -31,20 +29,16 @@ public class InboxRecyclerViewAdapter extends RecyclerView.Adapter<InboxRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return inbox.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
-        public PlaceholderItem mItem;
 
         public ViewHolder(FragmentInboxItemBinding binding) {
             super(binding.getRoot());

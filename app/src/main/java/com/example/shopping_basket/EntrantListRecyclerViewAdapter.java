@@ -7,21 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.shopping_basket.placeholder.PlaceholderContent.PlaceholderItem;
 import com.example.shopping_basket.databinding.EntrantItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class EntrantListRecyclerViewAdapter extends RecyclerView.Adapter<EntrantListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private List<Profile> entrants;
 
-    public EntrantListRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public EntrantListRecyclerViewAdapter(ArrayList<Profile> entrants) {
+        this.entrants = entrants;
     }
 
     @Override
@@ -32,23 +31,20 @@ public class EntrantListRecyclerViewAdapter extends RecyclerView.Adapter<Entrant
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-
-        holder.mIdView.setText(mValues.get(position).id);
+        String entrantName = holder.entrantName.getText().toString();
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return entrants.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public PlaceholderItem mItem;
+        public final TextView entrantName;
 
         public ViewHolder(EntrantItemBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.entrantName;
+            entrantName = binding.entrantName;
         }
 
         @Override
