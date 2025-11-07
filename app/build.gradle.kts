@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.legacy.support.v4)
     implementation(libs.fragment)
+    implementation(libs.firebase.auth)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
