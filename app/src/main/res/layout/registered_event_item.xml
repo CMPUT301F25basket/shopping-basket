@@ -11,6 +11,7 @@
         android:paddingHorizontal="16dp"
         android:paddingTop="2dp"
         android:textSize="16sp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/roboto_medium"
         />
 
@@ -22,16 +23,6 @@
         android:paddingTop="2dp"
         android:textSize="12sp"
         android:fontFamily="@font/roboto"
-        />
-
-    <TextView
-        android:id="@+id/registration_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="2dp"
-        android:textSize="12sp"
-        android:textColor="@color/oxford_grey"
-        android:fontFamily="@font/roboto"
+        android:layout_marginBottom="8dp"
         />
 </LinearLayout>

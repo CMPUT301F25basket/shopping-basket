@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +11,8 @@ import java.util.Random;
  * This class defines a user created event
  * and tracks all registrants
  */
+
+@IgnoreExtraProperties  // Firebase will not issue warning since there is getter for WaitListSize but not setter
 public class Event implements Serializable {
     private Profile owner;
     private String name;
