@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/calendar_svgrepo_com"
+        android:title="Events" />
+    <item
+        android:id="@+id/myEvent"
+        android:icon="@drawable/add_circle_svgrepo_com"
+        android:title="My Event" />
+    <item
+        android:id="@+id/inbox"
+        android:icon="@drawable/inbox_line_svgrepo_com"
+        android:title="Inbox" />
+</menu>
