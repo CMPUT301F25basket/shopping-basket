@@ -1,13 +1,18 @@
 package com.example.shopping_basket;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 /**
  * This class defines a user created event
  * and tracks all registrants
  */
+
+@IgnoreExtraProperties  // Firebase will not issue warning since there is getter for WaitListSize but not setter
 public class Event implements Serializable {
     private Profile owner;
     private String name;
@@ -15,15 +20,18 @@ public class Event implements Serializable {
     private int selectNum;
     //
     private int maxReg;
-    private Calendar startDate;
-    private Calendar endDate;
+    private Date startDate;
+    private Date endDate;
     //private ----- poster;
+    private String eventTime;
     private ArrayList<Profile> waitingList;
     private ArrayList<Profile> inviteList;
     private ArrayList<Profile> enrollList;
     private ArrayList<Profile> cancelList;
 
-    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Calendar startDate, Calendar endDate){
+    public Event() {}
+
+    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
         this.owner = owner;
         this.name = name;
         this.desc = desc;
@@ -31,6 +39,7 @@ public class Event implements Serializable {
         this.maxReg = maxReg;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.eventTime = eventTime;
         this.waitingList = new ArrayList<Profile>();
         this.inviteList = new ArrayList<Profile>();
         this.enrollList = new ArrayList<Profile>();
@@ -269,19 +278,19 @@ public class Event implements Serializable {
         this.maxReg = maxReg;
     }
 
-    public Calendar getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Calendar startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public Calendar getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Calendar endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
@@ -303,5 +312,13 @@ public class Event implements Serializable {
 
     public ArrayList<Profile> getCancelList() {
         return cancelList;
+    }
+
+    public String getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(String eventTime) {
+        this.eventTime = eventTime;
     }
 }

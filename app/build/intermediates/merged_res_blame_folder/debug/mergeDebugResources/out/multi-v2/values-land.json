@@ -1,10 +1,37 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.shopping_basket.app-mergeDebugResources-46:/values-land/values-land.xml",
+            "outputFile": "com.example.shopping_basket.app-mergeDebugResources-56:/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\abbas\\.gradle\\caches\\8.13\\transforms\\ea43f91b069e50ef56f558e332dbdc36\\transformed\\material-1.13.0\\res\\values-land\\values-land.xml",
+                    "source": "/Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/5d4d84be48d85da818162abc3d702342/transformed/appcompat-1.7.1/res/values-land/values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,125,196",
+                        "endColumns": "69,70,67",
+                        "endOffsets": "120,191,259"
+                    }
+                },
+                {
+                    "source": "/Users/chauu335/AndroidStudioProjects/shopping-basket/app/src/main/res/values-land/dimens.xml",
+                    "from": {
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "16",
+                        "endColumns": "41",
+                        "endOffsets": "53"
+                    },
+                    "to": {
+                        "startLines": "5",
+                        "startColumns": "4",
+                        "startOffsets": "264",
+                        "endColumns": "41",
+                        "endOffsets": "301"
+                    }
+                },
+                {
+                    "source": "/Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/44d90b3ca785e53c7a2bb78041dea8f6/transformed/material-1.13.0/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,22,31,36",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -20,33 +47,6 @@
                         "endLines": "6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,25,34,39,42",
                         "endColumns": "74,73,64,66,69,71,68,68,81,89,75,67,66,77,64,66,10,10,10,10",
                         "endOffsets": "376,450,515,582,652,724,793,862,944,1034,1110,1178,1245,1323,1388,1455,1627,2196,2465,2693"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\abbas\\.gradle\\caches\\8.13\\transforms\\ed50c35c0c0ae6ee98338bf2d99804b1\\transformed\\appcompat-1.7.1\\res\\values-land\\values-land.xml",
-                    "from": {
-                        "startLines": "2,3,4",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "55,125,196",
-                        "endColumns": "69,70,67",
-                        "endOffsets": "120,191,259"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\abbas\\AndroidStudioProjects\\shopping-basket\\app\\src\\main\\res\\values-land\\dimens.xml",
-                    "from": {
-                        "startLines": "1",
-                        "startColumns": "4",
-                        "startOffsets": "17",
-                        "endColumns": "41",
-                        "endOffsets": "54"
-                    },
-                    "to": {
-                        "startLines": "5",
-                        "startColumns": "4",
-                        "startOffsets": "264",
-                        "endColumns": "41",
-                        "endOffsets": "301"
                     }
                 }
             ]

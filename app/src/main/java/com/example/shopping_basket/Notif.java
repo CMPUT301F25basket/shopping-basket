@@ -1,6 +1,5 @@
 package com.example.shopping_basket;
-
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  * This class defines a notification sent to a user
@@ -10,11 +9,12 @@ public class Notif {
     // target is GUID of profile notif is sent to
     private String target;
     private String message;
-    //private Calendar time;
+    private Date time;
 
     public Notif(String target, String message){
         this.target = target;
         this.message = message;
+        this.time = new Date();
     }
 
     public String getTarget() {
@@ -31,5 +31,10 @@ public class Notif {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Date getTime() { return time; }
+    public void setTime(Date time) {
+        this.time = time;
     }
 }

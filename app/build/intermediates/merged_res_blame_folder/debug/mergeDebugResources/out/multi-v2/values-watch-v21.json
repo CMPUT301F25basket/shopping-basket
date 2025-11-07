@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.shopping_basket.app-mergeDebugResources-46:/values-watch-v21/values-watch-v21.xml",
+            "outputFile": "com.example.shopping_basket.app-mergeDebugResources-56:/values-watch-v21/values-watch-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\abbas\\.gradle\\caches\\8.13\\transforms\\ed50c35c0c0ae6ee98338bf2d99804b1\\transformed\\appcompat-1.7.1\\res\\values-watch-v21\\values-watch-v21.xml",
+                    "source": "/Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/5d4d84be48d85da818162abc3d702342/transformed/appcompat-1.7.1/res/values-watch-v21/values-watch-v21.xml",
                     "from": {
                         "startLines": "2,6,10",
                         "startColumns": "4,4,4",

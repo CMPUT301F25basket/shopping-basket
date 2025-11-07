@@ -6,6 +6,7 @@ array com_google_android_gms_fonts_certs_prod
 array preloaded_fonts
 color black
 color error
+color error_bg
 color light_blue
 color oxford_blue
 color oxford_dark
@@ -169,10 +170,16 @@ string event_name
 string event_status
 string event_time
 string first_fragment_label
+string gcm_defaultSenderId
+string google_api_key
+string google_app_id
+string google_crash_reporting_api_key
+string google_storage_bucket
 string hello_blank_fragment
 string lorem_ipsum
 string next
 string previous
+string project_id
 string second_fragment_label
 string user_email
 string user_name

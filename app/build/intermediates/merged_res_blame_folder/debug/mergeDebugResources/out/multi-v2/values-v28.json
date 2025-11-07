@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.shopping_basket.app-mergeDebugResources-46:/values-v28/values-v28.xml",
+            "outputFile": "com.example.shopping_basket.app-mergeDebugResources-56:/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\abbas\\.gradle\\caches\\8.13\\transforms\\ea43f91b069e50ef56f558e332dbdc36\\transformed\\material-1.13.0\\res\\values-v28\\values-v28.xml",
+                    "source": "/Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/44d90b3ca785e53c7a2bb78041dea8f6/transformed/material-1.13.0/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\abbas\\.gradle\\caches\\8.13\\transforms\\ed50c35c0c0ae6ee98338bf2d99804b1\\transformed\\appcompat-1.7.1\\res\\values-v28\\values-v28.xml",
+                    "source": "/Users/chauu335/AndroidStudioProjects/basket/caches/8.13/transforms/5d4d84be48d85da818162abc3d702342/transformed/appcompat-1.7.1/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",

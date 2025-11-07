@@ -3,6 +3,7 @@ package com.example.shopping_basket;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,9 +15,18 @@ import java.util.ArrayList;
 
 public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.ViewHolder> {
     private ArrayList<Event> events;
+    private OnItemClickListener onItemClickListener;
 
     public EventCardAdapter(ArrayList<Event> events) {
         this.events = events;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,23 +73,33 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
 
         holder.eventCardName.setText(eventItem.getName());
 
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(position);
+            }
+        });
+
         // TODO IMPLEMENTATION:
         if (eventItem.getStartDate() != null && eventItem.getEndDate() != null) {
             java.text.SimpleDateFormat dateFormat =
-                    new java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault());
+                    new java.text.SimpleDateFormat("MM/dd/yyyy", java.util.Locale.getDefault());
             java.text.SimpleDateFormat timeFormat =
-                    new java.text.SimpleDateFormat("h:mm a", java.util.Locale.getDefault());
+                    new java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault());
 
             String dateText = dateFormat.format(eventItem.getStartDate().getTime()) + " - " +
                     dateFormat.format(eventItem.getEndDate().getTime());
             holder.eventCardDate.setText(dateText);
-
-            String durationText = timeFormat.format(eventItem.getStartDate().getTime()) + " - " +
-                    timeFormat.format(eventItem.getEndDate().getTime());
+            // NOTE: Wrong time frame!
+            String durationText = timeFormat.format(eventItem.getEventTime());
             holder.eventCardDuration.setText(durationText);
 
-            long diffMillis = eventItem.getEndDate().getTimeInMillis() - System.currentTimeMillis();
-            long daysLeft = Math.max(0, diffMillis / (24 * 60 * 60 * 1000));
+
+            long diffMillis = eventItem.getEndDate().getTime() - System.currentTimeMillis();
+            long daysLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffMillis);
+
+            // Ensure daysLeft is not negative
+            daysLeft = Math.max(0, daysLeft);
+
             holder.eventCardStatus.setText("Closes in " + daysLeft + " days");
         } else {
             holder.eventCardDate.setText("Date TBD");
