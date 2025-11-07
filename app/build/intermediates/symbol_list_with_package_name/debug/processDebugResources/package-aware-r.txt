@@ -3865,8 +3865,10 @@ id action_container
 id action_context_bar
 id action_divider
 id action_eventCreationFragment_to_homeFragment
+id action_eventDetailFragment_to_homeFragment
 id action_global_homeFragment
 id action_homeFragment_to_eventCreationFragment
+id action_homeFragment_to_eventDetailFragment
 id action_homeFragment_to_inboxFragment
 id action_image
 id action_inboxFragment_to_homeFragment
@@ -4057,6 +4059,7 @@ id entireSpace
 id entrant_name
 id escape
 id eventCreationFragment
+id eventDetailFragment
 id event_card_list
 id event_card_name
 id event_card_poster
@@ -4289,7 +4292,6 @@ id rectangles
 id registered_event_name
 id registered_event_time
 id registered_events_list
-id registration_time
 id report_drawn
 id retreat
 id reverseSawtooth

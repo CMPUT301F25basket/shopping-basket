@@ -42,21 +42,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             eventCardDate = itemView.findViewById(R.id.event_card_registration_period);
             eventCardDuration = itemView.findViewById(R.id.event_card_time);
             eventCardStatus = itemView.findViewById(R.id.event_card_status);
-
-            // TODO IMPLEMENTATION:
-            itemView.setOnClickListener(v -> {
-                // Navigate to event detail screen
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Event selectedEvent = ((EventCardAdapter)
-                            ((RecyclerView) itemView.getParent()).getAdapter()).events.get(position);
-                    android.widget.Toast.makeText(
-                            itemView.getContext(),
-                            "Clicked: " + selectedEvent.getName(),
-                            android.widget.Toast.LENGTH_SHORT
-                    ).show();
-                }
-            });
         }
     }
 
@@ -90,9 +75,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
                     dateFormat.format(eventItem.getEndDate().getTime());
             holder.eventCardDate.setText(dateText);
             // NOTE: Wrong time frame!
-            String durationText = timeFormat.format(eventItem.getEventTime());
+            String durationText = eventItem.getEventTime();
             holder.eventCardDuration.setText(durationText);
-
 
             long diffMillis = eventItem.getEndDate().getTime() - System.currentTimeMillis();
             long daysLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffMillis);

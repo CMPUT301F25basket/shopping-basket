@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import static androidx.navigation.Navigation.findNavController;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -62,6 +64,11 @@ public class HomeFragment extends Fragment {
         binding.eventCardList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.eventCardList.setAdapter(eventAdapter);
         loadEvents();
+
+        eventAdapter.setOnItemClickListener(position -> {
+            Event selectedEvent = events.get(position);
+            navigateToEventDetail(selectedEvent);
+        });
     }
 
     private void loadEvents() {
@@ -79,5 +86,11 @@ public class HomeFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error loading events: " + e.getMessage());
                 });
+    }
+
+    private void navigateToEventDetail(Event event) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("event", event);
+        findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
     }
 }

@@ -3855,8 +3855,10 @@ int id action_container 0x7f0a003c
 int id action_context_bar 0x7f0a003d
 int id action_divider 0x7f0a003e
 int id action_eventCreationFragment_to_homeFragment 0x7f0a003f
+int id action_eventDetailFragment_to_homeFragment 0x7f0a0292
 int id action_global_homeFragment 0x7f0a0040
 int id action_homeFragment_to_eventCreationFragment 0x7f0a0041
+int id action_homeFragment_to_eventDetailFragment 0x7f0a0293
 int id action_homeFragment_to_inboxFragment 0x7f0a0042
 int id action_image 0x7f0a0043
 int id action_inboxFragment_to_homeFragment 0x7f0a0044
@@ -4041,6 +4043,7 @@ int id entireSpace 0x7f0a00f6
 int id entrant_name 0x7f0a00f7
 int id escape 0x7f0a00f8
 int id eventCreationFragment 0x7f0a00f9
+int id eventDetailFragment 0x7f0a0294
 int id event_card_list 0x7f0a00fa
 int id event_card_name 0x7f0a00fb
 int id event_card_poster 0x7f0a00fc
@@ -4271,7 +4274,6 @@ int id rectangles 0x7f0a01dc
 int id registered_event_name 0x7f0a01dd
 int id registered_event_time 0x7f0a01de
 int id registered_events_list 0x7f0a01df
-int id registration_time 0x7f0a01e0
 int id report_drawn 0x7f0a01e1
 int id retreat 0x7f0a01e2
 int id reverseSawtooth 0x7f0a01e3
