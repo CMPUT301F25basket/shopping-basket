@@ -111,7 +111,6 @@ public class EventCreationFragment extends Fragment {
         binding.textInputCreateEventEnd.setFocusable(false);
 
         binding.textInputCreateEventTime.setOnClickListener(v -> {
-            CalendarUtils.showDatePicker(requireContext(), binding.textInputCreateEventTime);
             CalendarUtils.showTimePicker(requireContext(), binding.textInputCreateEventTime);
         });
         binding.textInputCreateEventTime.setFocusable(false);

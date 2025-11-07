@@ -35,6 +35,13 @@ font roboto_bold
 font roboto_light
 font roboto_medium
 font roboto_thin
+id action_eventCreationFragment_to_homeFragment
+id action_eventDetailFragment_to_homeFragment
+id action_global_homeFragment
+id action_homeFragment_to_eventCreationFragment
+id action_homeFragment_to_eventDetailFragment
+id action_homeFragment_to_inboxFragment
+id action_inboxFragment_to_homeFragment
 id action_profile
 id action_send
 id appBarLayout
@@ -85,6 +92,7 @@ id edit_text_profile_name
 id edit_text_profile_phone
 id entrant_name
 id eventCreationFragment
+id eventDetailFragment
 id event_card_list
 id event_card_name
 id event_card_poster
@@ -121,7 +129,6 @@ id radio_unselected_entrants
 id registered_event_name
 id registered_event_time
 id registered_events_list
-id registration_time
 id text_input_create_event_desc
 id text_input_create_event_end
 id text_input_create_event_name
@@ -160,6 +167,7 @@ menu menu_main
 mipmap ic_launcher
 mipmap ic_launcher_round
 navigation bottom_nav_graph
+navigation nav_graph
 string action_profile
 string action_send
 string action_settings

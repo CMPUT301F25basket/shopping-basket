@@ -25,16 +25,11 @@ public final class RegisteredEventItemBinding implements ViewBinding {
   @NonNull
   public final TextView registeredEventTime;
 
-  @NonNull
-  public final TextView registrationTime;
-
   private RegisteredEventItemBinding(@NonNull LinearLayout rootView,
-      @NonNull TextView registeredEventName, @NonNull TextView registeredEventTime,
-      @NonNull TextView registrationTime) {
+      @NonNull TextView registeredEventName, @NonNull TextView registeredEventTime) {
     this.rootView = rootView;
     this.registeredEventName = registeredEventName;
     this.registeredEventTime = registeredEventTime;
-    this.registrationTime = registrationTime;
   }
 
   @Override
@@ -76,14 +71,8 @@ public final class RegisteredEventItemBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.registration_time;
-      TextView registrationTime = ViewBindings.findChildViewById(rootView, id);
-      if (registrationTime == null) {
-        break missingId;
-      }
-
       return new RegisteredEventItemBinding((LinearLayout) rootView, registeredEventName,
-          registeredEventTime, registrationTime);
+          registeredEventTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

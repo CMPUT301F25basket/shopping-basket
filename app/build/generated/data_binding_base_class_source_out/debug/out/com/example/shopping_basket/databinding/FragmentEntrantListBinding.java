@@ -4,9 +4,9 @@ package com.example.shopping_basket.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import com.example.shopping_basket.R;
 import java.lang.NullPointerException;
@@ -14,19 +14,19 @@ import java.lang.Override;
 
 public final class FragmentEntrantListBinding implements ViewBinding {
   @NonNull
-  private final RecyclerView rootView;
+  private final ListView rootView;
 
   @NonNull
-  public final RecyclerView list;
+  public final ListView list;
 
-  private FragmentEntrantListBinding(@NonNull RecyclerView rootView, @NonNull RecyclerView list) {
+  private FragmentEntrantListBinding(@NonNull ListView rootView, @NonNull ListView list) {
     this.rootView = rootView;
     this.list = list;
   }
 
   @Override
   @NonNull
-  public RecyclerView getRoot() {
+  public ListView getRoot() {
     return rootView;
   }
 
@@ -51,8 +51,8 @@ public final class FragmentEntrantListBinding implements ViewBinding {
       throw new NullPointerException("rootView");
     }
 
-    RecyclerView list = (RecyclerView) rootView;
+    ListView list = (ListView) rootView;
 
-    return new FragmentEntrantListBinding((RecyclerView) rootView, list);
+    return new FragmentEntrantListBinding((ListView) rootView, list);
   }
 }
