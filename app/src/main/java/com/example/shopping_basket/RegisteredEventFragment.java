@@ -1,27 +1,37 @@
 package com.example.shopping_basket;
 
-import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
+
+// We no longer need FirebaseAuth here
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
 
 
 /**
  * A fragment representing a list of Items.
  */
 public class RegisteredEventFragment extends Fragment {
+    private static final String TAG = "RegisteredEventFragment";
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private ListView registeredEventsListView;
+    private RegisteredEventAdapter adapter;
+    private ArrayList<Event> registeredEventsList;
+    private FirebaseFirestore db;
+    private Profile currentUser; // Use the Profile object from the singleton
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -30,40 +40,37 @@ public class RegisteredEventFragment extends Fragment {
     public RegisteredEventFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static RegisteredEventFragment newInstance(int columnCount) {
-        RegisteredEventFragment fragment = new RegisteredEventFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        db = FirebaseFirestore.getInstance();
+        // Get the current user from the ProfileManager singleton
+        currentUser = ProfileManager.getInstance().getCurrentUserProfile();
+        registeredEventsList = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registered_events, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-        }
+        registeredEventsListView = view.findViewById(R.id.registered_events_list);
+
+        adapter = new RegisteredEventAdapter(requireContext(), registeredEventsList);
+        registeredEventsListView.setAdapter(adapter);
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        loadRegisteredEvents();
+    }
+
+    private void loadRegisteredEvents() {
+        // Reserved for final product
     }
 }

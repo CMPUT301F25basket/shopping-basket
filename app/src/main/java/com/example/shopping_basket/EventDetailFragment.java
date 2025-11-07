@@ -21,11 +21,9 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment to display the details of a specific Event.
+ * It uses the ProfileManager singleton to determine the current user's registration status.
  */
-// TODO: Display event detail and (probably subclasses) for entrant/organizer operations
 public class EventDetailFragment extends Fragment {
     private Event event;
     private Profile profile;
@@ -53,6 +51,7 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.profile = ProfileManager.getInstance().getCurrentUserProfile();
         if (getArguments() != null) {
             event = (Event) getArguments().getSerializable("event");
         }
@@ -99,6 +98,7 @@ public class EventDetailFragment extends Fragment {
 
     private void updateRegisterButtonState() {
         if (profile == null) {
+            // No user is logged in, so disable the button and show a generic "Register" message.
             binding.buttonRegisterEvent.setEnabled(false);
             return;
         }
@@ -119,9 +119,7 @@ public class EventDetailFragment extends Fragment {
 
     private void setupClickListeners() {
         binding.buttonDetailToHome.setOnClickListener(v -> {
-            assert getActivity() != null;
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            fm.popBackStack();
+            NavHostFragment.findNavController(this).popBackStack();
         });
         binding.buttonRegisterEvent.setOnClickListener(v -> {
             if (event.getWaitingList().contains(profile)) {

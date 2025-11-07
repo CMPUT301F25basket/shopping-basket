@@ -1,64 +1,145 @@
 package com.example.shopping_basket;
 
+import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+
+import com.example.shopping_basket.databinding.FragmentEditProfileBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A DialogFragment for editing the user's profile (name and phone number).
  */
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends DialogFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "EditProfileFragment";
+    private FragmentEditProfileBinding binding;
+    private Profile currentUser;
+    private FirebaseFirestore db;
 
     public EditProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
-        EditProfileFragment fragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        currentUser = ProfileManager.getInstance().getCurrentUserProfile();
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        binding = FragmentEditProfileBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            dialog.setCanceledOnTouchOutside(true); // Dismiss when tapped outside
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (currentUser != null) {
+            setupInitialData();
+            setupClickListeners();
+        } else {
+            // Safeguard in case no user is logged in
+            Toast.makeText(getContext(), "Error: No user found to edit.", Toast.LENGTH_SHORT).show();
+            dismiss();
+        }
+    }
+
+    /**
+     * Pre-fills the input fields with the current user's data.
+     * The email field is disabled to prevent users from changing their unique identifier.
+     */
+    private void setupInitialData() {
+        binding.editTextProfileName.setText(currentUser.getName());
+        binding.editTextProfileEmail.setText(currentUser.getEmail());
+        binding.editTextProfilePhone.setText(currentUser.getPhone());
+
+        // --- IMPORTANT: Disable the email field ---
+        binding.editTextProfileEmail.setEnabled(false);
+        binding.editTextProfileEmail.setFocusable(false);
+    }
+
+    /**
+     * Sets up click listeners for the Confirm and Back buttons.
+     */
+    private void setupClickListeners() {
+        binding.buttonConfirmEditProfile.setOnClickListener(v -> saveProfileChanges());
+        binding.buttonCancelEditProfile.setOnClickListener(v -> dismiss()); // Just close the dialog
+    }
+
+    /**
+     * Validates input and saves the updated profile data to Firestore.
+     */
+    private void saveProfileChanges() {
+        String newName = binding.editTextProfileName.getText().toString().trim();
+        String newPhone = binding.editTextProfilePhone.getText().toString().trim();
+
+        if (newName.isEmpty()) {
+            binding.editTextProfileName.setError("Name cannot be empty");
+            return;
+        }
+
+        // --- Create a map to update only the changed fields in Firestore ---
+        Map<String, Object> updatedData = new HashMap<>();
+        updatedData.put("name", newName);
+        updatedData.put("phone", newPhone); // Phone can be empty
+
+        String userId = currentUser.getGuid();
+
+        db.collection("profiles").document(userId)
+                .update(updatedData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Profile successfully updated in Firestore for user: " + userId);
+                    currentUser.setName(newName);
+                    currentUser.setPhone(newPhone);
+                    ProfileManager.getInstance().setCurrentUserProfile(currentUser);
+
+                    getParentFragmentManager().setFragmentResult("profile-edited", new Bundle());
+                    Toast.makeText(getContext(), "Profile updated!", Toast.LENGTH_SHORT).show();
+                    dismiss(); // Close the dialog on success
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error updating profile in Firestore", e);
+                    Toast.makeText(getContext(), "Failed to update profile. Please try again.", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
