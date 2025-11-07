@@ -4,11 +4,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +26,8 @@ import android.view.ViewGroup;
 // TODO: Display event detail and (probably subclasses) for entrant/organizer operations
 public class EventDetailFragment extends Fragment {
     private Event event;
+    private Profile profile;
+    private FragmentEventDetailBinding binding;
 
     public EventDetailFragment() {
         // Required empty public constructor
@@ -57,5 +67,66 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding = FragmentEventDetailBinding.bind(view);
+        setupEventDetail();
+        setupEventDetail();
+        updateRegisterButtonState();
+    }
+
+    private String dateFormatter(Calendar c) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        return sdf.format(c.getTime());
+    }
+
+    private void setupEventDetail() {
+        binding.detailEventName.setText(event.getName());
+        String startDate = dateFormatter(event.getStartDate());
+        String endDate = dateFormatter(event.getEndDate());
+        String registrationTime = startDate + " - " + endDate;
+        binding.detailRegistrationTime.setText(registrationTime);
+        binding.detailEventTime.setText(event.getEventTime());
+        // TODO: Count remaining registration time for eventStatus, set up eventGuideline, eventPoster
+        String registrationStatus = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
+        binding.detailEventStatus.setText(registrationStatus);
+        binding.detailEventDescription.setText(event.getDesc());
+    }
+
+    private void updateRegisterButtonState() {
+        if (profile == null) {
+            binding.buttonRegisterEvent.setEnabled(false);
+            return;
+        }
+        binding.buttonRegisterEvent.setEnabled(true);
+        if (event.getWaitingList().contains(profile)) {
+            // User is registered, so show "Unregister" state
+            binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
+            binding.buttonRegisterEvent.setText("Unregister");
+        } else {
+            // User is not registered, so show "Register" state
+            binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), com.google.android.material.R.color.design_default_color_primary)); // Or your default button color
+            binding.buttonRegisterEvent.setText("Register");
+        }
+        // Update the count of registered users
+        String registrationStatus = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
+        binding.detailEventStatus.setText(registrationStatus);
+    }
+
+    private void setupClickListeners() {
+        binding.buttonDetailToHome.setOnClickListener(v -> {
+            assert getActivity() != null;
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            fm.popBackStack();
+        });
+        binding.buttonRegisterEvent.setOnClickListener(v -> {
+            if (event.getWaitingList().contains(profile)) {
+                // If user is in the list, leave the event
+                event.leaveEvent(profile);
+            } else {
+                // Otherwise, join the event
+                event.joinEvent(profile);
+            }
+            // After the click, update the button's state and text
+            updateRegisterButtonState();
+        });
     }
 }
