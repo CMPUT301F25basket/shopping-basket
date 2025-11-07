@@ -1,1 +1,0 @@
-/Users/chauu335/AndroidStudioProjects/shopping-basket/app/build/intermediates/compiled_navigation_res/debug/compileDebugNavigationResources/navigation_bottom_nav_graph.xml.flat 

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="gcm_defaultSenderId" translatable="false">183045569037</string>
-    <string name="google_api_key" translatable="false">AIzaSyD9vLH3fOrbk8te-V4kSm5Ra47zJarg7P8</string>
-    <string name="google_app_id" translatable="false">1:183045569037:android:a48cae01fbf5f56b907344</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD9vLH3fOrbk8te-V4kSm5Ra47zJarg7P8</string>
-    <string name="google_storage_bucket" translatable="false">shopping-basket-47519.firebasestorage.app</string>
-    <string name="project_id" translatable="false">shopping-basket-47519</string>
-</resources>
