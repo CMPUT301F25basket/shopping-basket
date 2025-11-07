@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,6 @@ public class EventDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            // TODO: Write test cases for this
             event = (Event) getArguments().getSerializable("event");
         }
     }
@@ -68,9 +68,14 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (event == null) {
+            // Navigate back if no event data is available.
+            NavHostFragment.findNavController(this).popBackStack();
+            return;
+        }
         binding = FragmentEventDetailBinding.bind(view);
         setupEventDetail();
-        setupEventDetail();
+        setupClickListeners();
         updateRegisterButtonState();
     }
 
@@ -129,5 +134,11 @@ public class EventDetailFragment extends Fragment {
             // After the click, update the button's state and text
             updateRegisterButtonState();
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

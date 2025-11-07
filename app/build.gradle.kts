@@ -32,6 +32,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -45,6 +46,7 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.legacy.support.v4)
     implementation(libs.fragment)
+    implementation(libs.firebase.auth)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
@@ -53,4 +55,5 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
+    
 }
