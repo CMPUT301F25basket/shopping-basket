@@ -1,12 +1,24 @@
 package com.example.shopping_basket;
 
+import static androidx.navigation.Navigation.findNavController;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.shopping_basket.databinding.FragmentEventCreationBinding;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +26,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+
+    FragmentEventCreationBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,4 +75,26 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentEventCreationBinding.bind(view);
+        //find user profile for data
+        CollectionReference profiles = FirebaseFirestore
+                .getInstance()
+                .collection("profiles");
+        DocumentReference profRef = profiles.document(UUID.randomUUID().toString());
+        //setupCheckboxListener();
+        setupClickListeners();
+    }
+
+    private void setupClickListeners() {
+        binding.buttonCreateToHome.setOnClickListener(v -> {
+            findNavController(v).navigate(R.id.homeFragment);
+        });
+
+        //binding.buttonDeleteProfile.setOnClickListener
+    }
+
 }
