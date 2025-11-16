@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,22 +14,54 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * A {@link RecyclerView.Adapter} for displaying a list of Event objects in a card format.
+ * <p>
+ * This adapter is responsible for taking a list of events and populating a {@link RecyclerView}.
+ * Each item is displayed as a card showing the event's name, registration period, and time,
+ * and remaining registration time.
+ * <p>
+ * This adapter also allows navigation to EventDetailFragment, where details of an event can
+ * be viewed.
+ */
 public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.ViewHolder> {
     private ArrayList<Event> events;
     private OnItemClickListener onItemClickListener;
 
+    /**
+     * Constructs a new EventCardAdapter.
+     *
+     * @param events An ArrayList}of Event objects to be displayed.
+     */
     public EventCardAdapter(ArrayList<Event> events) {
         this.events = events;
     }
 
+    /**
+     * Interface for receiving click events on items in the RecyclerView.
+     */
     public interface OnItemClickListener {
+        /**
+         * Called when an item in the RecyclerView has been clicked.
+         *
+         * @param position The position of the clicked item in the adapter.
+         */
         void onItemClick(int position);
     }
 
+    /**
+     * Registers a callback to be invoked when an item in this adapter has been clicked.
+     *
+     * @param listener The callback that will be executed.
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
     }
 
+    /**
+     * A {@link RecyclerView.ViewHolder} that describes an item view and data about its place
+     * within the RecyclerView. It holds the UI components for a single event card.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView eventCardPoster;
         private TextView eventCardName;
@@ -45,6 +78,14 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         }
     }
 
+    /**
+     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,6 +93,15 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         return new ViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     * This method updates the contents of the ViewHolder to reflect the item at the
+     * given position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event eventItem = events.get(position);
@@ -64,7 +114,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             }
         });
 
-        // TODO IMPLEMENTATION:
         if (eventItem.getStartDate() != null && eventItem.getEndDate() != null) {
             java.text.SimpleDateFormat dateFormat =
                     new java.text.SimpleDateFormat("MM/dd/yyyy", java.util.Locale.getDefault());
@@ -75,6 +124,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
                     dateFormat.format(eventItem.getEndDate().getTime());
             holder.eventCardDate.setText(dateText);
             // NOTE: Wrong time frame!
+            // TODO: Add logic to handle events past registration period
             String durationText = eventItem.getEventTime();
             holder.eventCardDuration.setText(durationText);
 
@@ -93,6 +143,11 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
     }
 
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     *
+     * @return The total number of items in this adapter.
+     */
     @Override
     public int getItemCount() {
         return events.size();

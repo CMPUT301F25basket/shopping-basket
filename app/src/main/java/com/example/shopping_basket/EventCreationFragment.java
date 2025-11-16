@@ -20,17 +20,25 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Calendar;
 import java.util.Date;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventCreationFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A {@link Fragment} that provides a user interface for creating new events.
+ * <p>
+ * This fragment contains a form for users to input event details such as name,
+ * description, start/end dates for registration, event time, and an optional location.
+ * It uses the CalendarUtils helper class to display date and time pickers.
+ * <p>
+ * Upon successful creation, the new Event object is saved to the "events"
+ * collection in Firestore.
  */
 public class EventCreationFragment extends Fragment {
     FragmentEventCreationBinding binding;
+
+    /**
+     * Default public constructor.
+     * Required for instantiation by the Android framework.
+     */
     public EventCreationFragment() {
         // Required empty public constructor
     }
@@ -41,12 +49,9 @@ public class EventCreationFragment extends Fragment {
      *
      * @return A new instance of fragment EventCreationFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EventCreationFragment newInstance() {
         EventCreationFragment fragment = new EventCreationFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,6 +62,14 @@ public class EventCreationFragment extends Fragment {
 
     }
 
+    /**
+     * Creates and returns the view hierarchy associated with the fragment.
+     *
+     * @param inflater The LayoutInflater object used to inflate any views in the fragment.
+     * @param container The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return The root view for the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,6 +77,13 @@ public class EventCreationFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_event_creation, container, false);
     }
 
+    /**
+     * Called immediately after onCreateView() has returned.
+     * This method initializes view binding and sets up UI listeners.
+     *
+     * @param view The View returned by onCreateView().
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -72,6 +92,10 @@ public class EventCreationFragment extends Fragment {
         setupClickListeners();
     }
 
+    /**
+     * Sets up a listener for the location checkbox to toggle the visibility
+     * of the location input field.
+     */
     private void setupCheckboxListener() {
         binding.checkboxRequireLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -85,6 +109,10 @@ public class EventCreationFragment extends Fragment {
         });
     }
 
+    /**
+     * Sets up click listeners for all interactive elements on the screen,
+     * including navigation, event creation, and date/time picker dialogs.
+     */
     private void setupClickListeners() {
         binding.buttonCreateToHome.setOnClickListener(v -> {
             findNavController(v).navigate(R.id.homeFragment);
@@ -94,7 +122,7 @@ public class EventCreationFragment extends Fragment {
             createEvent();
         });
 
-        binding.buttonUploadPoster.setEnabled(false);
+        binding.buttonUploadPoster.setEnabled(false); // TODO: Implement
 //        binding.buttonUploadPoster.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -116,6 +144,10 @@ public class EventCreationFragment extends Fragment {
         binding.textInputCreateEventTime.setFocusable(false);
     }
 
+    /**
+     * Gathers all user input from the form fields, validates it,
+     * creates a new {@link Event} object, and triggers the upload process.
+     */
     private void createEvent() {
         String eventName = binding.textInputCreateEventName.getText().toString().trim();
         String eventDesc = binding.textInputCreateEventDesc.getText().toString().trim();
@@ -135,8 +167,16 @@ public class EventCreationFragment extends Fragment {
         uploadToFirebase(event);
     }
 
-//    private void uploadPoster() {}
+    // TODO: Implement this method
+    private void uploadPoster() {}
 
+
+    /**
+     * Saves the provided Event object to the "events" collection in Firestore.
+     * Logs the outcome of the operation (success or failure).
+     *
+     * @param event The Event object to be uploaded.
+     */
     private void uploadToFirebase(Event event) {
         FirebaseFirestore
                 .getInstance()

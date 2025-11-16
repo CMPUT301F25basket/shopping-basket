@@ -15,8 +15,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
- * Handles a simple user sign-in by checking for an existing profile in Firestore.
- * This does not use Firebase Authentication.
+ * An {@link AppCompatActivity} that provides a user interface for signing in.
+ * <p>
+ * This activity implements the app's login mechanism. It verifies a user's existence by searching for a matching
+ * email in the "profiles" collection in Firestore. The activity also provides a button to navigate to the
+ * {@link SignupActivity} for new users.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,6 +33,14 @@ public class LoginActivity extends AppCompatActivity {
     // Firebase
     private FirebaseFirestore db;
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the views, Firebase instances, and sets up click listeners.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}. Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes all UI components from the layout file.
+     */
     private void initializeViews() {
         editTextLoginEmail = findViewById(R.id.editTextLoginEmail);
         buttonLogin = findViewById(R.id.buttonLogin);
@@ -58,7 +72,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Validates input and starts the login process by searching for the user in Firestore.
+     * Validates the user's input and initiates the login process by calling
+     * {@link #findProfileByEmail(String)}.
      */
     private void attemptLogin() {
         String email = editTextLoginEmail.getText().toString().trim();
@@ -75,7 +90,10 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Queries the "profiles" collection in Firestore for a document matching the provided email.
-     * @param email The email to search for.
+     * On success, it populates the {@link ProfileManager} and navigates to the main app.
+     * On failure or if no user is found, it displays a toast message.
+     *
+     * @param email The email address to search for in the database.
      */
     private void findProfileByEmail(String email) {
         db.collection("profiles")

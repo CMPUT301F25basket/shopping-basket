@@ -18,8 +18,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.UUID;
 
 /**
- * Handles user profile creation without Firebase Authentication.
- * It checks for email uniqueness in Firestore and then creates a local profile.
+ * An {@link AppCompatActivity} that provides a user interface for new user registration.
+ * <p>
+ * This activity facilitates a signup process where an user is uniquely identified by their
+ * emails, apart from required name and an optional phone number.
+ * This activity also includes a check on startup to see if a user is already logged in via the
+ * {@link ProfileManager}, in which case it redirects them directly to {@link MainActivity}.
  */
 public class SignupActivity extends AppCompatActivity {
 
@@ -33,6 +37,17 @@ public class SignupActivity extends AppCompatActivity {
     // Firebase
     private FirebaseFirestore db;
 
+    /**
+     * Called when the activity is first created.
+     * <p>
+     * It first checks if a user is already logged in (via the {@link ProfileManager})
+     * and redirects to {@link MainActivity} if so. Otherwise, it initializes the UI,
+     * Firebase, and sets up click listeners for the signup and login buttons.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}. Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +80,9 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes all UI components from the layout file and assigns them to member variables.
+     */
     private void initializeViews() {
         editTextName = findViewById(R.id.editTextName);
         editTextEmail = findViewById(R.id.editTextEmail);
@@ -91,7 +109,15 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     /**
-     * Queries Firestore to see if a profile with the given email already exists.
+     * Queries the "profiles" collection in Firestore to verify if a document with the
+     * given email already exists.
+     * <p>
+     * If the email is unique, it proceeds to {@link #createProfileInDatabase(String, String, String)}.
+     * If the email is already taken, it displays an error message to the user.
+     *
+     * @param name The user's name to be passed along for profile creation.
+     * @param email The email address to check for uniqueness.
+     * @param phone The user's (optional) phone number to be passed along for profile creation.
      */
     private void checkIfEmailExists(String name, String email, String phone) {
         db.collection("profiles")
@@ -118,8 +144,16 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
+
     /**
-     * Creates the profile document in Firestore and registers it with the Singleton.
+     * Creates a new {@link Profile} object, saves it as a new document in the Firestore "profiles"
+     * collection, and registers it with the {@link ProfileManager} singleton.
+     * <p>
+     * On success, it navigates the user to the main part of the application.
+     *
+     * @param name The user's full name.
+     * @param email The user's unique email address.
+     * @param phone The user's phone number.
      */
     private void createProfileInDatabase(String name, String email, String phone) {
         // Since we aren't using Firebase Auth, we generate a random unique ID.
@@ -144,7 +178,9 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     /**
-     * Navigates to the MainActivity and clears the activity stack.
+     * Navigates to the {@link MainActivity} after a successful signup and login.
+     * It clears the activity stack to prevent the user from returning to the signup screen
+     * using the back button.
      */
     private void navigateToMain() {
         Toast.makeText(this, "Welcome, " + ProfileManager.getInstance().getCurrentUserProfile().getName() + "!", Toast.LENGTH_SHORT).show();
@@ -155,6 +191,10 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Toggles the loading indicator's visibility.
+     * @param isLoading true to show the progress bar, false to hide it.
+     */
     private void setLoading(boolean isLoading) {
         if (isLoading) {
             progressBar.setVisibility(View.VISIBLE);
