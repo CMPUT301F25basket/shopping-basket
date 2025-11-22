@@ -7,6 +7,7 @@ import java.util.UUID;
  * This class outlines the unique profile of a user
  */
 public class Profile {
+    private String deviceId;
     private String guid;
     private String name;
     private String phone;
@@ -19,6 +20,14 @@ public class Profile {
         this.name = name;
         this.phone = phone;
         this.email = email;
+    }
+
+    public Profile(String deviceId, String guid, String name, String phone, String email){
+        this.guid = guid;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.deviceId = deviceId;
     }
 
     /**
@@ -59,6 +68,10 @@ public class Profile {
         return null;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
     public String getGuid() {
         return guid;
     }
@@ -89,5 +102,9 @@ public class Profile {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }

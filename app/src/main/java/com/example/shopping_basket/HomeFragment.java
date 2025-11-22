@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A {@link Fragment} that serves as the main screen of the application, displaying a list of events.
@@ -108,7 +109,9 @@ public class HomeFragment extends Fragment {
                     events.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Event event = document.toObject(Event.class);
-                        events.add(event);
+                        // Only shows event where registration period is still in effect
+                        if (event.getEndDate() != null && event.getEndDate().after(new Date()))
+                            events.add(event);
                     }
                     eventAdapter.notifyDataSetChanged();
                 })

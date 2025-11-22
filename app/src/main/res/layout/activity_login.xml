@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:background="@drawable/rounded_32"
-        android:backgroundTint="@color/oxford_light"
+        android:backgroundTint="@color/winter"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="24dp"

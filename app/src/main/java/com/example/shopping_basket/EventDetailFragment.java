@@ -1,12 +1,13 @@
 package com.example.shopping_basket;
 
+import static com.example.shopping_basket.CalendarUtils.dateFormatter;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -15,8 +16,6 @@ import android.view.ViewGroup;
 
 import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -111,44 +110,61 @@ public class EventDetailFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
             return;
         }
-        binding = FragmentEventDetailBinding.bind(view);
         setupEventDetail();
         setupClickListeners();
         updateRegisterButtonState();
     }
 
     /**
-     * Formats a {@link Date} object into a "MM/dd/yyyy" string.
-     * @param d The Date to format.
-     * @return The formatted date string.
-     */
-    // TODO: Use CalendarUtils instead (and implement the method)
-    private String dateFormatter(Date d) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-        return sdf.format(d.getTime());
-    }
-
-    /**
      * Populates the UI components with data from the Event object.
      */
     private void setupEventDetail() {
+        // Basic info
         binding.detailEventName.setText(event.getName());
+        binding.detailEventDescription.setText(event.getDesc());
+        binding.detailEventGuideline.setText(event.getGuideline());
+        // TODO: set up eventPoster
+
+        // Date and time components
         String startDate = dateFormatter(event.getStartDate());
         String endDate = dateFormatter(event.getEndDate());
         String registrationTime = startDate + " - " + endDate;
         binding.detailRegistrationTime.setText(registrationTime);
-        binding.detailEventTime.setText(event.getEventTime());
-        // TODO: Count remaining registration time for eventStatus, set up eventGuideline, eventPoster
-        String registrationStatus = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
-        binding.detailEventStatus.setText(registrationStatus);
-        binding.detailEventDescription.setText(event.getDesc());
+        binding.detailEventTime.setText(event.getEventTime()); // TODO: Format
+
+        // Registration status
+        renderRegistrationDuration();
+        String registrationCountText = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
+        binding.detailRegistrationCount.setText(registrationCountText);
     }
 
     /**
-     * Updates the state and appearance of the register/unregister button based on the
-     * current user's registration status for this event.
-     * If event period is over, options to enroll/quit being the event chosen entrants
-     * is displayed instead.
+     * Calculates and displays the time left for registration and sets the text color accordingly.
+     */
+    private void renderRegistrationDuration() {
+        long diffMillis = event.getEndDate().getTime() - System.currentTimeMillis();
+        long daysLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffMillis);
+
+        String registrationStatusText;
+        int statusColor;
+
+        if (daysLeft > 1) {
+            registrationStatusText = String.format(Locale.US, "Closes in %d days", daysLeft);
+            statusColor = getResources().getColor(R.color.oxford_blue, null);
+        } else if (daysLeft == 1) {
+            registrationStatusText = "Closes in 1 day";
+            statusColor = getResources().getColor(R.color.error, null);
+        } else { // daysLeft is 0 or negative
+            registrationStatusText = "Registration period closed";
+            statusColor = getResources().getColor(R.color.error, null);
+        }
+
+        binding.detailEventStatus.setText(registrationStatusText);
+        binding.detailEventStatus.setTextColor(statusColor);
+    }
+
+    /**
+     * Updates the register/enroll button state based on the date and user's status.
      */
     // TODO: Handle enrollment
     private void updateRegisterButtonState() {
@@ -158,18 +174,30 @@ public class EventDetailFragment extends Fragment {
             return;
         }
         binding.buttonRegisterEvent.setEnabled(true);
-        if (event.getWaitingList().contains(profile)) {
-            // User is registered, so show "Unregister" state
-            binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
-            binding.buttonRegisterEvent.setText("Unregister");
+
+        if (event.getEndDate().after(new Date())) {
+            if (event.getWaitingList().contains(profile)) {
+                // User is registered, so show "Unregister" state
+                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
+                binding.buttonRegisterEvent.setText("Unregister");
+            } else {
+                // User is not registered, so show "Register" state
+                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.light_blue));
+                binding.buttonRegisterEvent.setText("Register");
+            }
         } else {
-            // User is not registered, so show "Register" state
-            binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.light_blue));
-            binding.buttonRegisterEvent.setText("Register");
+            if (event.getEnrollList().contains(profile)) {
+                // User has enrolled, and this action is final. Disable the button.
+                binding.buttonRegisterEvent.setText("Enrolled");
+                binding.buttonRegisterEvent.setEnabled(false);
+            } else if (event.getInviteList().contains(profile.getGuid())) {
+                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
+                binding.buttonRegisterEvent.setText("Decline");
+            } else {
+                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.oxford_blue));
+                binding.buttonRegisterEvent.setText("Enroll");
+            }
         }
-        // Update the count of registered users
-        String registrationStatus = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
-        binding.detailEventStatus.setText(registrationStatus);
     }
 
     /**
@@ -180,15 +208,26 @@ public class EventDetailFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
         });
         binding.buttonRegisterEvent.setOnClickListener(v -> {
-            if (event.getWaitingList().contains(profile)) {
-                // If user is in the list, leave the event
-                event.leaveEvent(profile);
-            } else {
-                // Otherwise, join the event
-                event.joinEvent(profile);
+            String buttonText = binding.buttonRegisterEvent.getText().toString();
+            switch (buttonText) {
+                case "Register":
+                    event.joinEvent(profile);
+                    break;
+                case "Unregister":
+                    event.leaveEvent(profile);
+                    break;
+                case "Decline":
+                    event.decline(profile);
+                    break;
+                case "Enroll":
+                    event.enroll(profile);
+                    break;
             }
             // After the click, update the button's state and text
             updateRegisterButtonState();
+            // Update TextView displaying the count of registered users
+            String registrationCountText = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
+            binding.detailRegistrationCount.setText(registrationCountText);
         });
     }
 

@@ -2,6 +2,7 @@ package com.example.shopping_basket;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
  * email in the "profiles" collection in Firestore. The activity also provides a button to navigate to the
  * {@link SignupActivity} for new users.
  */
+// NOTE: Most of the methods for login might not be used. Instead querying for device ID might be delegated to MainActivity
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText editTextLoginEmail;
     private Button buttonLogin, buttonToSignup;
     private ProgressBar progressBarLogin;
+    private boolean isAutoLoginAttempted = false;
 
     // Firebase
     private FirebaseFirestore db;
@@ -51,6 +54,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Views
         initializeViews();
+
+        if (!isAutoLoginAttempted) {
+            isAutoLoginAttempted = true;
+            attemptAutoLogin();
+        }
 
         // Setup button click listeners
         buttonLogin.setOnClickListener(v -> attemptLogin());
@@ -89,6 +97,36 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * Attempts to automatically log in the user by finding a profile
+     * that matches the current device's unique ID.
+     */
+    private void attemptAutoLogin() {
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        if (androidId == null || androidId.isEmpty()) {
+            setLoading(false);
+            return;
+        }
+        db.collection("profiles")
+                .whereEqualTo("deviceId", androidId)
+                .limit(1) // We only expect one match
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
+                        // Profile was found, get the first (and only) document
+                        QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
+                        Profile foundProfile = document.toObject(Profile.class);
+                        Log.d(TAG, "Auto-login successful for device ID: " + androidId);
+                        ProfileManager.getInstance().setCurrentUserProfile(foundProfile);
+                        navigateToMain(foundProfile.getName());
+                    }
+                    else {
+                        Log.d(TAG, "Auto-login failed: No profile found for this device.");
+                        setLoading(false); // Hide the progress bar and show login buttons
+                    }
+                });
+    }
+
+    /**
      * Queries the "profiles" collection in Firestore for a document matching the provided email.
      * On success, it populates the {@link ProfileManager} and navigates to the main app.
      * On failure or if no user is found, it displays a toast message.
@@ -102,11 +140,9 @@ public class LoginActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
-                        // Profile was found
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Profile foundProfile = document.toObject(Profile.class);
                             Log.d(TAG, "Profile found for email: " + email);
-
                             // Set the found profile in the Singleton Manager
                             ProfileManager.getInstance().setCurrentUserProfile(foundProfile);
 

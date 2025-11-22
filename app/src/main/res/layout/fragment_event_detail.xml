@@ -123,7 +123,7 @@
 
                 <Button
                     android:id="@+id/button_detail_to_home"
-                    android:layout_width="418dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
@@ -135,7 +135,7 @@
 
                 <Button
                     android:id="@+id/button_register_event"
-                    android:layout_width="418dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
@@ -145,6 +145,15 @@
                     android:textColor="@color/oxford_blue"
                     android:textSize="16sp" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_waitlist_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_light"
+                android:text=""
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

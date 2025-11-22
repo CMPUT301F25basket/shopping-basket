@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.provider.Settings.Secure;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -158,7 +158,8 @@ public class SignupActivity extends AppCompatActivity {
     private void createProfileInDatabase(String name, String email, String phone) {
         // Since we aren't using Firebase Auth, we generate a random unique ID.
         String guid = UUID.randomUUID().toString();
-        Profile newProfile = new Profile(guid, name, phone, email);
+        String androidId = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+        Profile newProfile = new Profile(androidId, guid, name, phone, email);
 
         db.collection("profiles").document(guid)
                 .set(newProfile)

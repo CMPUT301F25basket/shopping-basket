@@ -3,6 +3,7 @@ package com.example.shopping_basket;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,8 @@ public class EditProfileFragment extends DialogFragment {
         if (dialog != null) {
             dialog.setCanceledOnTouchOutside(true); // Dismiss when tapped outside
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,9 +98,10 @@ public class ProfileFragment extends DialogFragment {
         super.onStart();
         // Make the dialog dismissable when tapped outside and set dimensions ---
         Dialog dialog = getDialog();
-        if (dialog != null) {
-            dialog.setCanceledOnTouchOutside(true);
+        if (dialog != null && dialog.getWindow() != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
         }
     }
 
@@ -108,7 +110,7 @@ public class ProfileFragment extends DialogFragment {
     /**
      * Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned.
      * This method setups the view by populating data and setting up click listeners.
-     * If no user is logged in, it shows an error and navigates to {@link LoginActivity}.
+     * If no user is logged in, it shows an error and navigates to {@link SignupActivity}.
      *
      * @param view               The View returned by onCreateView.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
@@ -126,7 +128,7 @@ public class ProfileFragment extends DialogFragment {
             Log.w(TAG, "No user profile found in ProfileManager.");
             Toast.makeText(getContext(), "You are not logged in.", Toast.LENGTH_LONG).show();
             dismiss(); // Close the dialog
-            navigateToLogin(); // Send user to login screen
+            navigateToSignUp(); // Send user to signup screen
         }
     }
 
@@ -155,6 +157,7 @@ public class ProfileFragment extends DialogFragment {
             EditProfileFragment editProfileDialog = new EditProfileFragment();
             // Use getParentFragmentManager() to show a dialog from within another fragment
             editProfileDialog.show(getParentFragmentManager(), "EditProfileFragment");
+            // TODO: Retain when EditProfileDialog closes
         });
 
         // TODO: Implement
@@ -166,12 +169,12 @@ public class ProfileFragment extends DialogFragment {
     }
 
     /**
-     * Navigates to {@link LoginActivity} and clears the navigation stack.
+     * Navigates to {@link SignupActivity} and clears the navigation stack.
      */
-    private void navigateToLogin() {
+    private void navigateToSignUp() {
         if (getActivity() != null) {
             dismiss(); // Ensure the dialog is closed before navigating
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(getActivity(), SignupActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             getActivity().finish();

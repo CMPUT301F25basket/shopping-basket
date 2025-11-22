@@ -16,6 +16,7 @@ public class Event implements Serializable {
     private Profile owner;
     private String name;
     private String desc;
+    private String guideline;   // Optional, depending on organizer
     private int selectNum;
     //
     private int maxReg;
@@ -34,6 +35,22 @@ public class Event implements Serializable {
         this.owner = owner;
         this.name = name;
         this.desc = desc;
+        this.selectNum = selectNum;
+        this.maxReg = maxReg;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.eventTime = eventTime;
+        this.waitingList = new ArrayList<Profile>();
+        this.inviteList = new ArrayList<Profile>();
+        this.enrollList = new ArrayList<Profile>();
+        this.cancelList = new ArrayList<Profile>();
+    }
+
+    public Event(Profile owner, String name, String desc, String guideline, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
+        this.owner = owner;
+        this.name = name;
+        this.desc = desc;
+        this.guideline = guideline;
         this.selectNum = selectNum;
         this.maxReg = maxReg;
         this.startDate = startDate;
@@ -259,6 +276,12 @@ public class Event implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getGuideline() { return guideline; }
+
+    public void setGuideline(String guideline) {
+        this.guideline = guideline;
     }
 
     public int getSelectNum() {

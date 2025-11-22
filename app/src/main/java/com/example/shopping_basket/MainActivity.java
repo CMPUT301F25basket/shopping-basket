@@ -37,6 +37,7 @@ public class    MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    private Profile profile;
 
 
     /**
@@ -56,6 +57,8 @@ public class    MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        this.profile = ProfileManager.getInstance().getCurrentUserProfile();
 
         setSupportActionBar(binding.toolbar);
 

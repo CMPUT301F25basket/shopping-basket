@@ -3,9 +3,6 @@ package com.example.shopping_basket;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -123,8 +120,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             String dateText = dateFormat.format(eventItem.getStartDate().getTime()) + " - " +
                     dateFormat.format(eventItem.getEndDate().getTime());
             holder.eventCardDate.setText(dateText);
-            // NOTE: Wrong time frame!
-            // TODO: Add logic to handle events past registration period
             String durationText = eventItem.getEventTime();
             holder.eventCardDuration.setText(durationText);
 
@@ -133,7 +128,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
 
             // Ensure daysLeft is not negative
             daysLeft = Math.max(0, daysLeft);
-
             holder.eventCardStatus.setText("Closes in " + daysLeft + " days");
         } else {
             holder.eventCardDate.setText("Date TBD");

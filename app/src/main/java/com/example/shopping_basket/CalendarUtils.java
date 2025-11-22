@@ -88,4 +88,14 @@ public class CalendarUtils {
             return null;
         }
     }
+
+    /**
+     * Formats a {@link Date} object into a "MM/dd/yyyy" string.
+     * @param d The Date to format.
+     * @return The formatted date string.
+     */
+    public static String dateFormatter(Date d) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        return sdf.format(d.getTime());
+    }
 }
