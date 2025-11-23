@@ -92,7 +92,8 @@ public class EventDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_detail, container, false);
+        binding = FragmentEventDetailBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     /**
@@ -121,15 +122,12 @@ public class EventDetailFragment extends Fragment {
     private void setupEventDetail() {
         // Basic info
         binding.detailEventName.setText(event.getName());
-        binding.detailEventDescription.setText(event.getDesc());
-        binding.detailEventGuideline.setText(event.getGuideline());
+        if (event.getDesc() != null) binding.detailEventDescription.setText(event.getDesc());
+        if (event.getGuideline() != null) binding.detailEventGuideline.setText(event.getGuideline());
         // TODO: set up eventPoster
 
         // Date and time components
-        String startDate = dateFormatter(event.getStartDate());
-        String endDate = dateFormatter(event.getEndDate());
-        String registrationTime = startDate + " - " + endDate;
-        binding.detailRegistrationTime.setText(registrationTime);
+        binding.detailEventDate.setText(event.getEventTime()); // TODO: Format
         binding.detailEventTime.setText(event.getEventTime()); // TODO: Format
 
         // Registration status
@@ -155,7 +153,7 @@ public class EventDetailFragment extends Fragment {
             registrationStatusText = "Closes in 1 day";
             statusColor = getResources().getColor(R.color.error, null);
         } else { // daysLeft is 0 or negative
-            registrationStatusText = "Registration period closed";
+            registrationStatusText = "Registration closed";
             statusColor = getResources().getColor(R.color.error, null);
         }
 

@@ -101,7 +101,7 @@ public class ProfileFragment extends DialogFragment {
         if (dialog != null && dialog.getWindow() != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setGravity(Gravity.BOTTOM);
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bottom_rounded_bg);
         }
     }
 

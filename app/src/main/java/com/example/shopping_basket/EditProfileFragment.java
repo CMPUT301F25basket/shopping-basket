@@ -22,12 +22,11 @@ import java.util.Map;
 
 /**
  * A {@link DialogFragment} that provides a user interface
- * for updating the user's name and phone number.
+ * for updating the user's name, email, and phone number.
  * <p>
  * Responsibilities:
  * <ul>
  *     <li>Retrieves the current user's Profile from the ProfileManager singleton.</li>
- *     <li>Disables the email field to prevent modification of the (current) unique identifier.</li>
  *     <li>Validates user input before saving.</li>
  *     <li>Updates the user's profile data in the Firestore "profiles" collection.</li>
  *     <li>Updates the local Profile instance within the ProfileManager to ensure UI consistency across the app.</li>
@@ -108,7 +107,7 @@ public class EditProfileFragment extends DialogFragment {
             dialog.setCanceledOnTouchOutside(true); // Dismiss when tapped outside
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setGravity(Gravity.BOTTOM);
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bottom_rounded_bg);
         }
     }
 
@@ -136,16 +135,11 @@ public class EditProfileFragment extends DialogFragment {
 
     /**
      * Pre-fills the input fields with the current user's data.
-     * The email field is (currently) disabled to prevent users from changing their unique identifier.
      */
     private void setupInitialData() {
         binding.editTextProfileName.setText(currentUser.getName());
         binding.editTextProfileEmail.setText(currentUser.getEmail());
         binding.editTextProfilePhone.setText(currentUser.getPhone());
-
-        // For security, disables the email field
-        binding.editTextProfileEmail.setEnabled(false);
-        binding.editTextProfileEmail.setFocusable(false);
     }
 
     /**
@@ -163,6 +157,7 @@ public class EditProfileFragment extends DialogFragment {
      */
     private void saveProfileChanges() {
         String newName = binding.editTextProfileName.getText().toString().trim();
+        String newEmail = binding.editTextProfileEmail.getText().toString().trim();
         String newPhone = binding.editTextProfilePhone.getText().toString().trim();
 
         if (newName.isEmpty()) {
@@ -173,7 +168,8 @@ public class EditProfileFragment extends DialogFragment {
         // Create a map to update only the changed fields in Firestore
         Map<String, Object> updatedData = new HashMap<>();
         updatedData.put("name", newName);
-        updatedData.put("phone", newPhone); // Phone can be empty
+        updatedData.put("email", newEmail);
+        updatedData.put("phone", newPhone);
 
         String userId = currentUser.getGuid();
 
@@ -182,6 +178,7 @@ public class EditProfileFragment extends DialogFragment {
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Profile successfully updated in Firestore for user: " + userId);
                     currentUser.setName(newName);
+                    currentUser.setEmail(newEmail);
                     currentUser.setPhone(newPhone);
                     ProfileManager.getInstance().setCurrentUserProfile(currentUser);
 

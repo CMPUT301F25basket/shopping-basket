@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * A {@link Fragment} that serves as the main screen of the application, displaying a list of events.
@@ -36,6 +37,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private EventCardAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
+    private Profile currentUser;
 
     /**
      * Default public constructor.
@@ -84,7 +86,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentHomeBinding.bind(view);
-
+        this.currentUser = ProfileManager.getInstance().getCurrentUserProfile();
         eventAdapter = new EventCardAdapter(events);
         binding.eventCardList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.eventCardList.setAdapter(eventAdapter);
@@ -121,14 +123,24 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Navigates from this fragment to the {@link EventDetailFragment}.
-     * It passes the selected {@link Event} object to the detail fragment via a {@link Bundle}.
+     * Navigates to the appropriate detail screen based on event ownership.
+     * If the current user is the event owner, it navigates to an editable screen.
+     * Otherwise, it navigates to a read-only detail screen.
      *
      * @param event The {@link Event} object that was clicked by the user.
      */
     private void navigateToEventDetail(Event event) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("event", event);
-        findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
+        // NOTE: During building phase, some events were created without an owner. Subject to change in final product
+        if (event.getOwner() != null) {
+            if (Objects.equals(event.getOwner().getGuid(), currentUser.getGuid())) {
+                findNavController(requireView()).navigate(R.id.action_homeFragment_to_myEventFragment, bundle);
+            } else {
+                findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
+            }
+        } else {
+            findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
+        }
     }
 }

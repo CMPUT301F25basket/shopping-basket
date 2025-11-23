@@ -95,7 +95,7 @@ public class DeleteProfileFragment extends DialogFragment {
             dialog.setCanceledOnTouchOutside(true); // Dismiss when tapped outside
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setGravity(Gravity.BOTTOM);
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bottom_rounded_bg);
         }
     }
 
@@ -133,7 +133,7 @@ public class DeleteProfileFragment extends DialogFragment {
      */
     private void deleteProfile() {
         String userId = currentUser.getGuid();
-
+        // TODO: Delete all their active events
         db.collection("profiles").document(userId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {

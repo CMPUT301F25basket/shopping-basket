@@ -2,12 +2,12 @@ package com.example.shopping_basket;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 import java.util.Date;
 
 /**
@@ -34,6 +36,7 @@ import java.util.Date;
  */
 public class EventCreationFragment extends Fragment {
     FragmentEventCreationBinding binding;
+    private Profile profile;
 
     /**
      * Default public constructor.
@@ -59,7 +62,7 @@ public class EventCreationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.profile = ProfileManager.getInstance().getCurrentUserProfile();
     }
 
     /**
@@ -162,9 +165,12 @@ public class EventCreationFragment extends Fragment {
 
         Date startDate = CalendarUtils.stringToDate(startDateStr, "MM/dd/yyyy");
         Date endDate = CalendarUtils.stringToDate(endDateStr, "MM/dd/yyyy");
-
-        Event event = new Event(null, eventName, eventDesc, 0, entrantLimit, startDate, endDate, eventTimeStr);
+        Event event = new Event(profile, eventName, eventDesc, 0, entrantLimit, startDate, endDate, eventTimeStr);
         uploadToFirebase(event);
+    }
+
+    private String generateEventURL(String eventURL) {
+        return "";
     }
 
     // TODO: Implement this method
@@ -173,7 +179,8 @@ public class EventCreationFragment extends Fragment {
 
     /**
      * Saves the provided Event object to the "events" collection in Firestore.
-     * Logs the outcome of the operation (success or failure).
+     * On success, it chains a second operation to update the new document with
+     * its generated ID and deep link URL. Finally, it navigates to the QR code screen.
      *
      * @param event The Event object to be uploaded.
      */
@@ -181,19 +188,23 @@ public class EventCreationFragment extends Fragment {
         FirebaseFirestore
                 .getInstance()
                 .collection("events")
-                .add(event)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        String eventId = documentReference.getId();
-                        Log.d("Firestore", "Event created with ID: " + eventId);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Firestore", "Error creating event: " + e.getMessage());
-                    }
+                .add(event) // Step 1: Add the initial event document to Firestore
+                .onSuccessTask(documentReference -> {
+                    String eventId = documentReference.getId();
+                    String eventURL = "shopping-basket://event/" + eventId;
+
+                    event.setEventId(eventId);
+                    event.setEventURL(eventURL);
+                    // Step 2: Create and return the next task below: updating the document accordingly,
+                    // The result is passed to addOnSuccessListener to navigate to the next fragment
+                    return documentReference.update("eventId", eventId, "eventURL", eventURL);
+                }).addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Event created and updated with ID: " + event.getEventId());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("event", event);
+                    findNavController(requireView()).navigate(R.id.action_eventCreationFragment_to_eventQRFragment, bundle);
+                }).addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error during event creation or update: " + e.getMessage());
                 });
     }
 }

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_eventCreationFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_eventCreationFragment_to_eventQRFragment"
+            app:destination="@id/eventQRFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -32,6 +35,9 @@
         <action
             android:id="@+id/action_homeFragment_to_eventDetailFragment"
             app:destination="@id/eventDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_myEventFragment"
+            app:destination="@id/myEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/inboxFragment"
@@ -53,9 +59,35 @@
         android:id="@+id/eventDetailFragment"
         android:name="com.example.shopping_basket.EventDetailFragment"
         android:label="fragment_event_detail"
-        tools:layout="@layout/fragment_event_detail" >
+        tools:layout="@layout/fragment_event_detail">
         <action
             android:id="@+id/action_eventDetailFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="shopping-basket://event/{event_id}" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventQRFragment"
+        android:name="com.example.shopping_basket.EventQRFragment"
+        android:label="fragment_event_qr"
+        tools:layout="@layout/fragment_event_qr" >
+        <action
+            android:id="@+id/action_eventQRFragment_to_myEventFragment"
+            app:destination="@id/myEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myEventFragment"
+        android:name="com.example.shopping_basket.MyEventFragment"
+        android:label="fragment_my_event"
+        tools:layout="@layout/fragment_my_event" >
+        <action
+            android:id="@+id/action_myEventFragment_to_eventQRFragment"
+            app:destination="@id/eventQRFragment" />
+        <action
+            android:id="@+id/action_myEventFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>
