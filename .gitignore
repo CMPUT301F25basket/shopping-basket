@@ -5,3 +5,6 @@ GoogleService-Info.plist
 /app/build
 /captures
 .gradle
+.idea/
+*.iml
+misc.xml

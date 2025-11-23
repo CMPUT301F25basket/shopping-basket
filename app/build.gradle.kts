@@ -55,5 +55,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-    
+    // Dependency to allow use of QR code
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
 }

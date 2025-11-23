@@ -58,7 +58,7 @@ public class InboxFragment extends Fragment {
         loadNotifications();
     }
 
-    // IMPORTANT: This method is reserved to be implemented in final product
+    // TODO: Implement
     private void loadNotifications() {
 //        if (currentUser == null) {
 //            Log.w(TAG, "No user logged in. Cannot load notifications.");

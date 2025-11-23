@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,24 +13,40 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment; // --- CHANGE: Import DialogFragment
+import androidx.fragment.app.DialogFragment;
 
 import com.example.shopping_basket.databinding.FragmentProfileBinding;
 
 /**
- * A DialogFragment to display the current user's profile information.
- * It can be dismissed by tapping outside the dialog window.
+ * A {@link DialogFragment} that displays the current user's profile information.
+ * <p>
+ * This fragment shows the user's name, email, and phone number. It retrieves this
+ * data from the {@link ProfileManager} singleton. It also provides a button to navigate
+ * to the {@link EditProfileFragment}.
+ * <p>
+ * If no user is logged in, it automatically closes and redirects to the {@link LoginActivity}.
+ * It also listens for results from {@code EditProfileFragment} to refresh the data automatically
+ * after an edit.
  */
-public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend DialogFragment
+public class ProfileFragment extends DialogFragment {
 
     private static final String TAG = "ProfileFragment";
     private FragmentProfileBinding binding;
     private Profile currentUser;
 
+    /**
+     * Default public constructor.
+     * Required for instantiation by the Android framework.
+     */
     public ProfileFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Called when the fragment is first created.
+     * Initializes the user profile and sets up a listener to refresh data
+     * when the profile is edited.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +62,14 @@ public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend Dial
         });
     }
 
+    /**
+     * Creates and returns the view hierarchy associated with the fragment.
+     *
+     * @param inflater The LayoutInflater object used to inflate any views in the fragment.
+     * @param container The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return The root view for the fragment's UI.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,6 +77,9 @@ public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend Dial
         return binding.getRoot();
     }
 
+    /**
+     * Overrides the default dialog creation to request a window without a title bar.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -60,18 +88,33 @@ public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend Dial
         return dialog;
     }
 
+    /**
+     * Called when the fragment's dialog is started.
+     * Configures the dialog's appearance and allow cancelling
+     * the dialog upon touching outside it.
+     */
     @Override
     public void onStart() {
         super.onStart();
         // Make the dialog dismissable when tapped outside and set dimensions ---
         Dialog dialog = getDialog();
-        if (dialog != null) {
-            dialog.setCanceledOnTouchOutside(true);
+        if (dialog != null && dialog.getWindow() != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bottom_rounded_bg);
         }
     }
 
 
+
+    /**
+     * Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned.
+     * This method setups the view by populating data and setting up click listeners.
+     * If no user is logged in, it shows an error and navigates to {@link SignupActivity}.
+     *
+     * @param view               The View returned by onCreateView.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -85,7 +128,7 @@ public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend Dial
             Log.w(TAG, "No user profile found in ProfileManager.");
             Toast.makeText(getContext(), "You are not logged in.", Toast.LENGTH_LONG).show();
             dismiss(); // Close the dialog
-            navigateToLogin(); // Send user to login screen
+            navigateToSignUp(); // Send user to signup screen
         }
     }
 
@@ -114,8 +157,10 @@ public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend Dial
             EditProfileFragment editProfileDialog = new EditProfileFragment();
             // Use getParentFragmentManager() to show a dialog from within another fragment
             editProfileDialog.show(getParentFragmentManager(), "EditProfileFragment");
+            // TODO: Retain when EditProfileDialog closes
         });
 
+        // TODO: Implement
 //        binding.buttonToRegistrationHistory.setOnClickListener(v -> {
 //            dismiss();
 //            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
@@ -124,22 +169,25 @@ public class ProfileFragment extends DialogFragment { // --- CHANGE: Extend Dial
     }
 
     /**
-     * Navigates to the LoginActivity and clears the navigation stack.
+     * Navigates to {@link SignupActivity} and clears the navigation stack.
      */
-    private void navigateToLogin() {
+    private void navigateToSignUp() {
         if (getActivity() != null) {
             dismiss(); // Ensure the dialog is closed before navigating
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(getActivity(), SignupActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             getActivity().finish();
         }
     }
 
+    /**
+     * Called when the view previously created by onCreateView has been detached from the fragment.
+     * Nullifies the binding object to prevent memory leaks.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Clean up the binding reference to avoid memory leaks
         binding = null;
     }
 }
