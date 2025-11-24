@@ -56,4 +56,6 @@
     <string name="user_phone">0123456789</string>
     <string name="action_profile">Profile</string>
     <string name="action_send">Send notification</string>
+    <string name="toggle_admin">Admin Menu</string>
+    <string name="action_toggle_notification">Toggle Notification</string>
 </resources>

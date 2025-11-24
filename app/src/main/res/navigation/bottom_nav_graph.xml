@@ -38,6 +38,12 @@
         <action
             android:id="@+id/action_homeFragment_to_myEventFragment"
             app:destination="@id/myEventFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_adminMenuFragment"
+            app:destination="@id/adminMenuFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_adminEventDetailFragment"
+            app:destination="@id/adminEventDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/inboxFragment"
@@ -49,6 +55,9 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_inboxFragment_to_adminMenuFragment"
+            app:destination="@id/adminMenuFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_homeFragment"
@@ -58,7 +67,7 @@
     <fragment
         android:id="@+id/eventDetailFragment"
         android:name="com.example.shopping_basket.EventDetailFragment"
-        android:label="fragment_event_detail"
+        android:label="Event detail"
         tools:layout="@layout/fragment_event_detail">
         <action
             android:id="@+id/action_eventDetailFragment_to_homeFragment"
@@ -70,7 +79,7 @@
     <fragment
         android:id="@+id/eventQRFragment"
         android:name="com.example.shopping_basket.EventQRFragment"
-        android:label="fragment_event_qr"
+        android:label="Create event"
         tools:layout="@layout/fragment_event_qr" >
         <action
             android:id="@+id/action_eventQRFragment_to_myEventFragment"
@@ -88,6 +97,73 @@
             android:id="@+id/action_myEventFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_myEventFragment_to_entrantListFragment"
+            app:destination="@id/entrantListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/entrantListFragment"
+        android:name="com.example.shopping_basket.EntrantListFragment"
+        android:label="Entrant list"
+        tools:layout="@layout/fragment_entrant_list" >
+        <action
+            android:id="@+id/action_entrantListFragment_to_myEventFragment"
+            app:destination="@id/myEventFragment"
+            app:popUpTo="@id/myEventFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <dialog
+        android:id="@+id/adminMenuFragment"
+        android:name="com.example.shopping_basket.AdminMenuFragment"
+        android:label="Admin menu"
+        tools:layout="@layout/fragment_admin_menu" >
+        <action
+            android:id="@+id/action_adminMenuFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_adminMenuFragment_to_userProfilesFragment"
+            app:destination="@id/userProfilesFragment" />
+        <action
+            android:id="@+id/action_adminMenuFragment_to_inboxFragment"
+            app:destination="@id/inboxFragment" />
+        <action
+            android:id="@+id/action_adminMenuFragment_to_imageItemFragment"
+            app:destination="@id/imageItemFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/imageItemFragment"
+        android:name="com.example.shopping_basket.ImageItemFragment"
+        android:label="Images"
+        tools:layout="@layout/fragment_image_list" >
+        <action
+            android:id="@+id/action_imageItemFragment_to_adminMenuFragment"
+            app:destination="@id/adminMenuFragment"
+            app:popUpTo="@id/adminMenuFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/adminEventDetailFragment"
+        android:name="com.example.shopping_basket.AdminEventDetailFragment"
+        android:label="Event detail"
+        tools:layout="@layout/fragment_admin_event_detail" >
+        <action
+            android:id="@+id/action_adminEventDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/userProfilesFragment"
+        android:name="com.example.shopping_basket.UserProfilesFragment"
+        android:label="Profiles"
+        tools:layout="@layout/fragment_user_profile_list" >
+        <action
+            android:id="@+id/action_userProfilesFragment_to_adminMenuFragment"
+            app:destination="@id/adminMenuFragment"
+            app:popUpTo="@id/adminMenuFragment"
             app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

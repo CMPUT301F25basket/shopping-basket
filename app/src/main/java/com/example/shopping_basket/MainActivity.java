@@ -33,7 +33,7 @@ import android.view.MenuItem;
  *     <li>Handling clicks on the profile action item to display the {@link ProfileFragment} as a dialog.</li>
  * </ul>
  */
-public class    MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
