@@ -6,13 +6,20 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.shopping_basket.databinding.FragmentHomeBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -76,7 +83,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} has returned.
-     * This method initializes view binding, sets up the RecyclerView and its adapter,
+     * This method initializes toolbar option, view binding, sets up the RecyclerView and its adapter,
      * loads event data, and configures the item click listener.
      *
      * @param view The View returned by {@link #onCreateView}.
@@ -96,6 +103,31 @@ public class HomeFragment extends Fragment {
             Event selectedEvent = events.get(position);
             navigateToEventDetail(selectedEvent);
         });
+
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Events");
+        }
+
+        // Add a menu provider to the fragment, making it responsible for its own toolbar items
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Make the admin button visible only if the current user is an admin
+                if (currentUser.isAdmin())
+                    menu.findItem(R.id.action_admin).setVisible(true);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_admin) {
+                    findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminMenuFragment);
+                    return true;
+                }
+                return false;
+            }
+            // The menu's lifecycle is tied to the fragment's view, ensuring it's cleaned up automatically.
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     /**
@@ -132,15 +164,19 @@ public class HomeFragment extends Fragment {
     private void navigateToEventDetail(Event event) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("event", event);
-        // NOTE: During building phase, some events were created without an owner. Subject to change in final product
         if (event.getOwner() != null) {
+            // Navigate to MyEventFragment if the current user is the event's owner
             if (Objects.equals(event.getOwner().getGuid(), currentUser.getGuid())) {
                 findNavController(requireView()).navigate(R.id.action_homeFragment_to_myEventFragment, bundle);
+                // Navigate to AdminEventDetailFragment if the current user is in admin mode (must be an admin first)
+            } else if (ProfileManager.getInstance().isAdminMode()) {
+                findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminEventDetailFragment, bundle);
+                // Else, navigate to event detail for registering
             } else {
                 findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
             }
         } else {
-            findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
+            Toast.makeText(getContext(), "Error loading event detail: no owner found", Toast.LENGTH_SHORT).show();
         }
     }
 }

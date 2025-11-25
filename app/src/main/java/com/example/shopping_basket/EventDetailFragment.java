@@ -1,11 +1,10 @@
 package com.example.shopping_basket;
 
-import static com.example.shopping_basket.CalendarUtils.dateFormatter;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -111,6 +110,11 @@ public class EventDetailFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
             return;
         }
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Event Detail");
+        }
+
         setupEventDetail();
         setupClickListeners();
         updateRegisterButtonState();
@@ -127,8 +131,8 @@ public class EventDetailFragment extends Fragment {
         // TODO: set up eventPoster
 
         // Date and time components
-        binding.detailEventDate.setText(event.getEventTime()); // TODO: Format
-        binding.detailEventTime.setText(event.getEventTime()); // TODO: Format
+        binding.detailEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
+        binding.detailEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(),"hh:mm a"));
 
         // Registration status
         renderRegistrationDuration();
@@ -150,7 +154,8 @@ public class EventDetailFragment extends Fragment {
             registrationStatusText = String.format(Locale.US, "Closes in %d days", daysLeft);
             statusColor = getResources().getColor(R.color.oxford_blue, null);
         } else if (daysLeft == 1) {
-            registrationStatusText = "Closes in 1 day";
+            long hoursLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(diffMillis);
+            registrationStatusText = String.format(Locale.US, "Closes in %d hours", hoursLeft);
             statusColor = getResources().getColor(R.color.error, null);
         } else { // daysLeft is 0 or negative
             registrationStatusText = "Registration closed";

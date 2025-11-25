@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An {@link ArrayAdapter} for displaying a list of {@link Notif} objects.
@@ -58,15 +59,52 @@ public class InboxAdapter extends ArrayAdapter<Notif> {
         TextView notificationMessage = view.findViewById(R.id.inbox_item_message);
         TextView notificationTime = view.findViewById(R.id.inbox_item_time);
 
-        notificationMessage.setText(notif.getMessage());
-        if (notif.getTime() != null) {
-            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
-            String formattedDate = formatter.format(notif.getTime());
-            notificationTime.setText(formattedDate);
-        } else {
-            notificationTime.setText("");
-        }
+        notificationMessage.setText(getFormattedTimestamp(notif));
 
         return view;
+    }
+
+    /**
+     * Formats the timestamp of a {@link Notif} based on the current user mode (Admin or User).
+     * <p>
+     * In regular user mode, it displays a relative "time ago" format (e.g., "Sent 5 minutes ago", "Sent just now").
+     * In admin mode, it displays an absolute date and time (e.g., "Sent on 08-28-2025 15:00").
+     * If the notification time is null, it returns a fallback message.
+     *
+     * @param notif The {@link Notif} object containing the timestamp to format.
+     * @return A formatted string representing the notification's sent time.
+     */
+    private String getFormattedTimestamp(Notif notif) {
+        if (notif.getTime() == null) {
+            return "Timestamp not available";
+        }
+
+        if (!ProfileManager.getInstance().isAdminMode()) {
+            // Regular user mode: Display relative "time ago"
+            long diffMillis = System.currentTimeMillis() - notif.getTime().getTime();
+            long daysAgo = TimeUnit.MILLISECONDS.toDays(diffMillis);
+
+            if (daysAgo >= 7) {
+                return "Sent 7+ days ago";
+            } else if (daysAgo >= 1) {
+                return String.format(Locale.US, "Sent %d days ago", daysAgo);
+            }
+
+            long hoursAgo = TimeUnit.MILLISECONDS.toHours(diffMillis);
+            if (hoursAgo >= 1) {
+                return String.format(Locale.US, "Sent %d hours ago", hoursAgo);
+            }
+
+            long minutesAgo = TimeUnit.MILLISECONDS.toMinutes(diffMillis);
+            if (minutesAgo >= 1) {
+                return String.format(Locale.US, "Sent %d minutes ago", minutesAgo);
+            } else {
+                return "Sent just now";
+            }
+        } else {
+            // User Mode: Display absolute date and time
+            String formattedDate = CalendarUtils.dateFormatter(notif.getTime(), "MM-dd-yyyy HH:mm");
+            return String.format(Locale.US, "Sent on %s", formattedDate);
+        }
     }
 }

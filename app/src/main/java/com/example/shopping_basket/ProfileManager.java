@@ -12,6 +12,9 @@ public class ProfileManager {
     // The profile object for the currently logged-in user
     private Profile currentUserProfile;
 
+    // Flag to track if the admin is currently in "admin mode".
+    private boolean adminMode = false;
+
     /**
      * Private constructor to prevent anyone else from creating an instance.
      */
@@ -35,7 +38,10 @@ public class ProfileManager {
      * @param profile The Profile object to be stored.
      */
     public void setCurrentUserProfile(Profile profile) {
+
         this.currentUserProfile = profile;
+        // Reset admin mode whenever a new user profile is set.
+        this.adminMode = false;
     }
 
     /**
@@ -50,7 +56,10 @@ public class ProfileManager {
      * Clears the current user's profile data. This should be called on logout.
      */
     public void clearUserProfile() {
+
         this.currentUserProfile = null;
+        // Also clear admin mode on logout.
+        this.adminMode = false;
     }
 
     /**
@@ -59,6 +68,32 @@ public class ProfileManager {
      */
     public boolean isUserLoggedIn() {
         return this.currentUserProfile != null;
+    }
+
+    /**
+     * Sets the current session to be in admin mode or regular mode.
+     * Only works if the logged-in user is actually an admin.
+     *
+     * @param isInAdminMode true to enter admin mode, false to exit.
+     */
+    public void setAdminMode(boolean isInAdminMode) {
+        // Safety check: Only allow setting admin mode if the user is an admin.
+        if (currentUserProfile != null && currentUserProfile.isAdmin()) {
+            this.adminMode = isInAdminMode;
+        } else {
+            // Otherwise, ensure it's always false.
+            this.adminMode = false;
+        }
+    }
+
+    /**
+     * Checks if the current session is in admin mode.
+     *
+     * @return true if the user is an admin AND is currently in admin mode.
+     */
+    public boolean isAdminMode() {
+        // The user must be an admin and have the mode enabled.
+        return currentUserProfile != null && currentUserProfile.isAdmin() && this.adminMode;
     }
 }
 

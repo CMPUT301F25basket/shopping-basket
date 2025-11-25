@@ -166,6 +166,14 @@ public class ProfileFragment extends DialogFragment {
 //            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
 //            registeredEventFragment.show(getParentFragmentManager(), "RegistrationHistoryFragment");
 //        });
+
+        binding.buttonDeleteProfile.setOnClickListener(v -> {
+            dismiss();
+            DeleteProfileFragment deleteProfileFragment = new DeleteProfileFragment();
+            deleteProfileFragment.show(getParentFragmentManager(), "DeleteProfileFragment");
+//            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
+//            registeredEventFragment.show(getParentFragmentManager(), "RegistrationHistoryFragment");
+        });
     }
 
     /**

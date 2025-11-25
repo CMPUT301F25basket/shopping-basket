@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -36,7 +37,6 @@ import java.util.Date;
  */
 public class EventCreationFragment extends Fragment {
     FragmentEventCreationBinding binding;
-    private Profile profile;
 
     /**
      * Default public constructor.
@@ -62,7 +62,6 @@ public class EventCreationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.profile = ProfileManager.getInstance().getCurrentUserProfile();
     }
 
     /**
@@ -91,6 +90,12 @@ public class EventCreationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentEventCreationBinding.bind(view);
+
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Create Event");
+        }
+
         setupCheckboxListener();
         setupClickListeners();
     }
@@ -142,7 +147,7 @@ public class EventCreationFragment extends Fragment {
         binding.textInputCreateEventEnd.setFocusable(false);
 
         binding.textInputCreateEventTime.setOnClickListener(v -> {
-            CalendarUtils.showTimePicker(requireContext(), binding.textInputCreateEventTime);
+            CalendarUtils.showDateTimePicker(requireContext(), binding.textInputCreateEventTime);
         });
         binding.textInputCreateEventTime.setFocusable(false);
     }
@@ -165,12 +170,9 @@ public class EventCreationFragment extends Fragment {
 
         Date startDate = CalendarUtils.stringToDate(startDateStr, "MM/dd/yyyy");
         Date endDate = CalendarUtils.stringToDate(endDateStr, "MM/dd/yyyy");
-        Event event = new Event(profile, eventName, eventDesc, 0, entrantLimit, startDate, endDate, eventTimeStr);
+        Date eventTime = CalendarUtils.stringToDate(eventTimeStr, "MM/dd/yyyy HH:mm");
+        Event event = new Event(ProfileManager.getInstance().getCurrentUserProfile(), eventName, eventDesc, 0, entrantLimit, startDate, endDate, eventTime);
         uploadToFirebase(event);
-    }
-
-    private String generateEventURL(String eventURL) {
-        return "";
     }
 
     // TODO: Implement this method

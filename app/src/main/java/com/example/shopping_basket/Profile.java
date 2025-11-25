@@ -12,6 +12,8 @@ public class Profile {
     private String name;
     private String phone;
     private String email;
+    private boolean notificationPref = true;    // By default, notification is on
+    private boolean isAdmin = false;    // // By default, an account is a regular user
 
     public Profile() {}
 
@@ -106,5 +108,21 @@ public class Profile {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public void setNotificationPref(boolean notificationPref) {
+        this.notificationPref = notificationPref;
+    }
+
+    public boolean isNotificationPref() {
+        return notificationPref;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

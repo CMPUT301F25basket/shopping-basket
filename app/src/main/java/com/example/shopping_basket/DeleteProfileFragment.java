@@ -139,7 +139,7 @@ public class DeleteProfileFragment extends DialogFragment {
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Profile successfully deleted in Firestore for user: " + userId);
                     // Clear the user's profile from the singleton immediately after deletion.
-                    ProfileManager.getInstance().setCurrentUserProfile(null);
+                    ProfileManager.getInstance().clearUserProfile();
                     Toast.makeText(getContext(), "Profile deleted.", Toast.LENGTH_SHORT).show();
                     navigateToSignup();
                 })

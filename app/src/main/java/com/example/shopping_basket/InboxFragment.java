@@ -3,15 +3,22 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.shopping_basket.databinding.FragmentInboxBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,7 +62,40 @@ public class InboxFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Inbox");
+        }
+
         loadNotifications();
+
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                MenuItem notificationToggle = menu.findItem(R.id.action_toggle_notification);
+                if (notificationToggle != null) {
+                    notificationToggle.setVisible(true);
+                    if (currentUser.isNotificationPref()) notificationToggle.setIcon(R.drawable.bell_svgrepo_com);
+                    else notificationToggle.setIcon(R.drawable.bell_off_svgrepo_com);
+                }
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_toggle_notification) {
+                    boolean currentPref = currentUser.isNotificationPref();
+                    if (currentPref) {
+                        menuItem.setIcon(R.drawable.bell_off_svgrepo_com);
+                    } else {
+                        menuItem.setIcon(R.drawable.bell_svgrepo_com);
+                    }
+                    currentUser.setNotificationPref(!currentPref);
+                    return true;
+                }
+                return false;
+            }
+            // The menu's lifecycle is tied to the fragment's view, ensuring it's cleaned up automatically.
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     // TODO: Implement

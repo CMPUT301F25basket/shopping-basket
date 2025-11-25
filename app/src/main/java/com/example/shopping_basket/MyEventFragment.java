@@ -92,8 +92,8 @@ public class MyEventFragment extends Fragment {
         if (event.getGuideline() != null) binding.myEventGuideline.setText(event.getGuideline());
 
         // Date and time
-        binding.myEventDate.setText(event.getEventTime()); // TODO: Format
-        binding.myEventTime.setText(event.getEventTime()); // TODO: Format
+        binding.myEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
+        binding.myEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(),"hh:mm a"));
 
         // Registration status
         renderRegistrationDuration();

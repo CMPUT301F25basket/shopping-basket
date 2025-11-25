@@ -25,7 +25,7 @@ public class Event implements Serializable {
     private Date startDate;
     private Date endDate;
     //private ----- poster;
-    private String eventTime;
+    private Date eventTime;
     private ArrayList<Profile> waitingList;
     private ArrayList<Profile> inviteList;
     private ArrayList<Profile> enrollList;
@@ -33,7 +33,7 @@ public class Event implements Serializable {
 
     public Event() {}
 
-    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
+    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Date startDate, Date endDate, Date eventTime){
         this.owner = owner;
         this.name = name;
         this.desc = desc;
@@ -48,7 +48,7 @@ public class Event implements Serializable {
         this.cancelList = new ArrayList<Profile>();
     }
 
-    public Event(Profile owner, String name, String desc, String guideline, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
+    public Event(Profile owner, String name, String desc, String guideline, int selectNum, int maxReg, Date startDate, Date endDate, Date eventTime){
         this.owner = owner;
         this.name = name;
         this.desc = desc;
@@ -338,11 +338,11 @@ public class Event implements Serializable {
         return cancelList;
     }
 
-    public String getEventTime() {
+    public Date getEventTime() {
         return eventTime;
     }
 
-    public void setEventTime(String eventTime) {
+    public void setEventTime(Date eventTime) {
         this.eventTime = eventTime;
     }
 
