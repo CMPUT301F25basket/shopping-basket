@@ -69,6 +69,7 @@ public class InboxFragment extends Fragment {
 
         loadNotifications();
 
+        // Set visibility for the toggle notification button on toolbar
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {

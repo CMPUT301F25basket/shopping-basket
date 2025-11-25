@@ -1,6 +1,7 @@
 package com.example.shopping_basket;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class Event implements Serializable {
     private ArrayList<Profile> inviteList;
     private ArrayList<Profile> enrollList;
     private ArrayList<Profile> cancelList;
+
+    @ServerTimestamp // Tells Firestore to automatically populate this field with the server's current timestamp
+    private Date creationTimestamp; // The timestamp the Event is initialized
 
     public Event() {}
 
@@ -360,5 +364,13 @@ public class Event implements Serializable {
 
     public void setEventURL(String eventURL) {
         this.eventURL = eventURL;
+    }
+
+    public Date getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(Date creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 }
