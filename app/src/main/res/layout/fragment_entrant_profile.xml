@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".EntrantProfileFragment"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:paddingHorizontal="24dp"
+    android:paddingBottom="32dp"
+    android:paddingTop="24dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/text_view_entrant_profile_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Entrant's profile not found"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/oxford_blue"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/text_view_remove_entrant_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove entrant?"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/oxford_blue"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_cancel_remove_entrant"
+            android:minWidth="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="No"
+            android:layout_marginEnd="16dp"/>
+        <Button
+            android:id="@+id/button_confirm_remove_entrant"
+            android:minWidth="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="Yes" />
+
+    </LinearLayout>
+</LinearLayout>

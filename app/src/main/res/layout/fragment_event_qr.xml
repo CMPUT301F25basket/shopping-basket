@@ -48,13 +48,21 @@
                 android:layout_height="320dp"
                 tools:src="@tools:sample/avatars" />
 
+            <Button
+                android:id="@+id/button_save_qr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Save QR Code"
+                app:icon="@drawable/download_minimalistic_svgrepo_com" />
+
             <TextView
                 android:id="@+id/created_long_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto"
-                android:text="Your event is now live!\nShare this QR codeto let\npeople register."
+                android:text="Your event is now live!\nShare this QR code to let\npeople register."
                 android:textAlignment="center"
                 android:textSize="24sp" />
         </LinearLayout>

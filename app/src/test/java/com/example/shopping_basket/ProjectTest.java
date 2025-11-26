@@ -11,13 +11,13 @@ import java.util.ArrayList;
 public class ProjectTest {
     private ArrayList<Profile> testProfileData(){
         ArrayList<Profile> testProfiles = new ArrayList<Profile>();
-        testProfiles.add(new Profile("Bob", "8675309", "generic@nmail.com"));
-        testProfiles.add(new Profile("Alice", "010101", "genericer@nmail.com"));
-        testProfiles.add(new Profile("John", "123456", "genericest@nmail.com"));
-        testProfiles.add(new Profile("Nhoj", "654321", "genericerer@nmail.com"));
-        testProfiles.get(1).setGUID("1");
-        testProfiles.get(2).setGUID("2");
-        testProfiles.get(3).setGUID("3");
+        testProfiles.add(new Profile("0", "Bob", "8675309", "generic@nmail.com"));
+        testProfiles.add(new Profile("1", "Alice", "010101", "genericer@nmail.com"));
+        testProfiles.add(new Profile("2", "John", "123456", "genericest@nmail.com"));
+        testProfiles.add(new Profile("3", "Nhoj", "654321", "genericerer@nmail.com"));
+        testProfiles.get(1).setGuid("1");
+        testProfiles.get(2).setGuid("2");
+        testProfiles.get(3).setGuid("3");
         return testProfiles;
     }
 

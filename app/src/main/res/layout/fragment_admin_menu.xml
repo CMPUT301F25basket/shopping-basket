@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    tools:context=".AdminMenuFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Admin Menu"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+        android:textColor="@color/oxford_blue" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_admin_browse_profiles"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="12dp"
+        android:text="Browse Users"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:icon="@drawable/user_circle_svgrepo_com"
+        android:textColor="@color/oxford_blue"
+        app:iconGravity="textStart" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_admin_browse_events"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="12dp"
+        android:text="Browse Events"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:icon="@drawable/calendar_svgrepo_com"
+        android:textColor="@color/oxford_blue"
+        app:iconGravity="textStart" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_admin_browse_images"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="12dp"
+        android:text="Browse Images"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:icon="@drawable/gallery_wide_svgrepo_com"
+        android:textColor="@color/oxford_blue"
+        app:iconGravity="textStart" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_admin_browse_inbox"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:paddingVertical="12dp"
+        android:text="Browse Notifications"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:icon="@drawable/inbox_line_svgrepo_com"
+        android:textColor="@color/oxford_blue"
+        app:iconGravity="textStart" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_admin_to_home"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        android:text="Return Home"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        app:iconGravity="textStart" />
+
+</LinearLayout>

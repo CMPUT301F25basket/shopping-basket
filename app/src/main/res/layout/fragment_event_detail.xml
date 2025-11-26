@@ -46,7 +46,7 @@
                     android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:id="@+id/detail_registration_time"
+                        android:id="@+id/detail_event_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -97,22 +97,34 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Event Description"
+                    android:textSize="16sp" />
+                <TextView
                     android:id="@+id/detail_event_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="Event Description"
-                    android:textSize="16sp" />
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="No text provided"
+                    android:textSize="12sp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Criteria and Guidelines"
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/detail_event_guideline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="Criteria and Guidelines"
-                    android:textSize="16sp" />
+                    android:fontFamily="@font/roboto"
+                    android:text="No text provided"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,7 +135,7 @@
 
                 <Button
                     android:id="@+id/button_detail_to_home"
-                    android:layout_width="418dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
@@ -135,7 +147,7 @@
 
                 <Button
                     android:id="@+id/button_register_event"
-                    android:layout_width="418dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
@@ -145,6 +157,15 @@
                     android:textColor="@color/oxford_blue"
                     android:textSize="16sp" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_waitlist_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_light"
+                android:text=""
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
