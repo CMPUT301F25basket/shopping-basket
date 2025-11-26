@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,6 +54,19 @@ public class EventDetailFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Events")
+                .get()
+                .addOnSuccessListener(querySnapshots -> {
+                    for (QueryDocumentSnapshot doc : querySnapshots) {
+                        String name = doc.getString("name");
+                        String date = doc.getString("date");
+                        System.out.println(name + " on " + date);
+                    }
+                })
+                .addOnFailureListener(e -> System.err.println("Error loading events: " + e));
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             event = (Event) getArguments().getSerializable("event");
