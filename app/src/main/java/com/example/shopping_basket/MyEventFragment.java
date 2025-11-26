@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -102,12 +104,17 @@ public class MyEventFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_send) {
-
+                    SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
+                    dialog.show(getParentFragmentManager(), "SendNotificationFragment");
                     return true;
                 }
                 return false;
             }
-        });
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+        if (event.getEventTime().after(new Date())) {
+            binding.buttonUpdateEvent.setEnabled(false);
+        }
 
         setupEventDetail();
         setupClickListeners();

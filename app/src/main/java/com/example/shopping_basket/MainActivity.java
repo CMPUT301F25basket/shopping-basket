@@ -81,10 +81,9 @@ public class MainActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("event", event);
                         navController.navigate(R.id.myEventFragment, bundle);
-                    }
+                        // No event found or event has ended, go to EventCreationFragment
+                    } else navController.navigate(R.id.eventCreationFragment);
                 });
-                // No event found or event has ended, go to EventCreationFragment
-                navController.navigate(R.id.eventCreationFragment);
                 return true;
             } else if (itemId == R.id.inbox) {
                 navController.navigate(R.id.inboxFragment);

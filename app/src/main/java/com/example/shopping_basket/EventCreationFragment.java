@@ -37,6 +37,7 @@ import java.util.Date;
  */
 public class EventCreationFragment extends Fragment {
     FragmentEventCreationBinding binding;
+    Event event = null;
 
     /**
      * Default public constructor.
@@ -62,6 +63,9 @@ public class EventCreationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            event = (Event) getArguments().getSerializable("event");
+        }
     }
 
     /**
@@ -209,4 +213,16 @@ public class EventCreationFragment extends Fragment {
                     Log.e("Firestore", "Error during event creation or update: " + e.getMessage());
                 });
     }
+
+//    private void populateEventData() {
+//        if (event == null) {
+//            return;
+//        }
+//        binding.textInputCreateEventName.setText(event.getName());
+//        binding.textInputCreateEventDesc.setText(event.getDesc());
+//        binding.textInputCreateEventStart.setText(CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy"));
+//        binding.textInputCreateEventEnd.setText(CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy"));
+//        binding.textInputCreateEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(), "MM/dd/yyyy HH:mm"));
+//        //binding.textInputCreateLimit.setText(event.getWaitListSize());
+//    }
 }
