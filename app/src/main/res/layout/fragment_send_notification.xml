@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".SendNotificationFragment"
     android:paddingHorizontal="24dp"
@@ -71,11 +72,14 @@
             android:id="@+id/button_cancel_notification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/oxford_grey"
+            android:backgroundTint="@color/oxford_light_grey"
             android:fontFamily="@font/roboto"
             android:text="Cancel"
             android:textColor="@color/oxford_blue"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"/>
 
         <Button
             android:id="@+id/button_send_notification"
@@ -84,6 +88,9 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/roboto_medium"
             android:text="Send"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"/>
     </LinearLayout>
 </LinearLayout>

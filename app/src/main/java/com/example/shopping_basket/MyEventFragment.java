@@ -97,8 +97,8 @@ public class MyEventFragment extends Fragment {
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                MenuItem sendButton = menu.findItem(R.id.action_send);
-                sendButton.setVisible(true);
+                menu.findItem(R.id.action_send).setVisible(true);
+                menu.findItem(R.id.action_qr).setVisible(true);
             }
 
             @Override
@@ -106,6 +106,12 @@ public class MyEventFragment extends Fragment {
                 if (menuItem.getItemId() == R.id.action_send) {
                     SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
                     dialog.show(getParentFragmentManager(), "SendNotificationFragment");
+                    return true;
+                }
+                if (menuItem.getItemId() == R.id.action_qr) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("event", event);
+                    NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_eventQRFragment, bundle);
                     return true;
                 }
                 return false;
@@ -184,14 +190,6 @@ public class MyEventFragment extends Fragment {
 
         binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
 
-        });
-
-        // TODO: Implement 'Send Notification' button click listener, which opens a DialogFragment
-        //       in which the organizer can proceed to write messages and choose who to send.
-        binding.buttonToEventQr.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("event", event);
-            NavHostFragment.findNavController(this).navigate(R.id.action_myEventFragment_to_eventQRFragment, bundle);
         });
     }
 
