@@ -36,6 +36,7 @@ public class EventRepository {
      * @param callback The callback that will be invoked with the latest event, or null if not found.
      */
     public static void getLatestEventByOwner(String userId, SingleEventCallback callback) {
+
         if (userId == null || userId.isEmpty()) {
             Log.e(TAG, "User ID is null or empty. Cannot fetch latest event.");
             callback.onCallback(null);
@@ -45,7 +46,7 @@ public class EventRepository {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(EVENTS_COLLECTION)
-                .whereEqualTo("owner", userId)
+                .whereEqualTo("owner.guid", userId)
                 .orderBy("creationTimestamp", Query.Direction.DESCENDING) // Newest first
                 .limit(1) // Only get the latest event
                 .get()
@@ -81,7 +82,7 @@ public class EventRepository {
         }
 
         db.collection(EVENTS_COLLECTION)
-                .whereEqualTo("owner", currentUser.getGuid())
+                .whereEqualTo("owner.guid", currentUser.getGuid())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
