@@ -63,14 +63,14 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         private ImageView eventCardPoster;
         private TextView eventCardName;
         private TextView eventCardDate;
-        private TextView eventCardDuration;
+        private TextView eventCardTime;
         private TextView eventCardStatus;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventCardPoster = itemView.findViewById(R.id.event_card_poster);
             eventCardName = itemView.findViewById(R.id.event_card_name);
             eventCardDate = itemView.findViewById(R.id.event_card_registration_period);
-            eventCardDuration = itemView.findViewById(R.id.event_card_time);
+            eventCardTime = itemView.findViewById(R.id.event_card_time);
             eventCardStatus = itemView.findViewById(R.id.event_card_status);
         }
     }
@@ -120,8 +120,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             String dateText = dateFormat.format(eventItem.getStartDate().getTime()) + " - " +
                     dateFormat.format(eventItem.getEndDate().getTime());
             holder.eventCardDate.setText(dateText);
-            String durationText = eventItem.getEventTime();
-            holder.eventCardDuration.setText(durationText);
+            String eventTimeText = CalendarUtils.dateFormatter(eventItem.getEventTime(), "MM/dd/yyyy hh:mm a");
+            holder.eventCardTime.setText(eventTimeText);
 
             long diffMillis = eventItem.getEndDate().getTime() - System.currentTimeMillis();
             long daysLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffMillis);
@@ -131,7 +131,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             holder.eventCardStatus.setText("Closes in " + daysLeft + " days");
         } else {
             holder.eventCardDate.setText("Date TBD");
-            holder.eventCardDuration.setText("");
+            holder.eventCardTime.setText("");
             holder.eventCardStatus.setText("Status unknown");
         }
     }

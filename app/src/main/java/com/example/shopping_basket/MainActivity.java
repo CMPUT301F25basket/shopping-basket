@@ -19,6 +19,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Date;
+
 /**
  * The main activity of the application, serving as the primary container for the user interface
  * after they have successfully logged in.
@@ -73,8 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 navController.navigate(R.id.homeFragment);
                 return true;
             } else if (itemId == R.id.myEvent) {
-                // TODO: Implement logic to either MyEventFragment or EventCreationFragment according to event time
-                navController.navigate(R.id.eventCreationFragment);
+                EventRepository.getLatestEventByOwner(profile.getGuid(), event -> {
+                    // Event exists and has not ended, go to MyEventFragment
+                    if (event != null && event.getEventTime().after(new Date())) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("event", event);
+                        navController.navigate(R.id.myEventFragment, bundle);
+                        // No event found or event has ended, go to EventCreationFragment
+                    } else navController.navigate(R.id.eventCreationFragment);
+                });
                 return true;
             } else if (itemId == R.id.inbox) {
                 navController.navigate(R.id.inboxFragment);

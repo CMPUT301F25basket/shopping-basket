@@ -113,7 +113,7 @@
             app:popUpTo="@id/myEventFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <dialog
+    <fragment
         android:id="@+id/adminMenuFragment"
         android:name="com.example.shopping_basket.AdminMenuFragment"
         android:label="Admin menu"
@@ -124,20 +124,20 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true"/>
         <action
-            android:id="@+id/action_adminMenuFragment_to_userProfilesFragment"
-            app:destination="@id/userProfilesFragment" />
+            android:id="@+id/action_adminMenuFragment_to_adminBrowseProfilesFragment"
+            app:destination="@id/adminBrowseProfilesFragment" />
         <action
             android:id="@+id/action_adminMenuFragment_to_inboxFragment"
             app:destination="@id/inboxFragment" />
         <action
-            android:id="@+id/action_adminMenuFragment_to_imageItemFragment"
-            app:destination="@id/imageItemFragment" />
-    </dialog>
+            android:id="@+id/action_adminMenuFragment_to_adminBrowseImagesFragment"
+            app:destination="@id/adminBrowseImagesFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/imageItemFragment"
-        android:name="com.example.shopping_basket.ImageItemFragment"
+        android:id="@+id/adminBrowseImagesFragment"
+        android:name="com.example.shopping_basket.AdminBrowseImagesFragment"
         android:label="Images"
-        tools:layout="@layout/fragment_image_list" >
+        tools:layout="@layout/fragment_admin_browse_images" >
         <action
             android:id="@+id/action_imageItemFragment_to_adminMenuFragment"
             app:destination="@id/adminMenuFragment"
@@ -156,10 +156,10 @@
             app:popUpToInclusive="true"/>
     </fragment>
     <fragment
-        android:id="@+id/userProfilesFragment"
-        android:name="com.example.shopping_basket.UserProfilesFragment"
+        android:id="@+id/adminBrowseProfilesFragment"
+        android:name="com.example.shopping_basket.AdminBrowseProfilesFragment"
         android:label="Profiles"
-        tools:layout="@layout/fragment_user_profile_list" >
+        tools:layout="@layout/fragment_admin_browse_profiles" >
         <action
             android:id="@+id/action_userProfilesFragment_to_adminMenuFragment"
             app:destination="@id/adminMenuFragment"

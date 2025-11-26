@@ -4,19 +4,27 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
 import com.example.shopping_basket.databinding.FragmentMyEventBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -75,11 +83,39 @@ public class MyEventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Event");
+        }
+
         if (event == null) {
             // Navigate back if no event data is available.
             NavHostFragment.findNavController(this).popBackStack();
             return;
         }
+
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                MenuItem sendButton = menu.findItem(R.id.action_send);
+                sendButton.setVisible(true);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_send) {
+                    SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
+                    dialog.show(getParentFragmentManager(), "SendNotificationFragment");
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+        if (event.getEventTime().after(new Date())) {
+            binding.buttonUpdateEvent.setEnabled(false);
+        }
+
         setupEventDetail();
         setupClickListeners();
         setupButtonsVisibility();
@@ -92,8 +128,8 @@ public class MyEventFragment extends Fragment {
         if (event.getGuideline() != null) binding.myEventGuideline.setText(event.getGuideline());
 
         // Date and time
-        binding.myEventDate.setText(event.getEventTime()); // TODO: Format
-        binding.myEventTime.setText(event.getEventTime()); // TODO: Format
+        binding.myEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
+        binding.myEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(),"hh:mm a"));
 
         // Registration status
         renderRegistrationDuration();

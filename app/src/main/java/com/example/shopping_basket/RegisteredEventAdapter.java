@@ -55,7 +55,10 @@ public class RegisteredEventAdapter extends ArrayAdapter<Event> {
         TextView eventTime = view.findViewById(R.id.registered_event_time);
 
         eventName.setText(event.getName());
-        eventTime.setText(event.getEventTime());
+
+        String dateStr = CalendarUtils.dateFormatter(event.getEventTime(), "MM-dd-yyyy");
+        String timeStr = CalendarUtils.dateFormatter(event.getEventTime(), "hh:mm a");
+        eventTime.setText(String.format("%s    %s", dateStr, timeStr));
 
         return view;
     }

@@ -34,7 +34,19 @@
             android:ems="10"
             android:fontFamily="@font/roboto"
             android:gravity="start|top"
-            android:hint="Event description"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/text_input_create_event_guideline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:ems="10"
+            android:fontFamily="@font/roboto"
+            android:gravity="start|top"
+            android:hint="Criteria and guidelines"
             android:inputType="textMultiLine"
             android:textSize="17sp" />
 
@@ -151,7 +163,8 @@
                 android:textSize="17sp"
                 app:icon="@drawable/upload"
                 app:iconPadding="4dp"
-                app:iconTint="@color/white" />
+                app:iconTint="@color/white"
+                app:cornerRadius="16dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -162,26 +175,38 @@
 
             <Button
                 android:id="@+id/button_create_to_home"
-                android:layout_width="182dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/oxford_grey"
+                app:backgroundTint="@color/oxford_grey"
                 android:fontFamily="@font/roboto_light"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="0dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="Back"
                 android:textColor="@color/oxford_blue"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:cornerRadius="12dp" />
 
             <Button
                 android:id="@+id/button_create_event"
-                android:layout_width="182dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/light_blue"
+                app:backgroundTint="@color/light_blue"
                 android:fontFamily="@font/roboto_medium"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="0dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="Create"
                 android:textColor="@color/oxford_blue"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:cornerRadius="12dp" />
         </LinearLayout>
 
     </LinearLayout>
