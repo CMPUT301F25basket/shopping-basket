@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -166,16 +167,35 @@ public class MyEventFragment extends Fragment {
 
         binding.buttonToEnrolledEntrants.setOnClickListener(v -> {
             // This button navigates to a screen showing the enrolled list.
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Event", event);
+            bundle.putSerializable("List", "Enrolled");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         binding.buttonToSelectedEntrants.setOnClickListener(v -> {
             // This button navigates to a screen showing the selected entrants (inviteList).
             // Also let organizer see canceled entrants
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Event", event);
+            bundle.putSerializable("List", "Invited");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         binding.buttonToUnselectedEntrants.setOnClickListener(v -> {
             // This button navigates to a screen showing the unselected entrants.
             // Also let organizer filter the waiting list
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Event", event);
+            bundle.putSerializable("List", "Waiting");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
+        });
+
+        binding.buttonToCancelledEntrants.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Event", event);
+            bundle.putSerializable("List", "Cancelled");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         binding.buttonUpdateEvent.setOnClickListener(v -> {
@@ -183,7 +203,10 @@ public class MyEventFragment extends Fragment {
         });
 
         binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
-
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Event", event);
+            bundle.putSerializable("List", "All");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         // TODO: Implement 'Send Notification' button click listener, which opens a DialogFragment

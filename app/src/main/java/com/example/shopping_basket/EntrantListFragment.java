@@ -14,11 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
  */
 public class EntrantListFragment extends Fragment {
+
+    private Event event;
+    private ArrayList<Profile> profiles;
+    //private ArrayAdapter<Profile> adapter;
+    private EntrantListAdapter adapter;
+    private String entrantListTitle;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,7 +50,10 @@ public class EntrantListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (getArguments() != null){
+            event = (Event) getArguments().getSerializable("Event");
+            entrantListTitle = (String) getArguments().getSerializable("List");
+        }
 //        if (getArguments() != null) {
 //            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
 //        }
@@ -74,8 +88,33 @@ public class EntrantListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO: Implement logic to change title depending on which entrant list is being displayed
-        String entrantListTitle = "";
+        switch (entrantListTitle) {
+            case "All":
+                profiles = event.getWaitingList();
+                profiles.addAll(event.getInviteList());
+                profiles.addAll(event.getEnrollList());
+                profiles.addAll(event.getCancelList());
+                break;
+            case "Enrolled":
+                profiles = event.getEnrollList();
+                break;
+            case "Invited":
+                profiles = event.getInviteList();
+                break;
+            case "Waiting":
+                profiles = event.getWaitingList();
+                break;
+            case "Cancelled":
+                profiles = event.getCancelList();
+                break;
+        }
+        adapter = new EntrantListAdapter(this.getContext(), profiles);
+        //adapter = new ArrayAdapter<>(this.getContext(), R.layout.entrant_item, profiles);
+
+        ListView list = new ListView(this.getContext());
+        list.findViewById(R.id.list);
+        list.setAdapter(adapter);
+
         if (getActivity() instanceof AppCompatActivity) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(entrantListTitle);
         }
