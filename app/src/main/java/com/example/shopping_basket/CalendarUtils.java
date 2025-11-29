@@ -1,0 +1,157 @@
+package com.example.shopping_basket;
+
+import static android.content.ContentValues.TAG;
+
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.nfc.FormatException;
+import android.util.Log;
+import android.widget.EditText;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+/**
+ * A utility class providing helper methods for handling date and time operations, including static methods to:
+ * - Display a {@link DatePickerDialog} and fill an {@link EditText} with the selected date.
+ * - Display a {@link TimePickerDialog} and fill an {@link EditText} with the selected time.
+ * - Convert a date String into a Date object.
+ */
+public class CalendarUtils {
+    /**
+     * Displays a {@link DatePickerDialog} pre-filled with the current date.
+     * Upon selection, the provided {@link EditText} is updated with the formatted date string "MM/dd/yyyy".
+     *
+     * @param context  The {@link Context} required to show the dialog (e.g., an Activity).
+     * @param editText The {@link EditText} widget that will display the selected date.
+     */
+    public static void showDatePicker(Context context, EditText editText) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePicker = new DatePickerDialog(context,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedMonth + 1, selectedDay, selectedYear);
+                    editText.setText(selectedDate);
+                },
+                year, month, day
+        );
+
+        datePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        datePicker.show();
+    }
+
+    /**
+     * Displays a {@link TimePickerDialog} pre-filled with the current time in 24-hour format.
+     * Upon selection, the provided {@link EditText} is updated with the formatted time string "HH:mm".
+     *
+     * @param context  The {@link Context} required to show the dialog (e.g., an Activity).
+     * @param editText The {@link EditText} widget that will display the selected time.
+     */
+    public static void showTimePicker(Context context, EditText editText) {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePicker = new TimePickerDialog(
+                context,
+                (view, selectedHour, selectedMinute) -> {
+                    String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
+                    editText.setText(selectedTime);
+                },
+                hour, minute, true
+        );
+
+        timePicker.show();
+    }
+
+    /**
+     * Displays a DatePickerDialog followed by a TimePickerDialog to select a full date and time.
+     * <p>
+     * Upon completion, the provided EditText is updated with the combined, formatted
+     * date and time string "MM/dd/yyyy HH:mm".
+     *
+     * @param context  The Context required to show the dialogs.
+     * @param editText The EditText widget that will display the selected date and time.
+     */
+    public static void showDateTimePicker(Context context, EditText editText) {
+        final Calendar calendar = Calendar.getInstance();
+
+        DatePickerDialog datePicker = new DatePickerDialog(context,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    calendar.set(Calendar.YEAR, selectedYear);
+                    calendar.set(Calendar.MONTH, selectedMonth);
+                    calendar.set(Calendar.DATE, selectedDay);
+
+                    // Setup time picker after a date has been selected
+                    TimePickerDialog timePicker = new TimePickerDialog(context,
+                            (timeView, selectedHour, selectedMinute) -> {
+                                calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                                calendar.set(Calendar.MINUTE, selectedMinute);
+
+                                // Format and set final text
+                                String selectedTime = dateFormatter(calendar.getTime(), "MM/dd/yyyy HH:mm");
+                                editText.setText(selectedTime);
+                            },
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE),
+                            true
+                    );
+                    timePicker.show();
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DATE)
+        );
+
+        datePicker.getDatePicker().setMinDate(System.currentTimeMillis());  // Prevent selecting past dates
+        datePicker.show();
+    }
+
+    /**
+     * Converts a String representation of a date into a Date object
+     * and handles parsing errors by logging them and returning null.
+     *
+     * @param dateString The string to be parsed (e.g., "11/15/2025").
+     * @param format     The date format pattern of the input string (e.g., "MM/dd/yyyy").
+     * @return A Date object representing the parsed string, or null if parsing fails.
+     */
+    public static Date stringToDate(String dateString, String format) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+            return sdf.parse(dateString);
+        } catch (ParseException e) {
+            // Log the error for debugging purposes
+            Log.e(TAG, "Failed to parse date string: " + dateString + " with format: " + format, e);
+            return null;
+        }
+    }
+
+    /**
+     * Formats a {@link Date} object into a string based on the provided format.
+     *
+     * @param d      The Date to format.
+     * @param format The date format pattern to use (e.g., "MM/dd/yyyy", "HH:mm").
+     * @return The formatted date string, or null if formatting fails due to an invalid format.
+     */
+    public static String dateFormatter(Date d, String format) {
+        if (d == null || format == null) {
+            Log.e(TAG, "Date or format string is null.");
+            return null;
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+            return sdf.format(d.getTime());
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Invalid format provided to dateFormatter: "+ e);
+            return null;
+        }
+    }
+}

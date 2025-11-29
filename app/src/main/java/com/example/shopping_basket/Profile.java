@@ -7,16 +7,29 @@ import java.util.UUID;
  * This class outlines the unique profile of a user
  */
 public class Profile {
-    private String GUID;
+    private String deviceId;
+    private String guid;
     private String name;
     private String phone;
     private String email;
+    private boolean notificationPref = true;    // By default, notification is on
+    private boolean isAdmin = false;    // // By default, an account is a regular user
 
-    public Profile(String name, String phone, String email){
-        GUID = UUID.randomUUID().toString();
+    public Profile() {}
+
+    public Profile(String guid, String name, String phone, String email){
+        this.guid = guid;
         this.name = name;
         this.phone = phone;
         this.email = email;
+    }
+
+    public Profile(String deviceId, String guid, String name, String phone, String email){
+        this.guid = guid;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.deviceId = deviceId;
     }
 
     /**
@@ -31,7 +44,7 @@ public class Profile {
     public ArrayList<Notif> getNotifs(ArrayList<Notif> notifs) {
         ArrayList<Notif> myNotifs = new ArrayList<Notif>();
         for(Notif i : notifs){
-            if(i.getTarget().equals(this.GUID)){
+            if(i.getTarget().equals(this.guid)){
                 myNotifs.add(i);
             }
         }
@@ -49,7 +62,7 @@ public class Profile {
     //not just the local variable
     public Event getMyEvent(ArrayList<Event> events) {
         for(Event i : events){
-            if(i.getOwner().getGUID().equals(this.GUID)){
+            if(i.getOwner().getGuid().equals(this.guid)){
                 return i;
             }
         }
@@ -57,12 +70,16 @@ public class Profile {
         return null;
     }
 
-    public String getGUID() {
-        return GUID;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setGUID(String GUID) {
-        this.GUID = GUID;
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     public String getName() {
@@ -87,5 +104,25 @@ public class Profile {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public void setNotificationPref(boolean notificationPref) {
+        this.notificationPref = notificationPref;
+    }
+
+    public boolean isNotificationPref() {
+        return notificationPref;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }
