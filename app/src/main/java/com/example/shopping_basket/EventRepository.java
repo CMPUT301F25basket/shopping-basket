@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -101,7 +102,42 @@ public class EventRepository {
                         callback.onCallback(new ArrayList<>());
                     }
                 });
+    }
 
+    /**
+     * Fetches a single event by its document ID from Firestore.
+     *
+     * @param eventId  The unique ID of the event document.
+     * @param callback The callback that will be invoked with the event, or null if not found.
+     */
+    public static void getEventById(String eventId, SingleEventCallback callback) {
+        if (eventId == null || eventId.trim().isEmpty()) {
+            Log.e(TAG, "Event ID is null or empty. Cannot fetch event.");
+            callback.onCallback(null);
+            return;
+        }
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(EVENTS_COLLECTION).document(eventId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            // Document found, convert it to an Event object
+                            Event event = document.toObject(Event.class);
+                            Log.d(TAG, "Successfully fetched event: " + eventId);
+                            callback.onCallback(event);
+                        } else {
+                            // Document does not exist
+                            Log.w(TAG, "No such event found with ID: " + eventId);
+                            callback.onCallback(null);
+                        }
+                    } else {
+                        // Task failed with an exception
+                        Log.e(TAG, "Error fetching event with ID: " + eventId, task.getException());
+                        callback.onCallback(null);
+                    }
+                });
     }
 }

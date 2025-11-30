@@ -1,14 +1,25 @@
 package com.example.shopping_basket;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +34,10 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+
 
 /**
  * A fragment that displays a confirmation message and a QR code after a user
@@ -34,6 +49,7 @@ public class EventQRFragment extends Fragment {
     private FragmentEventQrBinding binding;
     private Event event;
     private Bitmap qrCodeBitmap;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     /**
      * Default public constructor.
@@ -59,6 +75,16 @@ public class EventQRFragment extends Fragment {
         if (getArguments() != null) {
             event = (Event) getArguments().getSerializable("event");
         }
+
+        // Initialize the permission launcher
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                // Continue the action if the permission is granted
+                saveQRCodeToGallery(qrCodeBitmap);
+            } else {
+                Toast.makeText(getContext(), "Permission denied. Cannot save QR code.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -91,7 +117,6 @@ public class EventQRFragment extends Fragment {
             binding.eventQr.setImageBitmap(qrCodeBitmap);
         }
 
-        binding.buttonSaveQr.setEnabled(false);
         setupClickListeners();
     }
 
@@ -137,7 +162,53 @@ public class EventQRFragment extends Fragment {
             Toast.makeText(getContext(), "QR Code not available to save.", Toast.LENGTH_SHORT).show();
             return;
         }
-        // TODO: Implement
+
+        // For older versions (API 29), we need to request it.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted, request it.
+                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                return; // The actual saving will happen in the callback if permission is granted.
+            }
+        }
+
+        ContentResolver resolver = requireActivity().getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        String fileName = "EventQR_" + event.getEventId() + "_" + System.currentTimeMillis() + ".png";
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + "YourAppName");
+            contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
+        }
+
+        Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+        if (imageUri == null) {
+            Log.e("EventQRFragment", "Failed to create new MediaStore record.");
+            Toast.makeText(getContext(), "Failed to save QR code.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try (OutputStream fos = resolver.openOutputStream(imageUri)) {
+            if (fos == null) {
+                throw new IOException("Failed to get output stream.");
+            }
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            Toast.makeText(getContext(), "QR Code saved to Gallery!", Toast.LENGTH_SHORT).show();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.clear();
+                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                resolver.update(imageUri, contentValues, null, null);
+            }
+        } catch (IOException e) {
+            Log.e("EventQRFragment", "Failed to save bitmap.", e);
+            Toast.makeText(getContext(), "Failed to save QR Code.", Toast.LENGTH_SHORT).show();
+            // Clean up the pending entry if saving fails
+            resolver.delete(imageUri, null, null);
+        }
     }
 
     /**

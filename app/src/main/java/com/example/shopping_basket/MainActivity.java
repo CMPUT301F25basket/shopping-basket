@@ -1,9 +1,12 @@
 package com.example.shopping_basket;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.navigation.NavController;
@@ -16,10 +19,13 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.shopping_basket.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * The main activity of the application, serving as the primary container for the user interface
@@ -91,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        handleDeepLink(getIntent());
     }
 
     /**
@@ -125,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_profile) {
+            Log.d("MainActivity", "Profile is clicked");
             ProfileFragment profileDialog = new ProfileFragment();
             profileDialog.show(getSupportFragmentManager(), "ProfileDialogFragment");
             return true;
@@ -147,5 +156,71 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleDeepLink(intent);
+    }
+
+    private void handleDeepLink(Intent intent) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            Uri data = intent.getData();
+            Log.d("DeepLink", "Deep link received: " + data.toString());
+
+            // Check if the scheme and host match your manifest
+            if ("shopping-basket".equals(data.getScheme()) && "event".equals(data.getHost())) {
+                // The URL is shopping-basket://event/{eventId}
+                // getPath() will return "/{eventId}" (with a leading slash)
+                String path = data.getPath();
+
+                if (path != null && !path.isEmpty()) {
+                    // Extract the event ID by removing the leading "/"
+                    String eventId = path.substring(1);
+                    Log.d("DeepLink", "Parsed Event ID: " + eventId);
+
+                    // Now, navigate to your event detail fragment with this ID
+                    navigateToEventFromDeepLink(eventId);
+                }
+            }
+        }
+    }
+
+    private void navigateToEventFromDeepLink(String eventId) {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+        if (navHostFragment == null) {
+            Log.e("DeepLink", "NavHostFragment not found!");
+            return;
+        }
+
+        EventRepository.getEventById(eventId, event -> {
+            Bundle bundle = new Bundle();
+
+            NavController navController = navHostFragment.getNavController();
+
+            // Event exists and has not ended, go to EventDetailFragment
+            if (event != null && event.getEventTime().after(new Date())) {
+                if (profile != null && profile.getGuid().equals(event.getOwner().getGuid())) {
+                    bundle.putSerializable("event", event);
+                    navController.navigate(R.id.myEventFragment, bundle);
+                    Toast.makeText(this, "Opening your event...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                bundle.putSerializable("event", event);
+                try {
+                    navController.navigate(R.id.eventDetailFragment, bundle);
+                    Toast.makeText(this, "Opening event...", Toast.LENGTH_SHORT).show();
+                } catch (IllegalArgumentException e) {
+                    Log.e("DeepLink", "Navigation failed. Could not find a path to the event detail fragment.", e);
+                    Toast.makeText(this, "Could not open event link.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.w("DeepLink", "Event not found or has ended for ID: " + eventId);
+                Toast.makeText(this, "Event is no longer available.", Toast.LENGTH_SHORT).show();
+                navController.navigate(R.id.homeFragment);
+            }
+        });
     }
 }
