@@ -2,11 +2,11 @@ package com.example.shopping_basket;
 
 import static androidx.navigation.Navigation.findNavController;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -16,11 +16,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.example.shopping_basket.databinding.FragmentEventCreationBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.Date;
 
@@ -36,7 +32,7 @@ import java.util.Date;
  */
 public class EventCreationFragment extends Fragment {
     FragmentEventCreationBinding binding;
-    private Profile profile;
+    Event event = null;
 
     /**
      * Default public constructor.
@@ -62,7 +58,9 @@ public class EventCreationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.profile = ProfileManager.getInstance().getCurrentUserProfile();
+        if (getArguments() != null) {
+            event = (Event) getArguments().getSerializable("event");
+        }
     }
 
     /**
@@ -91,6 +89,12 @@ public class EventCreationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentEventCreationBinding.bind(view);
+
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Create Event");
+        }
+
         setupCheckboxListener();
         setupClickListeners();
     }
@@ -117,6 +121,7 @@ public class EventCreationFragment extends Fragment {
      * including navigation, event creation, and date/time picker dialogs.
      */
     private void setupClickListeners() {
+        // TODO: Only enable Create button when all required fields are filled in
         binding.buttonCreateToHome.setOnClickListener(v -> {
             findNavController(v).navigate(R.id.homeFragment);
         });
@@ -142,7 +147,7 @@ public class EventCreationFragment extends Fragment {
         binding.textInputCreateEventEnd.setFocusable(false);
 
         binding.textInputCreateEventTime.setOnClickListener(v -> {
-            CalendarUtils.showTimePicker(requireContext(), binding.textInputCreateEventTime);
+            CalendarUtils.showDateTimePicker(requireContext(), binding.textInputCreateEventTime);
         });
         binding.textInputCreateEventTime.setFocusable(false);
     }
@@ -154,6 +159,7 @@ public class EventCreationFragment extends Fragment {
     private void createEvent() {
         String eventName = binding.textInputCreateEventName.getText().toString().trim();
         String eventDesc = binding.textInputCreateEventDesc.getText().toString().trim();
+        String eventGuideline = binding.textInputCreateEventGuideline.getText().toString().trim();
         String startDateStr = binding.textInputCreateEventStart.getText().toString().trim();
         String endDateStr = binding.textInputCreateEventEnd.getText().toString().trim();
         String eventTimeStr = binding.textInputCreateEventTime.getText().toString().trim();
@@ -161,16 +167,13 @@ public class EventCreationFragment extends Fragment {
         String limitStr = binding.textInputCreateLimit.getText().toString().trim();
         int entrantLimit = limitStr.isEmpty() ? 0 : Integer.parseInt(limitStr);
 
-        boolean requireLocation = binding.checkboxRequireLocation.isChecked();
+        boolean requireLocation = binding.checkboxRequireLocation.isChecked();  // TODO: (Optionally) implement this
 
         Date startDate = CalendarUtils.stringToDate(startDateStr, "MM/dd/yyyy");
         Date endDate = CalendarUtils.stringToDate(endDateStr, "MM/dd/yyyy");
-        Event event = new Event(profile, eventName, eventDesc, 0, entrantLimit, startDate, endDate, eventTimeStr);
+        Date eventTime = CalendarUtils.stringToDate(eventTimeStr, "MM/dd/yyyy HH:mm");
+        Event event = new Event(ProfileManager.getInstance().getCurrentUserProfile(), eventName, eventDesc, eventGuideline, 0, entrantLimit, startDate, endDate, eventTime);
         uploadToFirebase(event);
-    }
-
-    private String generateEventURL(String eventURL) {
-        return "";
     }
 
     // TODO: Implement this method
@@ -206,5 +209,22 @@ public class EventCreationFragment extends Fragment {
                 }).addOnFailureListener(e -> {
                     Log.e("Firestore", "Error during event creation or update: " + e.getMessage());
                 });
+    }
+
+    /**
+     *
+     */
+    private void populateEventData() {
+        if (event == null) {
+            return;
+        }
+        binding.textInputCreateEventName.setText(event.getName());
+        binding.textInputCreateEventDesc.setText(event.getDesc());
+        binding.textInputCreateEventGuideline.setText(event.getGuideline() != null ? event.getGuideline() : "");
+        binding.textInputCreateEventStart.setText(CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy"));
+        binding.textInputCreateEventEnd.setText(CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy"));
+        binding.textInputCreateEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(), "MM/dd/yyyy HH:mm"));
+        binding.textInputCreateLimit.setText(event.getMaxReg() > 0 ? Integer.toString(event.getMaxReg()) : ""); // If maxReg is set (>0), populate the view, otherwise don't
+        // binding.checkboxRequireLocation.setChecked();
     }
 }

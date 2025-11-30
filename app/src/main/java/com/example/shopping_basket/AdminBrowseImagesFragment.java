@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 /**
  * A fragment representing a list of Items.
  */
-public class ImageItemFragment extends Fragment {
+public class AdminBrowseImagesFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -26,13 +26,13 @@ public class ImageItemFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ImageItemFragment() {
+    public AdminBrowseImagesFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ImageItemFragment newInstance(int columnCount) {
-        ImageItemFragment fragment = new ImageItemFragment();
+    public static AdminBrowseImagesFragment newInstance(int columnCount) {
+        AdminBrowseImagesFragment fragment = new AdminBrowseImagesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -51,7 +51,7 @@ public class ImageItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_image_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin_browse_images, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

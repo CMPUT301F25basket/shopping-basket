@@ -1,6 +1,7 @@
 package com.example.shopping_basket;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,15 +26,18 @@ public class Event implements Serializable {
     private Date startDate;
     private Date endDate;
     //private ----- poster;
-    private String eventTime;
+    private Date eventTime;
     private ArrayList<Profile> waitingList;
     private ArrayList<Profile> inviteList;
     private ArrayList<Profile> enrollList;
     private ArrayList<Profile> cancelList;
 
+    @ServerTimestamp // Tells Firestore to automatically populate this field with the server's current timestamp
+    private Date creationTimestamp; // The timestamp the Event is initialized
+
     public Event() {}
 
-    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
+    public Event(Profile owner, String name, String desc, int selectNum, int maxReg, Date startDate, Date endDate, Date eventTime){
         this.owner = owner;
         this.name = name;
         this.desc = desc;
@@ -48,7 +52,7 @@ public class Event implements Serializable {
         this.cancelList = new ArrayList<Profile>();
     }
 
-    public Event(Profile owner, String name, String desc, String guideline, int selectNum, int maxReg, Date startDate, Date endDate, String eventTime){
+    public Event(Profile owner, String name, String desc, String guideline, int selectNum, int maxReg, Date startDate, Date endDate, Date eventTime){
         this.owner = owner;
         this.name = name;
         this.desc = desc;
@@ -338,11 +342,11 @@ public class Event implements Serializable {
         return cancelList;
     }
 
-    public String getEventTime() {
+    public Date getEventTime() {
         return eventTime;
     }
 
-    public void setEventTime(String eventTime) {
+    public void setEventTime(Date eventTime) {
         this.eventTime = eventTime;
     }
 
@@ -360,5 +364,13 @@ public class Event implements Serializable {
 
     public void setEventURL(String eventURL) {
         this.eventURL = eventURL;
+    }
+
+    public Date getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(Date creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 }

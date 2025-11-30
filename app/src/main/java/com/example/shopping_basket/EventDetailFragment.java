@@ -1,25 +1,26 @@
 package com.example.shopping_basket;
 
-import static com.example.shopping_basket.CalendarUtils.dateFormatter;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * A {@link Fragment} that displays detailed information about a specific event.
@@ -75,19 +76,6 @@ public class EventDetailFragment extends Fragment {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("Events")
-                .get()
-                .addOnSuccessListener(querySnapshots -> {
-                    for (QueryDocumentSnapshot doc : querySnapshots) {
-                        String name = doc.getString("name");
-                        String date = doc.getString("date");
-                        System.out.println(name + " on " + date);
-                    }
-                })
-                .addOnFailureListener(e -> System.err.println("Error loading events: " + e));
-
         super.onCreate(savedInstanceState);
         this.profile = ProfileManager.getInstance().getCurrentUserProfile();
         if (getArguments() != null) {
@@ -126,6 +114,11 @@ public class EventDetailFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
             return;
         }
+        // Access the hosting activity's action bar and set the title
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Event Detail");
+        }
+
         setupEventDetail();
         setupClickListeners();
         updateRegisterButtonState();
@@ -142,8 +135,8 @@ public class EventDetailFragment extends Fragment {
         // TODO: set up eventPoster
 
         // Date and time components
-        binding.detailEventDate.setText(event.getEventTime()); // TODO: Format
-        binding.detailEventTime.setText(event.getEventTime()); // TODO: Format
+        binding.detailEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
+        binding.detailEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(),"hh:mm a"));
 
         // Registration status
         renderRegistrationDuration();
@@ -165,7 +158,8 @@ public class EventDetailFragment extends Fragment {
             registrationStatusText = String.format(Locale.US, "Closes in %d days", daysLeft);
             statusColor = getResources().getColor(R.color.oxford_blue, null);
         } else if (daysLeft == 1) {
-            registrationStatusText = "Closes in 1 day";
+            long hoursLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(diffMillis);
+            registrationStatusText = String.format(Locale.US, "Closes in %d hours", hoursLeft);
             statusColor = getResources().getColor(R.color.error, null);
         } else { // daysLeft is 0 or negative
             registrationStatusText = "Registration closed";
@@ -236,12 +230,55 @@ public class EventDetailFragment extends Fragment {
                     event.enroll(profile);
                     break;
             }
+            // Update Firestore's database
+            updateEventParticipationCollections();
             // After the click, update the button's state and text
             updateRegisterButtonState();
             // Update TextView displaying the count of registered users
             String registrationCountText = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
             binding.detailRegistrationCount.setText(registrationCountText);
         });
+    }
+
+    /**
+     * Updates the event document in Firestore with the current state of its lists.
+     * This method extracts the GUIDs from the Profile objects in each list
+     * and overwrites the corresponding arrays in the Firestore document.
+     */
+    private void updateEventParticipationCollections() {
+        if (event == null || event.getEventId() == null) {
+            Log.e("Firestore", "Event or Event ID is null. Cannot update.");
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        List<String> waitingListIds = event.getWaitingList().stream()
+                .map(Profile::getGuid)
+                .collect(Collectors.toList());
+
+
+        // Convert ArrayList<Profile> to ArrayList<String> of GUIDs for Firestore
+        List<String> enrollListIds = event.getEnrollList().stream()
+                .map(Profile::getGuid)
+                .collect(Collectors.toList());
+
+        List<String> cancelListIds = event.getCancelList().stream()
+                .map(Profile::getGuid)
+                .collect(Collectors.toList());
+
+        List<String> inviteListIds = event.getInviteList().stream()
+                .map(Profile::getGuid)
+                .collect(Collectors.toList());
+
+        // Update the specific fields in the Firestore document
+        db.collection("events").document(event.getEventId())
+                .update(
+                        "waitingList", waitingListIds,
+                        "enrollList", enrollListIds,
+                        "cancelList", cancelListIds,
+                        "inviteList", inviteListIds
+                )
+                .addOnSuccessListener(aVoid -> Log.d("FirestoreUpdate", "Event lists updated successfully!"))
+                .addOnFailureListener(e -> Log.e("FirestoreUpdate", "Error updating event lists", e));
     }
 
     /**
