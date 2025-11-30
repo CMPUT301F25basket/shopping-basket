@@ -1,5 +1,6 @@
 package com.example.shopping_basket;
 
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +12,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+
 
 import com.example.shopping_basket.databinding.FragmentProfileBinding;
 
@@ -151,21 +156,31 @@ public class ProfileFragment extends DialogFragment {
      * Sets up click listeners for the buttons in the dialog.
      */
     private void setupClickListeners() {
+        // Existing edit profile button
         binding.buttonEditProfile.setOnClickListener(v -> {
             dismiss();
-            // Show the new EditProfileFragment dialog
             EditProfileFragment editProfileDialog = new EditProfileFragment();
-            // Use getParentFragmentManager() to show a dialog from within another fragment
             editProfileDialog.show(getParentFragmentManager(), "EditProfileFragment");
-            // TODO: Retain when EditProfileDialog closes
         });
 
-        // TODO: Implement
-//        binding.buttonToRegistrationHistory.setOnClickListener(v -> {
-//            dismiss();
-//            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
-//            registeredEventFragment.show(getParentFragmentManager(), "RegistrationHistoryFragment");
-//        });
+        // NEW: Registration History button
+        binding.buttonToRegistrationHistory.setOnClickListener(v -> {
+            // Close the profile dialog so the new screen is visible
+            dismiss();
+
+            // Get the NavController from the NavHostFragment in MainActivity
+            NavHostFragment navHostFragment =
+                    (NavHostFragment) requireActivity()
+                            .getSupportFragmentManager()
+                            .findFragmentById(R.id.nav_host_fragment_content_main);
+
+            if (navHostFragment != null) {
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.registrationHistoryFragment);
+            }
+        });
+
+        // (Leave your other listeners here: logout, delete profile, etc.)
 
         binding.buttonDeleteProfile.setOnClickListener(v -> {
             dismiss();

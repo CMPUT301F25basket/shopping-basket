@@ -166,4 +166,11 @@
             app:popUpTo="@id/adminMenuFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+    <fragment
+        android:id="@+id/registrationHistoryFragment"
+        android:name="com.example.shopping_basket.RegistrationHistoryFragment"
+        android:label="Registration History"
+        tools:layout="@layout/fragment_registration_history" />
+
+
 </navigation>

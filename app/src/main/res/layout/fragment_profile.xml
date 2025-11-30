@@ -86,4 +86,15 @@
             android:textColor="@color/oxford_blue"
             android:textSize="16sp" />
     </LinearLayout>
+    <Button
+        android:id="@+id/button_registration_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/oxford_light_grey"
+        android:fontFamily="@font/roboto_light"
+        android:text="Registration History"
+        android:textColor="@color/oxford_blue"
+        android:textSize="16sp" />
+
 </LinearLayout>
