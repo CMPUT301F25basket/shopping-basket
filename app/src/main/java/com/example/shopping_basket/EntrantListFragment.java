@@ -54,8 +54,7 @@ public class EntrantListFragment extends Fragment {
      * @return The root view for the fragment's UI.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_entrant_list, container, false);
 
         // Set the adapter

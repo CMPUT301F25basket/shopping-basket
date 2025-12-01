@@ -96,8 +96,7 @@ public class EventQRFragment extends Fragment {
      * @return The root view for the fragment's UI.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentEventQrBinding.inflate(inflater, container, false);
         return binding.getRoot();

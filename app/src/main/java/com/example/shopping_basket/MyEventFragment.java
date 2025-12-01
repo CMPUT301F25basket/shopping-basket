@@ -21,12 +21,13 @@ import android.view.ViewGroup;
 
 import com.example.shopping_basket.databinding.FragmentMyEventBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 public class MyEventFragment extends Fragment {
 
@@ -66,8 +67,7 @@ public class MyEventFragment extends Fragment {
      * @return The root view for the fragment's UI.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMyEventBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -122,9 +122,65 @@ public class MyEventFragment extends Fragment {
             binding.buttonUpdateEvent.setEnabled(false);
         }
 
+        // Load the uploaded poster for this event (if any)
+        loadPosterImage();
+
         setupEventDetail();
         setupClickListeners();
         setupButtonsVisibility();
+    }
+
+    /**
+     * Loads the poster image for this event from Firestore and displays it
+     * in the header ImageView. If no poster is present or decoding fails,
+     * a placeholder image is shown instead.
+     */
+    private void loadPosterImage() {
+        if (binding == null || event == null) {
+            return;
+        }
+
+        String eventId = event.getEventId();
+        if (eventId == null || eventId.isEmpty()) {
+            // We don't know which document to look up → show placeholder
+            binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("events").document(eventId)
+                .get().addOnSuccessListener(doc -> {
+                    if (!isAdded() || binding == null) {
+                        return; // Fragment is no longer attached
+                    }
+
+                    if (doc != null && doc.exists()) {
+                        String posterBase64 = doc.getString("posterBase64");
+                        if (posterBase64 != null && !posterBase64.isEmpty()) {
+                            try {
+                                byte[] bytes = Base64.decode(posterBase64, Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                if (bitmap != null) {
+                                    binding.myEventPoster.setImageBitmap(bitmap);
+                                } else {
+                                    binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                Log.e("MyEventFragment", "Invalid Base64 poster data", e);
+                                binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                            }
+                        } else {
+                            binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                        }
+                    } else {
+                        binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("MyEventFragment", "Failed to load poster image", e);
+                    if (isAdded() && binding != null) {
+                        binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                    }
+                });
     }
 
     private void setupEventDetail() {

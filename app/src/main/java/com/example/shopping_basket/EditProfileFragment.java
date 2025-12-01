@@ -75,8 +75,7 @@ public class EditProfileFragment extends DialogFragment {
      * @return The root view for the fragment's UI.
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEditProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

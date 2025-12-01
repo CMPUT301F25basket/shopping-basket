@@ -57,9 +57,7 @@ public class AdminBrowseImagesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_admin_browse_images, container, false);
 
@@ -74,8 +72,7 @@ public class AdminBrowseImagesFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
 
@@ -92,37 +89,32 @@ public class AdminBrowseImagesFragment extends Fragment {
      * We only care about events where hasPoster == true.
      */
     private void loadPosters() {
-        db.collection(EVENTS_COLLECTION)
-                .whereEqualTo("hasPoster", true)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    posters.clear();
+        db.collection(EVENTS_COLLECTION).whereEqualTo("hasPoster", true).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            posters.clear();
 
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        String eventId = doc.getString("eventId");
-                        if (eventId == null || eventId.isEmpty()) {
-                            eventId = doc.getId(); // fallback
-                        }
+            for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                String eventId = doc.getString("eventId");
+                if (eventId == null || eventId.isEmpty()) {
+                    eventId = doc.getId(); // fallback
+                }
 
-                        String name = doc.getString("name");
-                        String base64 = doc.getString("posterBase64");
-                        String uploaderName = doc.getString("posterUploaderName");
+                String name = doc.getString("name");
+                String base64 = doc.getString("posterBase64");
+                String uploaderName = doc.getString("posterUploaderName");
 
-                        if (base64 == null || base64.isEmpty()) {
-                            continue; // nothing to display
-                        }
+                if (base64 == null || base64.isEmpty()) {
+                    continue; // nothing to display
+                }
 
-                        posters.add(new EventPoster(eventId, name, base64, uploaderName));
-                    }
+                posters.add(new EventPoster(eventId, name, base64, uploaderName));
+            }
 
-                    adapter.notifyDataSetChanged();
-                })
+            adapter.notifyDataSetChanged();
+        })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error loading posters", e);
                     if (getContext() != null) {
-                        Toast.makeText(getContext(),
-                                "Failed to load posters.",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Failed to load posters.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

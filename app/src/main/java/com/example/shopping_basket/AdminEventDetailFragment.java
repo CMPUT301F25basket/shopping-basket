@@ -62,16 +62,13 @@ public class AdminEventDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentAdminEventDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if (event == null) {
@@ -80,11 +77,8 @@ public class AdminEventDetailFragment extends Fragment {
             return;
         }
 
-        if (getActivity() != null
-                && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity())
-                    .getSupportActionBar()
-                    .setTitle("Admin – Event Detail");
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Admin – Event Detail");
         }
 
         setupEventDetail();
@@ -109,20 +103,15 @@ public class AdminEventDetailFragment extends Fragment {
         // Date & time
         Date eventTime = event.getEventTime();
         if (eventTime != null) {
-            binding.adminEventDate.setText(
-                    CalendarUtils.dateFormatter(eventTime, "MM/dd/yyyy"));
-            binding.detailEventTime.setText(
-                    CalendarUtils.dateFormatter(eventTime, "hh:mm a"));
+            binding.adminEventDate.setText(CalendarUtils.dateFormatter(eventTime, "MM/dd/yyyy"));
+            binding.detailEventTime.setText(CalendarUtils.dateFormatter(eventTime, "hh:mm a"));
         }
 
         // Registration status text (e.g. "Closes in X days" / "Registration closed")
         renderRegistrationDuration();
 
         // Simple count of users on the waiting list
-        String registrationCountText = String.format(
-                Locale.US,
-                "%d users have registered for this event",
-                event.getWaitListSize());
+        String registrationCountText = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
         binding.adminRegistrationCount.setText(registrationCountText);
 
         // Extra summary for the admin: breakdown of each list
