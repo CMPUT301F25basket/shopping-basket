@@ -258,7 +258,9 @@ public class MyEventFragment extends Fragment {
         });
 
         binding.buttonUpdateEvent.setOnClickListener(v -> {
-
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_eventCreationFragment, bundle);
         });
 
         binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
