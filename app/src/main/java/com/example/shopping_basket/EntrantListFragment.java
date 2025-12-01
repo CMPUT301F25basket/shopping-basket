@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.shopping_basket.databinding.FragmentEntrantListBinding;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -24,7 +27,7 @@ import java.util.Objects;
  * A fragment representing a list of Items.
  */
 public class EntrantListFragment extends Fragment {
-    // TODO: Back Button
+    private FragmentEntrantListBinding binding;
     private Event event;
     private ArrayList<Profile> profiles;
     private EntrantListAdapter adapter;
@@ -58,8 +61,8 @@ public class EntrantListFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_entrant_list, container, false);
-        return view;
+        binding = FragmentEntrantListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -70,8 +73,8 @@ public class EntrantListFragment extends Fragment {
 
         switch (entrantListTitle) {
             case "All":
-                profiles = event.getWaitingList();
-                profiles.addAll(event.getInviteList());
+                profiles = new ArrayList<>(); // Use a new list to avoid modifying original lists
+                profiles.addAll(event.getWaitingList());
                 profiles.addAll(event.getEnrollList());
                 profiles.addAll(event.getCancelList());
                 break;
@@ -90,13 +93,22 @@ public class EntrantListFragment extends Fragment {
         }
         adapter = new EntrantListAdapter(this.getContext(), profiles);
 
-        ListView list = new ListView(this.getContext());
-        list.findViewById(R.id.entrant_list);
-        list.setAdapter(adapter);
+        adapter = new EntrantListAdapter(requireContext(), profiles);
+        binding.entrantList.setAdapter(adapter);
 
         if (getActivity() instanceof AppCompatActivity) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(entrantListTitle + " Entrants");
         }
+
+        getParentFragmentManager().setFragmentResultListener("entrantProfileResult", this, (requestKey, bundle) -> {
+            boolean entrantRemoved = bundle.getBoolean("entrantRemoved");
+            if (entrantRemoved) {
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
+                Toast.makeText(getContext(), "Entrant has been removed.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setupClickListeners();
     }
@@ -125,6 +137,18 @@ public class EntrantListFragment extends Fragment {
     }
 
     private void setupClickListeners() {
+        binding.buttonEntrantListToMyEvent.setOnClickListener(v -> {
+            getParentFragmentManager().popBackStack();
+        });
 
+        binding.entrantList.setOnItemClickListener((parent, view, position, id) -> {
+            Profile selectedProfile = profiles.get(position);
+
+            EntrantProfileFragment dialog = EntrantProfileFragment.newInstance(selectedProfile, event);
+
+            dialog.show(getParentFragmentManager(), "EntrantProfileFragment");
+        });
     }
+
+
 }
