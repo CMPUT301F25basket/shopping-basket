@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -69,22 +72,17 @@ public class MyEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentMyEventBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     /**
-     * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} has returned.
-     * This method binds the views, populates the UI with event details, and sets up click listeners.
-     *
-     * @param view The View returned by {@link #onCreateView}.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * Called immediately after onCreateView has returned.
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Access the hosting activity's action bar and set the title
+        // Action bar title
         if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Event");
         }
@@ -100,6 +98,9 @@ public class MyEventFragment extends Fragment {
         if (event.getEventTime().after(new Date())) {
             binding.buttonUpdateEvent.setEnabled(false);
         }
+
+        // Load the uploaded poster for this event (if any)
+        loadPosterImage();
 
         setupEventDetail();
         setupClickListeners();
@@ -128,7 +129,8 @@ public class MyEventFragment extends Fragment {
                 if (menuItem.getItemId() == R.id.action_qr) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("event", event);
-                    NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_eventQRFragment, bundle);
+                    NavHostFragment.findNavController(MyEventFragment.this)
+                            .navigate(R.id.action_myEventFragment_to_eventQRFragment, bundle);
                     return true;
                 }
                 return false;
@@ -147,20 +149,23 @@ public class MyEventFragment extends Fragment {
         if (event.getGuideline() != null) binding.myEventGuideline.setText(event.getGuideline());
 
         // Date and time
-        binding.myEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
-        binding.myEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(),"hh:mm a"));
+        binding.myEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(), "MM/dd/yyyy"));
+        binding.myEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(), "hh:mm a"));
 
         // Registration status
         renderRegistrationDuration();
-        String registrationCountText = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
+        String registrationCountText = String.format(Locale.US,
+                "%d users have registered for this event", event.getWaitListSize());
         binding.myEventRegistrationCount.setText(registrationCountText);
     }
 
     /**
-     *
+     * Determines which button layout (pre/post lottery) should be visible.
      */
     private void setupButtonsVisibility() {
-        boolean lotteryDrawn = ((event.getInviteList() != null && !event.getInviteList().isEmpty()) || !event.getEnrollList().isEmpty());
+        boolean lotteryDrawn =
+                ((event.getInviteList() != null && !event.getInviteList().isEmpty())
+                        || !event.getEnrollList().isEmpty());
 
         if (lotteryDrawn) {
             binding.layoutPreLottery.setVisibility(View.GONE);
@@ -175,35 +180,121 @@ public class MyEventFragment extends Fragment {
      * Sets up click listeners for all interactive buttons on the screen.
      */
     private void setupClickListeners() {
-        // TODO: Implement navigation logic for each of these buttons.
 
+        // Open lottery dialog
         binding.buttonOpenLottery.setOnClickListener(v -> {
             LotteryFragment dialog = LotteryFragment.newInstance(event);
             dialog.show(getParentFragmentManager(), "LotteryFragment");
             setupButtonsVisibility();
         });
 
+        // Post-lottery lists
         binding.buttonToEnrolledEntrants.setOnClickListener(v -> {
-            // This button navigates to a screen showing the enrolled list.
+            // Enrolled entrants
+            navigateToEntrantList("enrolled");
         });
 
         binding.buttonToSelectedEntrants.setOnClickListener(v -> {
-            // This button navigates to a screen showing the selected entrants (inviteList).
-            // Also let organizer see canceled entrants
+            // Selected entrants (including cancelled, if you merge lists there)
+            navigateToEntrantList("selected");
         });
 
         binding.buttonToUnselectedEntrants.setOnClickListener(v -> {
-            // This button navigates to a screen showing the unselected entrants.
-            // Also let organizer filter the waiting list
+            // Unselected / waiting-list entrants
+            navigateToEntrantList("unselected");
         });
 
-        binding.buttonUpdateEvent.setOnClickListener(v -> {
-
-        });
-
+        // Pre-lottery list of registered entrants
         binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
-
+            navigateToEntrantList("registered");
         });
+
+        // Edit / update this event
+        binding.buttonUpdateEvent.setOnClickListener(v -> {
+            if (event == null) {
+                Log.w("MyEventFragment", "Update clicked but event is null");
+                return;
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+
+            NavHostFragment.findNavController(MyEventFragment.this)
+                    .navigate(R.id.action_myEventFragment_to_eventCreationFragment, bundle);
+        });
+    }
+
+    /**
+     * Helper to navigate to EntrantListFragment with current event and list type.
+     */
+    private void navigateToEntrantList(String listType) {
+        if (event == null) {
+            Log.w("MyEventFragment", "navigateToEntrantList: event is null");
+            return;
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("event", event);
+        bundle.putString("entrant_list_type", listType);
+
+        NavHostFragment.findNavController(MyEventFragment.this)
+                .navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
+    }
+
+    /**
+     * Loads the poster image for this event from Firestore and displays it
+     * in the header ImageView. If no poster is present or decoding fails,
+     * a placeholder image is shown instead.
+     */
+    private void loadPosterImage() {
+        if (binding == null || event == null) {
+            return;
+        }
+
+        String eventId = event.getEventId();
+        if (eventId == null || eventId.isEmpty()) {
+            // We don't know which document to look up → show placeholder
+            binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+            return;
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("events")
+                .document(eventId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (!isAdded() || binding == null) {
+                        return; // Fragment is no longer attached
+                    }
+
+                    if (doc != null && doc.exists()) {
+                        String posterBase64 = doc.getString("posterBase64");
+                        if (posterBase64 != null && !posterBase64.isEmpty()) {
+                            try {
+                                byte[] bytes = Base64.decode(posterBase64, Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                if (bitmap != null) {
+                                    binding.myEventPoster.setImageBitmap(bitmap);
+                                } else {
+                                    binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                Log.e("MyEventFragment", "Invalid Base64 poster data", e);
+                                binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                            }
+                        } else {
+                            binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                        }
+                    } else {
+                        binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("MyEventFragment", "Failed to load poster image", e);
+                    if (isAdded() && binding != null) {
+                        binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
+                    }
+                });
     }
 
     /**

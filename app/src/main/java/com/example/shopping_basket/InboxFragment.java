@@ -1,13 +1,6 @@
 package com.example.shopping_basket;
+
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+
 import com.example.shopping_basket.databinding.FragmentInboxBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -27,9 +27,14 @@ import java.util.ArrayList;
 
 /**
  * A fragment representing a list of notifications.
+ *
+ * Behaviour:
+ * - Normal user: shows only notifications targeted at the current user.
+ * - Admin mode (from Admin Menu): shows ALL notifications as a log.
  */
 public class InboxFragment extends Fragment {
     private static final String TAG = "InboxFragment";
+
     private ListView notificationListView;
     private MenuProvider menuProvider;
     private InboxAdapter inboxAdapter;
@@ -37,35 +42,39 @@ public class InboxFragment extends Fragment {
     private FirebaseFirestore db;
     private Profile currentUser;
 
-    public InboxFragment() {}
+    public InboxFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = ProfileManager.getInstance().getCurrentUserProfile();
-        // Initialize Firebase services
         db = FirebaseFirestore.getInstance();
-        // Initialize the data list
         notifications = new ArrayList<>();
-        }
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inbox, container, false);
         notificationListView = view.findViewById(R.id.inbox_fragment);
         inboxAdapter = new InboxAdapter(requireContext(), notifications);
         notificationListView.setAdapter(inboxAdapter);
-
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Access the hosting activity's action bar and set the title
-        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Inbox");
+
+        boolean adminMode = ProfileManager.getInstance().isAdminMode();
+
+        // Set title depending on mode
+        if (getActivity() != null
+                && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity())
+                    .getSupportActionBar()
+                    .setTitle(adminMode ? "Admin – Notification Logs" : "Inbox");
         }
 
         loadNotifications();
@@ -74,40 +83,65 @@ public class InboxFragment extends Fragment {
         setupMenu();
     }
 
-    // TODO: Implement
+    /**
+     * Loads notifications from Firestore.
+     * <p>
+     * - In normal user mode: only notifications targeted at the current user.
+     * - In admin mode: all notifications (log of everything sent).
+     */
     private void loadNotifications() {
-//        if (currentUser == null) {
-//            Log.w(TAG, "No user logged in. Cannot load notifications.");
-//            Toast.makeText(getContext(), "Please log in to see your notifications.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        String userId = currentUser.getGuid();
-//
-//        db.collection("notifications")
-//                .whereEqualTo("target", userId)
-//                .orderBy("timestamp", Query.Direction.DESCENDING)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        // Clear the old list before adding new data
-//                        notifications.clear();
-//
-//                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                            Notif notification = document.toObject(Notif.class);
-//                            notifications.add(notification);
-//                            Log.d(TAG, "Loaded notification: " + notification.getMessage());
-//                        }
-//                        inboxAdapter.notifyDataSetChanged();
-//
-//                        if (notifications.isEmpty()) {
-//                            Log.d(TAG, "No notifications found for user: " + userId);
-//                        }
-//
-//                    } else {
-//                        Log.e(TAG, "Error getting notifications: ", task.getException());
-//                        Toast.makeText(getContext(), "Failed to load notifications.", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        if (db == null) {
+            Log.e(TAG, "Firestore not initialised.");
+            return;
+        }
+
+        final boolean adminMode = ProfileManager.getInstance().isAdminMode();
+
+        if (!adminMode) {
+            if (currentUser == null) {
+                Log.w(TAG, "No user logged in. Cannot load notifications.");
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Please log in to see your notifications.", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+
+        Query query = db.collection("notifications");
+        final String userId;   // <-- final, assigned exactly once
+
+        if (adminMode) {
+            userId = null; // just for logging; not used in the query
+            query = query.orderBy("time", Query.Direction.DESCENDING);
+        } else {
+            userId = currentUser.getGuid();
+            query = query.whereEqualTo("target", userId).orderBy("time", Query.Direction.DESCENDING);
+        }
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                notifications.clear();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Notif notification = document.toObject(Notif.class);
+                    notifications.add(notification);
+                    Log.d(TAG, "Loaded notification: " + notification.getMessage());
+                }
+                inboxAdapter.notifyDataSetChanged();
+
+                if (notifications.isEmpty()) {
+                    if (adminMode) {
+                        Log.d(TAG, "No notifications found in the system.");
+                    } else {
+                        Log.d(TAG, "No notifications found for user: " + userId);
+                    }
+                }
+            } else {
+                Log.e(TAG, "Error getting notifications: ", task.getException());
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Failed to load notifications.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void setupMenu() {

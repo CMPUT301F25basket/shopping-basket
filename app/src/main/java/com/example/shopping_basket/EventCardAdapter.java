@@ -1,5 +1,8 @@
 package com.example.shopping_basket;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,134 +13,137 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 /**
- * A {@link RecyclerView.Adapter} for displaying a list of Event objects in a card format.
- * <p>
- * This adapter is responsible for taking a list of events and populating a {@link RecyclerView}.
- * Each item is displayed as a card showing the event's name, registration period, and time,
- * and remaining registration time.
- * <p>
- * This adapter also allows navigation to EventDetailFragment, where details of an event can
- * be viewed.
+ * RecyclerView.Adapter for displaying a list of Event objects in cards on the
+ * Home screen.
+ *
+ * This version also supports showing an uploaded poster image on the card.
+ * The poster image is stored as a Base64 string on the event document in
+ * Firestore and provided to the adapter via the eventPosters map.
  */
-public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.ViewHolder> {
-    private ArrayList<Event> events;
-    private OnItemClickListener onItemClickListener;
+public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.EventViewHolder> {
 
-    /**
-     * Constructs a new EventCardAdapter.
-     *
-     * @param events An ArrayList}of Event objects to be displayed.
-     */
-    public EventCardAdapter(ArrayList<Event> events) {
-        this.events = events;
-    }
-
-    /**
-     * Interface for receiving click events on items in the RecyclerView.
-     */
     public interface OnItemClickListener {
-        /**
-         * Called when an item in the RecyclerView has been clicked.
-         *
-         * @param position The position of the clicked item in the adapter.
-         */
         void onItemClick(int position);
     }
 
-    /**
-     * Registers a callback to be invoked when an item in this adapter has been clicked.
-     *
-     * @param listener The callback that will be executed.
-     */
+    private final ArrayList<Event> events;
+    private final Map<String, String> eventPosters;
+    private OnItemClickListener listener;
+
+    public EventCardAdapter(ArrayList<Event> events, Map<String, String> eventPosters) {
+        this.events = events;
+        this.eventPosters = eventPosters;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
+        this.listener = listener;
     }
 
-    /**
-     * A {@link RecyclerView.ViewHolder} that describes an item view and data about its place
-     * within the RecyclerView. It holds the UI components for a single event card.
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView eventCardPoster;
-        private TextView eventCardName;
-        private TextView eventCardDate;
-        private TextView eventCardTime;
-        private TextView eventCardStatus;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            eventCardPoster = itemView.findViewById(R.id.event_card_poster);
-            eventCardName = itemView.findViewById(R.id.event_card_name);
-            eventCardDate = itemView.findViewById(R.id.event_card_date);
-            eventCardTime = itemView.findViewById(R.id.event_card_time);
-            eventCardStatus = itemView.findViewById(R.id.event_card_status);
-        }
-    }
-
-    /**
-     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an item.
-     *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return A new ViewHolder that holds a View of the given view type.
-     */
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_overview_card, parent, false);
-        return new ViewHolder(view);
+    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.event_overview_card, parent, false);
+        return new EventViewHolder(view, listener);
     }
 
-    /**
-     * Called by RecyclerView to display the data at the specified position.
-     * This method updates the contents of the ViewHolder to reflect the item at the
-     * given position.
-     *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Event eventItem = events.get(position);
+    public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
+        Event event = events.get(position);
 
-        holder.eventCardName.setText(eventItem.getName());
+        holder.eventName.setText(event.getName() != null ? event.getName() : "Unnamed event");
 
-        holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(position);
-            }
-        });
-
-        if (eventItem.getStartDate() != null && eventItem.getEndDate() != null) {
-            holder.eventCardDate.setText(CalendarUtils.dateFormatter(eventItem.getEventTime(), "MM/dd/yyyy"));
-            String eventTimeText = CalendarUtils.dateFormatter(eventItem.getEventTime(), "hh:mm a");
-            holder.eventCardTime.setText(eventTimeText);
-
-            long diffMillis = eventItem.getEndDate().getTime() - System.currentTimeMillis();
-            long daysLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diffMillis);
-
-            // Ensure daysLeft is not negative
-            daysLeft = Math.max(0, daysLeft);
-            holder.eventCardStatus.setText("Closes in " + daysLeft + " days");
+        // Date
+        if (event.getStartDate() != null) {
+            holder.eventDate.setText(
+                    CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy")
+            );
         } else {
-            holder.eventCardDate.setText("Date TBD");
-            holder.eventCardTime.setText("");
-            holder.eventCardStatus.setText("Status unknown");
+            holder.eventDate.setText("");
+        }
+
+        // Time
+        if (event.getEventTime() != null) {
+            holder.eventTime.setText(
+                    CalendarUtils.dateFormatter(event.getEventTime(), "hh:mm a")
+            );
+        } else {
+            holder.eventTime.setText("");
+        }
+
+        // Status: "Closes in X days" based on endDate
+        if (event.getEndDate() != null) {
+            Date end = event.getEndDate();
+            Date now = new Date();
+            long diff = end.getTime() - now.getTime();
+            long days = (long) Math.ceil(diff / (1000.0 * 60 * 60 * 24));
+            if (days > 0) {
+                holder.eventStatus.setText("Closes in " + days + (days == 1 ? " day" : " days"));
+            } else {
+                holder.eventStatus.setText("Closed");
+            }
+        } else {
+            holder.eventStatus.setText("");
+        }
+
+        // Poster image
+        String posterBase64 = null;
+        if (eventPosters != null && event.getEventId() != null) {
+            posterBase64 = eventPosters.get(event.getEventId());
+        }
+
+        if (posterBase64 != null && !posterBase64.isEmpty()) {
+            try {
+                byte[] bytes = Base64.decode(posterBase64, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                if (bitmap != null) {
+                    holder.eventPoster.setImageBitmap(bitmap);
+                } else {
+                    holder.eventPoster.setImageResource(R.drawable.image_placeholder);
+                }
+            } catch (IllegalArgumentException e) {
+                // bad base64 → show placeholder
+                holder.eventPoster.setImageResource(R.drawable.image_placeholder);
+            }
+        } else {
+            // No poster for this event yet → placeholder
+            holder.eventPoster.setImageResource(R.drawable.image_placeholder);
         }
     }
 
-
-    /**
-     * Returns the total number of items in the data set held by the adapter.
-     *
-     * @return The total number of items in this adapter.
-     */
     @Override
     public int getItemCount() {
         return events.size();
+    }
+
+    static class EventViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView eventPoster;
+        TextView eventName;
+        TextView eventDate;
+        TextView eventTime;
+        TextView eventStatus;
+
+        EventViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+            super(itemView);
+            eventPoster = itemView.findViewById(R.id.event_card_poster);
+            eventName   = itemView.findViewById(R.id.event_card_name);
+            eventDate   = itemView.findViewById(R.id.event_card_date);
+            eventTime   = itemView.findViewById(R.id.event_card_time);
+            eventStatus = itemView.findViewById(R.id.event_card_status);
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
+        }
     }
 }
