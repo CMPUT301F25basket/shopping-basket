@@ -2,12 +2,20 @@ package com.example.shopping_basket;
 
 import static android.content.ContentValues.TAG;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.nfc.FormatException;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.EditText;
+
+import androidx.core.content.ContextCompat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,21 +38,33 @@ public class CalendarUtils {
      * @param editText The {@link EditText} widget that will display the selected date.
      */
     public static void showDatePicker(Context context, EditText editText) {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        editText.setFocusable(false);
+        editText.setClickable(true);
 
-        DatePickerDialog datePicker = new DatePickerDialog(context,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    String selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedMonth + 1, selectedDay, selectedYear);
-                    editText.setText(selectedDate);
-                },
-                year, month, day
-        );
+        editText.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            // Try to parse existing date to pre-fill the picker
+            Date existingDate = stringToDate(editText.getText().toString(), "MM/dd/yyyy");
+            if (existingDate != null) {
+                calendar.setTime(existingDate);
+            }
 
-        datePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        datePicker.show();
+            DatePickerDialog datePicker = new DatePickerDialog(context,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedMonth + 1, selectedDay, selectedYear);
+                        editText.setText(selectedDate);
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+
+            // Set min date if needed, but for filters it might be better to allow past dates
+            // datePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+            datePicker.show();
+        });
+
+        addClearButtonFunctionality(context, editText);
     }
 
     /**
@@ -55,64 +75,122 @@ public class CalendarUtils {
      * @param editText The {@link EditText} widget that will display the selected time.
      */
     public static void showTimePicker(Context context, EditText editText) {
-        final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
+        editText.setFocusable(false);
+        editText.setClickable(true);
 
-        TimePickerDialog timePicker = new TimePickerDialog(
-                context,
-                (view, selectedHour, selectedMinute) -> {
-                    String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
-                    editText.setText(selectedTime);
-                },
-                hour, minute, true
-        );
+        editText.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            Date existingTime = stringToDate(editText.getText().toString(), "HH:mm");
+            if (existingTime != null) {
+                calendar.setTime(existingTime);
+            }
 
-        timePicker.show();
+            TimePickerDialog timePicker = new TimePickerDialog(
+                    context,
+                    (view, selectedHour, selectedMinute) -> {
+                        String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
+                        editText.setText(selectedTime);
+                    },
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true // 24-hour format
+            );
+            timePicker.show();
+        });
     }
+
+        /**
+         * Displays a DatePickerDialog followed by a TimePickerDialog to select a full date and time.
+         * <p>
+         * Upon completion, the provided EditText is updated with the combined, formatted
+         * date and time string "MM/dd/yyyy HH:mm".
+         *
+         * @param context  The Context required to show the dialogs.
+         * @param editText The EditText widget that will display the selected date and time.
+         */
+        public static void showDateTimePicker(Context context, EditText editText) {
+            editText.setFocusable(false);
+            editText.setClickable(true);
+
+            editText.setOnClickListener(v -> {
+                final Calendar calendar = Calendar.getInstance();
+                Date existingDateTime = stringToDate(editText.getText().toString(), "MM/dd/yyyy HH:mm");
+                if (existingDateTime != null) {
+                    calendar.setTime(existingDateTime);
+                }
+
+                DatePickerDialog datePicker = new DatePickerDialog(context,
+                        (view, selectedYear, selectedMonth, selectedDay) -> {
+                            calendar.set(Calendar.YEAR, selectedYear);
+                            calendar.set(Calendar.MONTH, selectedMonth);
+                            calendar.set(Calendar.DATE, selectedDay);
+
+                            // Setup time picker after a date has been selected
+                            TimePickerDialog timePicker = new TimePickerDialog(context,
+                                    (timeView, selectedHour, selectedMinute) -> {
+                                        calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                                        calendar.set(Calendar.MINUTE, selectedMinute);
+
+                                        String selectedDateTime = dateFormatter(calendar.getTime(), "MM/dd/yyyy HH:mm");
+                                        editText.setText(selectedDateTime);
+                                    },
+                                    calendar.get(Calendar.HOUR_OF_DAY),
+                                    calendar.get(Calendar.MINUTE),
+                                    true
+                            );
+                            timePicker.show();
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DATE)
+                );
+                datePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+                datePicker.show();
+            });
+
+            addClearButtonFunctionality(context, editText);
+        }
 
     /**
-     * Displays a DatePickerDialog followed by a TimePickerDialog to select a full date and time.
-     * <p>
-     * Upon completion, the provided EditText is updated with the combined, formatted
-     * date and time string "MM/dd/yyyy HH:mm".
-     *
-     * @param context  The Context required to show the dialogs.
-     * @param editText The EditText widget that will display the selected date and time.
+     * Adds the clear button functionality (text watcher and touch listener) to an EditText.
+     * This is a private helper to avoid code duplication across the public methods.
      */
-    public static void showDateTimePicker(Context context, EditText editText) {
-        final Calendar calendar = Calendar.getInstance();
+    @SuppressLint("ClickableViewAccessibility")
+    private static void addClearButtonFunctionality(Context context, EditText editText) {
+        // Add a listener to show/hide the clear icon based on text content
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateClearIcon(context, editText, !s.toString().isEmpty());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
-        DatePickerDialog datePicker = new DatePickerDialog(context,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    calendar.set(Calendar.YEAR, selectedYear);
-                    calendar.set(Calendar.MONTH, selectedMonth);
-                    calendar.set(Calendar.DATE, selectedDay);
+        // Add a listener to handle clicks on the clear icon itself
+        editText.setOnTouchListener((v, event) -> {
+            // Check if the touch event is on the clear icon (the drawableEnd)
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (editText.getCompoundDrawables()[2] != null) { // Index 2 is for drawableEnd
+                    // Check if the click was within the bounds of the clear icon
+                    boolean isClearButtonClicked = event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[2].getBounds().width() - editText.getPaddingRight());
+                    if (isClearButtonClicked) {
+                        editText.setText(""); // Clear the text
+                        return true; // Consume the touch event
+                    }
+                }
+            }
+            // Let the default OnTouch behavior (and subsequently OnClick) handle other touches
+            return v.onTouchEvent(event);
+        });
 
-                    // Setup time picker after a date has been selected
-                    TimePickerDialog timePicker = new TimePickerDialog(context,
-                            (timeView, selectedHour, selectedMinute) -> {
-                                calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-                                calendar.set(Calendar.MINUTE, selectedMinute);
-
-                                // Format and set final text
-                                String selectedTime = dateFormatter(calendar.getTime(), "MM/dd/yyyy HH:mm");
-                                editText.setText(selectedTime);
-                            },
-                            calendar.get(Calendar.HOUR_OF_DAY),
-                            calendar.get(Calendar.MINUTE),
-                            true
-                    );
-                    timePicker.show();
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DATE)
-        );
-
-        datePicker.getDatePicker().setMinDate(System.currentTimeMillis());  // Prevent selecting past dates
-        datePicker.show();
+        // Initial check to set the icon state correctly when the view is first created
+        updateClearIcon(context, editText, !editText.getText().toString().isEmpty());
     }
+
+
 
     /**
      * Converts a String representation of a date into a Date object
@@ -123,6 +201,9 @@ public class CalendarUtils {
      * @return A Date object representing the parsed string, or null if parsing fails.
      */
     public static Date stringToDate(String dateString, String format) {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            return null;
+        }
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
             return sdf.parse(dateString);
@@ -152,6 +233,26 @@ public class CalendarUtils {
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Invalid format provided to dateFormatter: "+ e);
             return null;
+        }
+    }
+
+    /**
+     * Shows or hides the 'clear' icon at the end of the EditText.
+     * @param editText The EditText to modify.
+     * @param show     True to show the icon, false to hide it.
+     */
+    private static void updateClearIcon(Context context, EditText editText, boolean show) {
+        if (show) {
+            android.graphics.drawable.Drawable clearIcon = ContextCompat.getDrawable(context, R.drawable.eraser_svgrepo_com);
+            if (clearIcon != null) {
+                int size = (int) (editText.getTextSize() * 1.2);
+
+                clearIcon.setBounds(0, 0, size, size);
+            }
+            editText.setCompoundDrawables(null, null, clearIcon, null);
+        } else {
+            // If not showing, remove all drawables.
+            editText.setCompoundDrawables(null, null, null, null);
         }
     }
 }

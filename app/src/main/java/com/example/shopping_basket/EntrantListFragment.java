@@ -95,7 +95,7 @@ public class EntrantListFragment extends Fragment {
         list.setAdapter(adapter);
 
         if (getActivity() instanceof AppCompatActivity) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(entrantListTitle + "entrants");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(entrantListTitle + " Entrants");
         }
 
         setupClickListeners();

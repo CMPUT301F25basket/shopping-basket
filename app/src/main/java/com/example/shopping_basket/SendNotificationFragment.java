@@ -1,5 +1,6 @@
 package com.example.shopping_basket;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +61,22 @@ public class SendNotificationFragment extends DialogFragment {
     }
 
     /**
+     * Called when the fragment's dialog is started.
+     * Configures the dialog to be dismissable on an outside touch and sets its layout dimensions.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            dialog.setCanceledOnTouchOutside(true); // Dismiss when tapped outside
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bottom_rounded_bg);
+        }
+    }
+
+    /**
      * Creates and returns the view hierarchy associated with the fragment.
      *
      * @param inflater The LayoutInflater object used to inflate any views in the fragment.
@@ -77,9 +95,6 @@ public class SendNotificationFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_corners);
-        }
 
         // These lists being empty imply the lottery has not been drawn, so disable all checkboxes except for "All entrants"
         if (event.getCancelList().isEmpty() || event.getWaitingList().isEmpty()) {
