@@ -45,6 +45,7 @@ public class HomeFragment extends Fragment {
     private EventCardAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
     private Profile currentUser;
+    private MenuProvider menuProvider;
 
     /**
      * Default public constructor.
@@ -109,25 +110,7 @@ public class HomeFragment extends Fragment {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Events");
         }
 
-        // Add a menu provider to the fragment, making it responsible for its own toolbar items
-        requireActivity().addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                // Make the admin button visible only if the current user is an admin
-                if (currentUser.isAdmin())
-                    menu.findItem(R.id.action_admin).setVisible(true);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.action_admin) {
-                    findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminMenuFragment);
-                    return true;
-                }
-                return false;
-            }
-            // The menu's lifecycle is tied to the fragment's view, ensuring it's cleaned up automatically.
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        setupMenu();
     }
 
     /**
@@ -154,6 +137,27 @@ public class HomeFragment extends Fragment {
                 });
     }
 
+    private void setupMenu() {
+        menuProvider = new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Make the admin button visible only if the current user is an admin
+                if (currentUser.isAdmin())
+                    menu.findItem(R.id.action_admin).setVisible(true);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_admin) {
+                    findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminMenuFragment);
+                    return true;
+                }
+                return false;
+            }
+        };
+        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
     /**
      * Navigates to the appropriate detail screen based on event ownership.
      * If the current user is the event owner, it navigates to an editable screen.
@@ -178,5 +182,21 @@ public class HomeFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Error loading event detail: no owner found", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Called when the view previously created by onCreateView has been detached from the fragment.
+     * Nullifies the binding object to prevent memory leaks.
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // Remove the MenuProvider to prevent leaks and duplicate menus
+        if (menuProvider != null) {
+            requireActivity().removeMenuProvider(menuProvider);
+            menuProvider = null;
+        }
+        binding = null;
     }
 }
