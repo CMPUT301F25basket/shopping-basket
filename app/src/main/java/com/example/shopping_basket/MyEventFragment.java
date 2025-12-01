@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.shopping_basket.databinding.FragmentMyEventBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -121,7 +121,6 @@ public class MyEventFragment extends Fragment {
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_send) {
                     SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
-                    Log.d("My Event Fragment", "Clicked Send button.");
                     dialog.show(getParentFragmentManager(), "SendNotificationFragment");
                     return true;
                 }
