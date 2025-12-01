@@ -138,7 +138,9 @@ public class EventDetailFragment extends Fragment {
         binding.detailEventName.setText(event.getName());
         if (event.getDesc() != null) binding.detailEventDescription.setText(event.getDesc());
         if (event.getGuideline() != null) binding.detailEventGuideline.setText(event.getGuideline());
-        // TODO: set up eventPoster
+
+        // Actual image content is logged as metadata in the "images" collection".
+        binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
 
         // Date and time components
         binding.detailEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));

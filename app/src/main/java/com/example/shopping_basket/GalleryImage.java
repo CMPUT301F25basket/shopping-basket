@@ -1,40 +1,46 @@
 package com.example.shopping_basket;
 
 /**
- * Simple model class for an uploaded image entry that appears in the admin gallery.
- * Documents live in the "images" collection in Firestore.
+ * Model for an uploaded image entry stored in the "images" collection.
  *
- * Only metadata is kept here; the assignment does not use Firebase Storage.
+ * Required fields:
+ *  - id           : Firestore document ID
+ *  - uploaderId   : GUID of the uploader
+ *  - uploaderName : Display name of the uploader
+ *
+ * Optional:
+ *  - imageUrl     : Placeholder for future use
  */
 public class GalleryImage {
 
-    // Firestore document id
-    private String id;
+    private String id;            // Firestore document id
+    private String imageUrl;      // optional (always null unless adding URLs)
+    private String uploaderId;    // profile GUID
+    private String uploaderName;  // display name
 
-    // Optional metadata: name of the uploader
-    private String uploaderName;
-
-    // Required empty constructor for Firestore deserialization
     public GalleryImage() { }
 
-    public GalleryImage(String id, String uploaderName) {
+    public GalleryImage(String id,
+                        String imageUrl,
+                        String uploaderId,
+                        String uploaderName) {
         this.id = id;
+        this.imageUrl = imageUrl;
+        this.uploaderId = uploaderId;
         this.uploaderName = uploaderName;
     }
 
-    public String getId() {
-        return id;
-    }
+    // ---- Getters and Setters ----
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public String getUploaderName() {
-        return uploaderName;
-    }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public void setUploaderName(String uploaderName) {
-        this.uploaderName = uploaderName;
-    }
+    public String getUploaderId() { return uploaderId; }
+    public void setUploaderId(String uploaderId) { this.uploaderId = uploaderId; }
+
+    public String getUploaderName() { return uploaderName; }
+    public void setUploaderName(String uploaderName) { this.uploaderName = uploaderName; }
 }

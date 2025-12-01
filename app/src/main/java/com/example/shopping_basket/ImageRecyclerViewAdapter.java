@@ -12,17 +12,11 @@ import java.util.List;
 
 /**
  * RecyclerView adapter used on the Admin "Browse Images" screen.
- * Each card shows a single image entry and a Delete button.
- *
- * Note: The actual image content is not stored in Firebase Storage for this project.
- * The layout shows a placeholder image, but the admin can still browse entries and delete them.
+ * Shows each image entry with uploader info and Delete button.
  */
 public class ImageRecyclerViewAdapter
         extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ViewHolder> {
 
-    /**
-     * Callback so the fragment can handle delete actions.
-     */
     public interface OnImageDeleteListener {
         void onImageDelete(GalleryImage image);
     }
@@ -30,7 +24,8 @@ public class ImageRecyclerViewAdapter
     private final List<GalleryImage> images;
     private final OnImageDeleteListener deleteListener;
 
-    public ImageRecyclerViewAdapter(List<GalleryImage> images, OnImageDeleteListener deleteListener) {
+    public ImageRecyclerViewAdapter(List<GalleryImage> images,
+                                    OnImageDeleteListener deleteListener) {
         this.images = images;
         this.deleteListener = deleteListener;
     }
@@ -39,7 +34,9 @@ public class ImageRecyclerViewAdapter
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentImageItemBinding binding = FragmentImageItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false
+                LayoutInflater.from(parent.getContext()),
+                parent,
+                false
         );
         return new ViewHolder(binding);
     }
@@ -55,9 +52,6 @@ public class ImageRecyclerViewAdapter
         return images != null ? images.size() : 0;
     }
 
-    /**
-     * ViewHolder that binds a single GalleryImage to the card layout.
-     */
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final FragmentImageItemBinding binding;
@@ -70,14 +64,17 @@ public class ImageRecyclerViewAdapter
         void bind(final GalleryImage image,
                   final OnImageDeleteListener deleteListener) {
 
-            // Show uploader name (if available) under the placeholder image.
-            String uploader = (image.getUploaderName() != null && !image.getUploaderName().isEmpty())
-                    ? image.getUploaderName() : "Unknown uploader";
+            String uploaderText;
 
-            binding.galleryItemUploaderName.setText("Uploaded by " + uploader);
+            if (image.getUploaderName() != null && !image.getUploaderName().isEmpty()) {
+                uploaderText = image.getUploaderName();
+            } else if (image.getUploaderId() != null && !image.getUploaderId().isEmpty()) {
+                uploaderText = "User " + image.getUploaderId();
+            } else {
+                uploaderText = "Unknown uploader";
+            }
 
-            // The ImageView (gallery_item_image) uses whatever placeholder is defined in XML.
-            // No Storage integration is required.
+            binding.galleryItemUploaderName.setText("Uploaded by " + uploaderText);
 
             binding.buttonDeleteImage.setOnClickListener(v -> {
                 if (deleteListener != null) {

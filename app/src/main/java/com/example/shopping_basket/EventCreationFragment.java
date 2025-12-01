@@ -134,13 +134,8 @@ public class EventCreationFragment extends Fragment {
             createEvent();
         });
 
-        binding.buttonUploadPoster.setEnabled(false); // TODO: Implement
-//        binding.buttonUploadPoster.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                uploadPoster();
-//            }
-//        });
+        // Allow the organizer to upload poster metadata to the images collection.
+        binding.buttonUploadPoster.setOnClickListener(v -> uploadPoster());
 
         binding.textInputCreateEventStart.setOnClickListener(v ->
                 CalendarUtils.showDatePicker(requireContext(), binding.textInputCreateEventStart));
@@ -180,9 +175,56 @@ public class EventCreationFragment extends Fragment {
         uploadToFirebase(event);
     }
 
-    // TODO: Implement this method
-    private void uploadPoster() {}
+    /**
+     * "Uploads" an event poster on behalf of the current organizer.
+     *
+     * For this project we do not store actual image files. Instead, we log a
+     * GalleryImage entry in the Firestore "images" collection so that:
+     *  - Admins can review and delete images (US 03.03.01 / 03.06.01).
+     *  - The image document keeps track of who uploaded the poster.
+     *
+     * Each GalleryImage stores:
+     *  - id          : document ID (imageId)
+     *  - imageUrl    : unused / null (no Storage)
+     *  - uploaderId  : GUID of the uploader
+     *  - uploaderName: display name of the uploader
+     *
+     * This method is reused both when creating a brand-new event and when
+     * editing an existing event (US 02.04.01 & US 02.04.02).
+     */
+    void uploadPoster() {
+        Profile currentUser = ProfileManager.getInstance().getCurrentUserProfile();
+        if (currentUser == null) {
+            Log.w("EventCreationFragment", "uploadPoster: no logged in user");
+            if (getContext() != null) {
+                android.widget.Toast.makeText(getContext(), "You must be logged in to upload a poster.", android.widget.Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
 
+        // Create metadata entry for this poster.
+        GalleryImage galleryImage = new GalleryImage();
+        galleryImage.setImageUrl(null); // No real image storage in this project.
+        galleryImage.setUploaderId(currentUser.getGuid());
+        galleryImage.setUploaderName(currentUser.getName());
+
+        FirebaseFirestore.getInstance().collection("images").add(galleryImage).addOnSuccessListener(documentReference -> {
+            // Once created, store the generated id back into the document.
+            String imageId = documentReference.getId();
+            galleryImage.setId(imageId);
+            documentReference.update("id", imageId);
+            Log.d("EventCreationFragment", "Poster metadata uploaded with id: " + imageId);
+
+            if (getContext() != null) {
+                android.widget.Toast.makeText(getContext(), "Poster uploaded (placeholder image).", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {Log.e("EventCreationFragment", "Failed to upload poster metadata", e);
+                    if (getContext() != null) {
+                        android.widget.Toast.makeText(getContext(), "Failed to upload poster. Please try again.", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     /**
      * Saves the provided Event object to the "events" collection in Firestore.
