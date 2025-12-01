@@ -3,6 +3,9 @@ package com.example.shopping_basket;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,28 +14,30 @@ import com.example.shopping_basket.databinding.FragmentImageItemBinding;
 import java.util.List;
 
 /**
- * RecyclerView adapter used on the Admin "Browse Images" screen.
- * Shows each image entry with uploader info and Delete button.
+ * RecyclerView adapter for Admin browse posters screen.
+ * It shows each event poster (decoded from Base64) with event name
+ * and uploader, plus a delete button.
  */
-public class ImageRecyclerViewAdapter
-        extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ViewHolder> {
+public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ViewHolder> {
 
-    public interface OnImageDeleteListener {
-        void onImageDelete(GalleryImage image);
+    public interface OnPosterDeleteListener {
+        void onPosterDelete(EventPoster poster);
     }
 
-    private final List<GalleryImage> images;
-    private final OnImageDeleteListener deleteListener;
+    private final List<EventPoster> posters;
+    private final OnPosterDeleteListener deleteListener;
 
-    public ImageRecyclerViewAdapter(List<GalleryImage> images,
-                                    OnImageDeleteListener deleteListener) {
-        this.images = images;
+    public ImageRecyclerViewAdapter(List<EventPoster> posters,
+                                    OnPosterDeleteListener deleteListener) {
+        this.posters = posters;
         this.deleteListener = deleteListener;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                         int viewType) {
+
         FragmentImageItemBinding binding = FragmentImageItemBinding.inflate(
                 LayoutInflater.from(parent.getContext()),
                 parent,
@@ -43,13 +48,13 @@ public class ImageRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GalleryImage image = images.get(position);
-        holder.bind(image, deleteListener);
+        EventPoster poster = posters.get(position);
+        holder.bind(poster, deleteListener);
     }
 
     @Override
     public int getItemCount() {
-        return images != null ? images.size() : 0;
+        return posters != null ? posters.size() : 0;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,24 +66,35 @@ public class ImageRecyclerViewAdapter
             this.binding = binding;
         }
 
-        void bind(final GalleryImage image,
-                  final OnImageDeleteListener deleteListener) {
+        void bind(final EventPoster poster,
+                  final OnPosterDeleteListener deleteListener) {
 
-            String uploaderText;
-
-            if (image.getUploaderName() != null && !image.getUploaderName().isEmpty()) {
-                uploaderText = image.getUploaderName();
-            } else if (image.getUploaderId() != null && !image.getUploaderId().isEmpty()) {
-                uploaderText = "User " + image.getUploaderId();
-            } else {
-                uploaderText = "Unknown uploader";
+            // Decode Base64 poster into a Bitmap
+            Bitmap bitmap = null;
+            try {
+                if (poster.getPosterBase64() != null && !poster.getPosterBase64().isEmpty()) {
+                    byte[] bytes = Base64.decode(poster.getPosterBase64(), Base64.DEFAULT);
+                    bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                }
+            } catch (IllegalArgumentException e) {
+                // invalid base64, ignore
             }
 
-            binding.galleryItemUploaderName.setText("Uploaded by " + uploaderText);
+            if (bitmap != null) {
+                binding.galleryItemImage.setImageBitmap(bitmap);
+            } else {
+                // fallback placeholder if something went wrong
+                binding.galleryItemImage.setImageResource(R.drawable.image_placeholder);
+            }
+
+            String name = poster.getEventName() != null ? poster.getEventName() : "Unknown event";
+            String uploader = poster.getUploaderName() != null ? poster.getUploaderName() : "Unknown uploader";
+
+            binding.galleryItemUploaderName.setText(name + " (by " + uploader + ")");
 
             binding.buttonDeleteImage.setOnClickListener(v -> {
                 if (deleteListener != null) {
-                    deleteListener.onImageDelete(image);
+                    deleteListener.onPosterDelete(poster);
                 }
             });
         }

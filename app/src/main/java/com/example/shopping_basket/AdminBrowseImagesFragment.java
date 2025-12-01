@@ -13,52 +13,47 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AdminBrowseImagesFragment
  *
- * Admin can browse all uploaded image entries and delete them.
- * No Firebase Storage is used.
+ * Admin screen that shows all event posters.
+ * Posters are stored as fields inside the "events" documents:
+ *  - hasPoster (boolean)
+ *  - posterBase64 (string)
+ *  - posterUploaderName (string)
+ *
+ * We query "events" where hasPoster == true, decode Base64, and display.
  */
 public class AdminBrowseImagesFragment extends Fragment {
 
-    private static final String TAG = "AdminBrowseImages";
-    private static final String ARG_COLUMN_COUNT = "column-count";
-
-    private int mColumnCount = 2;
+    private static final String TAG = "AdminBrowseImagesFrag";
+    private static final String EVENTS_COLLECTION = "events";
 
     private RecyclerView recyclerView;
     private ImageRecyclerViewAdapter adapter;
-    private final List<GalleryImage> images = new ArrayList<>();
+    private final List<EventPoster> posters = new ArrayList<>();
     private FirebaseFirestore db;
 
-    public AdminBrowseImagesFragment() { }
-
-    public static AdminBrowseImagesFragment newInstance(int columnCount) {
-        AdminBrowseImagesFragment fragment = new AdminBrowseImagesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public AdminBrowseImagesFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -68,19 +63,12 @@ public class AdminBrowseImagesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_admin_browse_images, container, false);
 
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
+        recyclerView = view.findViewById(R.id.admin_browse_images);
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
-            adapter = new ImageRecyclerViewAdapter(images, this::confirmDeleteImage);
-            recyclerView.setAdapter(adapter);
-        }
+        adapter = new ImageRecyclerViewAdapter(posters, this::confirmDeletePoster);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -91,83 +79,95 @@ public class AdminBrowseImagesFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        if (getActivity() instanceof AppCompatActivity) {
-            ((AppCompatActivity) getActivity())
-                    .getSupportActionBar()
-                    .setTitle("Admin – Images");
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null && activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setTitle("Browse Posters");
         }
 
-        loadImages();
+        loadPosters();
     }
 
-    private void loadImages() {
-        db.collection("images")
+    /**
+     * Loads posters directly from the "events" collection.
+     * We only care about events where hasPoster == true.
+     */
+    private void loadPosters() {
+        db.collection(EVENTS_COLLECTION)
+                .whereEqualTo("hasPoster", true)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    images.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        GalleryImage image = document.toObject(GalleryImage.class);
+                    posters.clear();
 
-                        if (image.getId() == null || image.getId().isEmpty()) {
-                            image.setId(document.getId());
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        String eventId = doc.getString("eventId");
+                        if (eventId == null || eventId.isEmpty()) {
+                            eventId = doc.getId(); // fallback
                         }
 
-                        images.add(image);
+                        String name = doc.getString("name");
+                        String base64 = doc.getString("posterBase64");
+                        String uploaderName = doc.getString("posterUploaderName");
+
+                        if (base64 == null || base64.isEmpty()) {
+                            continue; // nothing to display
+                        }
+
+                        posters.add(new EventPoster(eventId, name, base64, uploaderName));
                     }
+
                     adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error loading images", e);
+                    Log.e(TAG, "Error loading posters", e);
                     if (getContext() != null) {
-                        Toast.makeText(
-                                getContext(),
-                                "Failed to load images.",
-                                Toast.LENGTH_SHORT
-                        ).show();
+                        Toast.makeText(getContext(),
+                                "Failed to load posters.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void confirmDeleteImage(GalleryImage image) {
+    private void confirmDeletePoster(EventPoster poster) {
         if (getContext() == null) return;
 
-        String uploaderText;
-
-        if (image.getUploaderName() != null && !image.getUploaderName().isEmpty()) {
-            uploaderText = image.getUploaderName();
-        } else if (image.getUploaderId() != null && !image.getUploaderId().isEmpty()) {
-            uploaderText = "user " + image.getUploaderId();
-        } else {
-            uploaderText = "this user";
-        }
+        String name = poster.getEventName() != null ? poster.getEventName() : "this event";
 
         new AlertDialog.Builder(requireContext())
-                .setTitle("Delete image")
-                .setMessage("Delete the image uploaded by " + uploaderText + "?")
-                .setPositiveButton("Delete", (dialog, which) -> deleteImage(image))
+                .setTitle("Delete poster")
+                .setMessage("Remove the poster for " + name + "?")
+                .setPositiveButton("Delete", (dialog, which) -> deletePoster(poster))
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void deleteImage(GalleryImage image) {
+    /**
+     * Clears the poster fields on the related event document.
+     */
+    private void deletePoster(EventPoster poster) {
         if (db == null || getContext() == null) return;
 
-        String id = image.getId();
-        if (id == null || id.isEmpty()) {
-            Toast.makeText(getContext(), "Invalid image ID.", Toast.LENGTH_SHORT).show();
+        String eventId = poster.getEventId();
+        if (eventId == null || eventId.isEmpty()) {
+            Toast.makeText(getContext(), "Invalid event ID.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("images").document(id)
-                .delete()
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("hasPoster", false);
+        updates.put("posterBase64", FieldValue.delete());
+        updates.put("posterUploaderId", FieldValue.delete());
+        updates.put("posterUploaderName", FieldValue.delete());
+
+        db.collection(EVENTS_COLLECTION).document(eventId)
+                .update(updates)
                 .addOnSuccessListener(aVoid -> {
-                    images.remove(image);
+                    posters.remove(poster);
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Image deleted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Poster removed.", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting image", e);
-                    Toast.makeText(getContext(), "Delete failed.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Error deleting poster", e);
+                    Toast.makeText(getContext(), "Failed to remove poster.", Toast.LENGTH_SHORT).show();
                 });
     }
 }
