@@ -83,14 +83,29 @@
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="512dp"
-        android:layout_height="512dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/basket_icon_foreground" />
+        app:srcCompat="@drawable/ic_splash_no_text" />
+
+    <TextView
+        android:id="@+id/text_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="SHOPPING\nBASKET"
+        android:textAlignment="center"
+        android:textColor="#FFCDE4FF"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonGetStarted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_icon" />
 
     <Button
         android:id="@+id/buttonGetStarted"

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     // UI Elements
     private Button buttonGetStarted;
     private ProgressBar progressBarLogin;
+    private ImageView appIcon;
+    // Animations
+    private Animation slideInAnimation;
+    private Animation slideOutAnimation;
 
     // Firebase
     private FirebaseFirestore db;
@@ -58,10 +63,34 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize Views
         initializeViews();
 
+        // Initialize animations
+        slideInAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_left);
+        slideOutAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_right);
+
+        // Start the initial slide-in animation for the icon
+        appIcon.startAnimation(slideInAnimation);
+
         // Set up the "Get started" button to navigate to the SignupActivity
         buttonGetStarted.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-            startActivity(intent);
+            // Add a listener to navigate after the animation completes
+            slideOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+            });
+            appIcon.startAnimation(slideOutAnimation);
         });
 
         // Attempt to log in the user automatically
@@ -74,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeViews() {
         buttonGetStarted = findViewById(R.id.buttonGetStarted);
         progressBarLogin = findViewById(R.id.progressBarLogin);
+        appIcon = findViewById(R.id.app_icon);
     }
 
     /**
@@ -117,11 +147,29 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void navigateToMain(String name) {
         showInfoToast(this, "Welcome back, " + name + "!");
-        Intent intent = new Intent(this, MainActivity.class);
-        // Clear the activity stack so the user can't go back to the login screen
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish(); // Finish this activity so it's removed from the back stack
+
+        slideOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                // Clear the activity stack so the user can't go back to the login screen
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish(); // Finish this activity so it's removed from the back stack
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+        });
+
+        appIcon.startAnimation(slideOutAnimation);
     }
 
     /**
