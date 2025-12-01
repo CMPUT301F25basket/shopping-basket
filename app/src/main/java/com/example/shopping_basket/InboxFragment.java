@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class InboxFragment extends Fragment {
     private static final String TAG = "InboxFragment";
     private ListView notificationListView;
+    private MenuProvider menuProvider;
     private InboxAdapter inboxAdapter;
     private ArrayList<Notif> notifications;
     private FirebaseFirestore db;
@@ -70,33 +71,7 @@ public class InboxFragment extends Fragment {
         loadNotifications();
 
         // Set visibility for the toggle notification button on toolbar
-        requireActivity().addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                MenuItem notificationToggle = menu.findItem(R.id.action_toggle_notification);
-                if (notificationToggle != null) {
-                    notificationToggle.setVisible(true);
-                    if (currentUser.isNotificationPref()) notificationToggle.setIcon(R.drawable.bell_svgrepo_com);
-                    else notificationToggle.setIcon(R.drawable.bell_off_svgrepo_com);
-                }
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.action_toggle_notification) {
-                    boolean currentPref = currentUser.isNotificationPref();
-                    if (currentPref) {
-                        menuItem.setIcon(R.drawable.bell_off_svgrepo_com);
-                    } else {
-                        menuItem.setIcon(R.drawable.bell_svgrepo_com);
-                    }
-                    currentUser.setNotificationPref(!currentPref);
-                    return true;
-                }
-                return false;
-            }
-            // The menu's lifecycle is tied to the fragment's view, ensuring it's cleaned up automatically.
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        setupMenu();
     }
 
     // TODO: Implement
@@ -133,5 +108,49 @@ public class InboxFragment extends Fragment {
 //                        Toast.makeText(getContext(), "Failed to load notifications.", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
+    }
+
+    private void setupMenu() {
+        menuProvider = new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                MenuItem notificationToggle = menu.findItem(R.id.action_toggle_notification);
+                if (notificationToggle != null) {
+                    notificationToggle.setVisible(true);
+                    if (currentUser.isNotificationPref()) notificationToggle.setIcon(R.drawable.bell_svgrepo_com);
+                    else notificationToggle.setIcon(R.drawable.bell_off_svgrepo_com);
+                }
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_toggle_notification) {
+                    boolean currentPref = currentUser.isNotificationPref();
+                    if (currentPref) {
+                        menuItem.setIcon(R.drawable.bell_off_svgrepo_com);
+                    } else {
+                        menuItem.setIcon(R.drawable.bell_svgrepo_com);
+                    }
+                    currentUser.setNotificationPref(!currentPref);
+                    return true;
+                }
+                return false;
+            }
+        };
+        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    /**
+     * Called when the view previously created by onCreateView has been detached from the fragment.
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // Remove the MenuProvider to prevent leaks and duplicate menus
+        if (menuProvider != null) {
+            requireActivity().removeMenuProvider(menuProvider);
+            menuProvider = null;
+        }
     }
 }

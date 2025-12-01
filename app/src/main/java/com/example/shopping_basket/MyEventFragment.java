@@ -32,6 +32,7 @@ public class MyEventFragment extends Fragment {
 
     private FragmentMyEventBinding binding;
     private Event event;
+    private MenuProvider menuProvider;
 
     /**
      * Default public constructor.
@@ -94,7 +95,22 @@ public class MyEventFragment extends Fragment {
             return;
         }
 
-        requireActivity().addMenuProvider(new MenuProvider() {
+        setupMenu();
+
+        if (event.getEventTime().after(new Date())) {
+            binding.buttonUpdateEvent.setEnabled(false);
+        }
+
+        setupEventDetail();
+        setupClickListeners();
+        setupButtonsVisibility();
+    }
+
+    /**
+     * Sets up and adds the menu provider to the activity.
+     */
+    private void setupMenu() {
+        menuProvider = new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menu.findItem(R.id.action_send).setVisible(true);
@@ -105,6 +121,7 @@ public class MyEventFragment extends Fragment {
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_send) {
                     SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
+                    Log.d("My Event Fragment", "Clicked Send button.");
                     dialog.show(getParentFragmentManager(), "SendNotificationFragment");
                     return true;
                 }
@@ -116,17 +133,13 @@ public class MyEventFragment extends Fragment {
                 }
                 return false;
             }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-
-        if (event.getEventTime().after(new Date())) {
-            binding.buttonUpdateEvent.setEnabled(false);
-        }
-
-        setupEventDetail();
-        setupClickListeners();
-        setupButtonsVisibility();
+        };
+        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
+    /**
+     * Populates the UI components with data from the Event object.
+     */
     private void setupEventDetail() {
         // Basic info
         binding.myEventName.setText(event.getName());
@@ -231,6 +244,12 @@ public class MyEventFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        // Remove the MenuProvider to prevent leaks and duplicate menus
+        if (menuProvider != null) {
+            requireActivity().removeMenuProvider(menuProvider);
+            menuProvider = null;
+        }
         binding = null;
     }
 }
