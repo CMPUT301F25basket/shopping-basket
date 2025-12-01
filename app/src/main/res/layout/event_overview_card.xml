@@ -19,9 +19,12 @@
         <ImageView
             android:id="@+id/event_card_poster"
             android:layout_width="match_parent"
-            android:layout_height="187dp"
-            android:contentDescription="Event Poster"
-            app:srcCompat="@drawable/image_placeholder" />
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/event_poster"
+            tools:srcCompat="@drawable/image_placeholder" />
+
 
         <TextView
             android:id="@+id/event_card_name"
