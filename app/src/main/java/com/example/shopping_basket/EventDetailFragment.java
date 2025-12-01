@@ -180,35 +180,54 @@ public class EventDetailFragment extends Fragment {
     /**
      * Updates the register/enroll button state based on the date and user's status.
      */
-    // TODO: Handle enrollment
     private void updateRegisterButtonState() {
         if (profile == null) {
             // No user is logged in, so disable the button and show a generic "Register" message.
             binding.buttonRegisterEvent.setEnabled(false);
+            binding.buttonRegisterEvent.setText("Register");
+            binding.buttonDecline.setVisibility(View.GONE); // Hide decline button
+            binding.buttonDetailToHome.setVisibility(View.VISIBLE); // Ensure back button is visible
             return;
         }
+        // Default state
         binding.buttonRegisterEvent.setEnabled(true);
+        binding.buttonRegisterEvent.setVisibility(View.VISIBLE);
+        binding.buttonDecline.setVisibility(View.GONE);
+        binding.buttonDetailToHome.setVisibility(View.VISIBLE);
 
-        if (event.getEndDate().after(new Date())) {
-            if (event.getWaitingList().contains(profile)) {
-                // User is registered, so show "Unregister" state
+        // Check if the current user's profile is in the inviteList
+        boolean isInvited = event.getInviteList().stream().anyMatch(p -> p.getGuid().equals(profile.getGuid()));
+        boolean isRegistered = event.getWaitingList().stream().anyMatch(p -> p.getGuid().equals(profile.getGuid()));
+        boolean isEnrolled = event.getEnrollList().stream().anyMatch(p -> p.getGuid().equals(profile.getGuid()));
+        boolean isRegistrationOpen = event.getEndDate().after(new Date());
+
+        if (isRegistrationOpen) {
+            if (isRegistered) {
+                // User is on the waiting list -> "Unregister"
                 binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
                 binding.buttonRegisterEvent.setText("Unregister");
             } else {
-                // User is not registered, so show "Register" state
+                // User can join the waiting list -> "Register"
                 binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.light_blue));
                 binding.buttonRegisterEvent.setText("Register");
             }
-        } else {
-            if (event.getEnrollList().contains(profile)) {
-                // User has enrolled, and this action is final. Disable the button.
+        } else { // Registration period is closed
+            if (isInvited) {
+                // User is invited to enroll. Show both "Enroll" and "Decline" buttons.
+                binding.buttonRegisterEvent.setText("Enroll");
+                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.light_blue));
+
+                // Show the new decline button and hide the normal back button
+                binding.buttonDecline.setVisibility(View.VISIBLE);
+                binding.buttonDetailToHome.setVisibility(View.GONE);
+
+            } else if (isEnrolled) {
+                // User is already enrolled, action is final.
                 binding.buttonRegisterEvent.setText("Enrolled");
                 binding.buttonRegisterEvent.setEnabled(false);
-            } else if (event.getInviteList().contains(profile.getGuid())) {
-                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
-                binding.buttonRegisterEvent.setText("Decline");
             } else {
-                binding.buttonRegisterEvent.setVisibility(GONE);
+                // Not invited and not enrolled after registration closes. Hide action button.
+                binding.buttonRegisterEvent.setVisibility(View.GONE);
             }
         }
     }

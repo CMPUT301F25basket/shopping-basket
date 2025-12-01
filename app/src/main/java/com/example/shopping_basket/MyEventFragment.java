@@ -95,6 +95,14 @@ public class MyEventFragment extends Fragment {
             return;
         }
 
+        getParentFragmentManager().setFragmentResultListener("lotteryResult", this, (requestKey, bundle) -> {
+            boolean lotteryRun = bundle.getBoolean("lotteryRun");
+            if (lotteryRun) {
+                // The lottery was run successfully, refresh data and buttons' visibility
+                refreshEventData();
+            }
+        });
+
         setupMenu();
 
         if (event.getEventTime().after(new Date())) {
@@ -109,6 +117,46 @@ public class MyEventFragment extends Fragment {
         setupEventDetail();
         setupClickListeners();
         setupButtonsVisibility();
+    }
+
+    /**
+     * Fetches the latest event data from Firestore and re-populates the entire UI.
+     * This is called after a significant change, like running the lottery.
+     */
+    private void refreshEventData() {
+        if (event == null || event.getEventId() == null) {
+            Log.e("MyEventFragment", "refreshEventData called with null event or eventId.");
+            return; // Cannot refresh without an event ID
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("events")
+                .document(event.getEventId())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!isAdded()) return; // Ensure fragment is still active
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        // Update the local event object with the fresh data from Firestore
+                        this.event = documentSnapshot.toObject(Event.class);
+
+                        if (this.event != null) {
+                            // Now, re-run all UI setup methods to reflect the new data
+                            setupEventDetail();
+                            setupButtonsVisibility(); // This is the most important call here
+                            // Optionally, notify the user
+                            Toast.makeText(getContext(), "Event data has been updated.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.w("MyEventFragment", "Event document no longer exists.");
+                        Toast.makeText(getContext(), "Could not find event.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    if (!isAdded()) return;
+                    Log.e("MyEventFragment", "Failed to refresh event data.", e);
+                    Toast.makeText(getContext(), "Failed to refresh event data.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     /**
@@ -219,15 +267,34 @@ public class MyEventFragment extends Fragment {
     /**
      *
      */
+    /**
+     * Controls the visibility of pre- and post-lottery layouts,
+     * and enables/disables entrant list buttons based on lottery status.
+     */
     private void setupButtonsVisibility() {
-        boolean lotteryDrawn = ((event.getInviteList() != null && !event.getInviteList().isEmpty()) || !event.getEnrollList().isEmpty());
+        boolean lotteryDrawn = (event.getInviteList() != null && !event.getInviteList().isEmpty()) ||
+                (event.getEnrollList() != null && !event.getEnrollList().isEmpty());
 
         if (lotteryDrawn) {
+            // --- POST-LOTTERY STATE ---
             binding.layoutPreLottery.setVisibility(View.GONE);
             binding.layoutPostLottery.setVisibility(View.VISIBLE);
+
+            // Enable all post-lottery buttons
+            binding.buttonToEnrolledEntrants.setEnabled(true);
+            binding.buttonToSelectedEntrants.setEnabled(true);
+            binding.buttonToUnselectedEntrants.setEnabled(true);
+            binding.buttonToCancelledEntrants.setEnabled(true);
         } else {
+            // --- PRE-LOTTERY STATE ---
             binding.layoutPreLottery.setVisibility(View.VISIBLE);
             binding.layoutPostLottery.setVisibility(View.GONE);
+
+            // Disable all post-lottery buttons but keep them visible
+            binding.buttonToEnrolledEntrants.setEnabled(false);
+            binding.buttonToSelectedEntrants.setEnabled(false);
+            binding.buttonToUnselectedEntrants.setEnabled(false);
+            binding.buttonToCancelledEntrants.setEnabled(false);
         }
     }
 
