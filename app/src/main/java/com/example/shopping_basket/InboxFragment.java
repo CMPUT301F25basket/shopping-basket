@@ -192,7 +192,7 @@ public class InboxFragment extends Fragment {
                     return true;
                 }
                 if (menuItem.getItemId() == R.id.action_admin) {
-                    findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminMenuFragment);
+                    findNavController(requireView()).navigate(R.id.action_inboxFragment_to_adminMenuFragment);
                     return true;
                 }
                 return false;
