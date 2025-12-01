@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A {@link RecyclerView.Adapter} for displaying a list of Event objects in a card format.
@@ -69,7 +70,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
             super(itemView);
             eventCardPoster = itemView.findViewById(R.id.event_card_poster);
             eventCardName = itemView.findViewById(R.id.event_card_name);
-            eventCardDate = itemView.findViewById(R.id.event_card_registration_period);
+            eventCardDate = itemView.findViewById(R.id.event_card_date);
             eventCardTime = itemView.findViewById(R.id.event_card_time);
             eventCardStatus = itemView.findViewById(R.id.event_card_status);
         }
@@ -112,15 +113,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.View
         });
 
         if (eventItem.getStartDate() != null && eventItem.getEndDate() != null) {
-            java.text.SimpleDateFormat dateFormat =
-                    new java.text.SimpleDateFormat("MM/dd/yyyy", java.util.Locale.getDefault());
-            java.text.SimpleDateFormat timeFormat =
-                    new java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault());
-
-            String dateText = dateFormat.format(eventItem.getStartDate().getTime()) + " - " +
-                    dateFormat.format(eventItem.getEndDate().getTime());
-            holder.eventCardDate.setText(dateText);
-            String eventTimeText = CalendarUtils.dateFormatter(eventItem.getEventTime(), "MM/dd/yyyy hh:mm a");
+            holder.eventCardDate.setText(CalendarUtils.dateFormatter(eventItem.getEventTime(), "MM/dd/yyyy"));
+            String eventTimeText = CalendarUtils.dateFormatter(eventItem.getEventTime(), "hh:mm a");
             holder.eventCardTime.setText(eventTimeText);
 
             long diffMillis = eventItem.getEndDate().getTime() - System.currentTimeMillis();

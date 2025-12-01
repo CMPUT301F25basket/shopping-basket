@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.example.shopping_basket.databinding.FragmentDeleteProfileBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 /**
  * A {@link DialogFragment} that presents a confirmation dialog to the user
@@ -125,15 +127,14 @@ public class DeleteProfileFragment extends DialogFragment {
      */
     private void setupClickListeners() {
         binding.buttonDeleteNegative.setOnClickListener(v -> dismiss());
-        binding.buttonDeletePositive.setOnClickListener(v -> deleteProfile());
+        binding.buttonDeletePositive.setOnClickListener(v -> deleteOrganizedEvents());
     }
 
     /**
-     * Deletes the current user's profile from Firestore and clears the local session data.
+     * Deletes the user's document from the 'profiles' collection in Firestore.
+     * On success, it clears local data and navigates to the signup screen.
      */
-    private void deleteProfile() {
-        String userId = currentUser.getGuid();
-        // TODO: Delete all their active events
+    private void deleteProfile(String userId) {
         db.collection("profiles").document(userId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
@@ -141,6 +142,7 @@ public class DeleteProfileFragment extends DialogFragment {
                     // Clear the user's profile from the singleton immediately after deletion.
                     ProfileManager.getInstance().clearUserProfile();
                     Toast.makeText(getContext(), "Profile deleted.", Toast.LENGTH_SHORT).show();
+
                     navigateToSignup();
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -149,6 +151,46 @@ public class DeleteProfileFragment extends DialogFragment {
                         Log.e(TAG, "Error deleting profile in Firestore", e);
                         Toast.makeText(getContext(), "Failed to delete profile. Please try again.", Toast.LENGTH_SHORT).show();
                     }
+                });
+    }
+
+    /**
+     * Finds and deletes all events organized by the current user.
+     * This is a critical cleanup step before deleting the user's profile.
+     * On success, it proceeds to delete the user's profile document.
+     * On failure, it logs an error and stops the process.
+     */
+    private void deleteOrganizedEvents() {
+        String userId = currentUser.getGuid();
+
+        db.collection("events")
+                .whereEqualTo("owner.guid", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d(TAG, "Found " + queryDocumentSnapshots.size() + " events organized by user " + userId);
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        deleteProfile(userId);
+                        return;
+                    }
+
+                    WriteBatch batch = db.batch();
+                    for (QueryDocumentSnapshot document: queryDocumentSnapshots) {
+                        batch.delete(document.getReference());
+                    }
+
+                    batch.commit()
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "Successfully deleted all organized events.");
+                                deleteProfile(userId);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Error deleting organized events", e);
+                                deleteProfile(userId);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error finding organized events to delete", e);
+                    deleteProfile(userId);
                 });
     }
 
