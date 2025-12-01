@@ -1,4 +1,6 @@
 package com.example.shopping_basket;
+import static androidx.navigation.Navigation.findNavController;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -187,6 +189,10 @@ public class InboxFragment extends Fragment {
                         updateNotificationPref();
                     }
                     currentUser.setNotificationPref(!currentPref);
+                    return true;
+                }
+                if (menuItem.getItemId() == R.id.action_admin) {
+                    findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminMenuFragment);
                     return true;
                 }
                 return false;
