@@ -110,10 +110,13 @@ public class HomeFragment extends Fragment {
             navigateToEventDetail(selectedEvent);
         });
 
-        // Access the hosting activity's action bar and set the title
+        // Set title depending on whether we are in admin mode or not
+        boolean adminMode = ProfileManager.getInstance().isAdminMode();
+
         if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Events");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(adminMode ? "Admin - Events" : "Events");
         }
+
 
         setupMenu();
     }

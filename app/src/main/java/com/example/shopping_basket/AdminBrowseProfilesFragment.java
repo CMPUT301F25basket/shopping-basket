@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -12,7 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import androidx.navigation.fragment.NavHostFragment;
+
 
 /**
  * AdminBrowseProfilesFragment
@@ -41,6 +48,7 @@ public class AdminBrowseProfilesFragment extends Fragment {
     private UserProfileRecyclerViewAdapter adapter;
     private final List<Profile> profiles = new ArrayList<>();
     private FirebaseFirestore db;
+    private MenuProvider menuProvider;   // for showing the Admin button
 
     public AdminBrowseProfilesFragment() {
         // Required empty public constructor
@@ -94,36 +102,73 @@ public class AdminBrowseProfilesFragment extends Fragment {
         if (getActivity() instanceof AppCompatActivity) {
             ((AppCompatActivity) getActivity())
                     .getSupportActionBar()
-                    .setTitle("Admin – Profiles");
+                    .setTitle("Admin \u2013 Profiles");
         }
+
+        // Show the Admin toolbar button on this screen
+        setupMenu();
 
         // Load all profiles from Firestore
         loadProfiles();
     }
 
     /**
+     * Makes the Admin button visible in the toolbar for this fragment.
+     * We only need to toggle visibility; click handling can stay global.
+     */
+    private void setupMenu() {
+        menuProvider = new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Just make the admin button visible on this admin page
+                MenuItem adminItem = menu.findItem(R.id.action_admin);
+                if (adminItem != null) {
+                    adminItem.setVisible(true);
+                }
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_admin) {
+                    // TODO: replace adminFragment with your actual admin menu destination if different
+                    NavHostFragment.findNavController(AdminBrowseProfilesFragment.this)
+                            .navigate(R.id.adminMenuFragment);
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        requireActivity().addMenuProvider(
+                menuProvider,
+                getViewLifecycleOwner(),
+                Lifecycle.State.RESUMED
+        );
+    }
+
+
+    /**
      * Fetches all profiles from the "profiles" collection and displays them.
      */
     private void loadProfiles() {
         db.collection("profiles").get().addOnSuccessListener(queryDocumentSnapshots -> {
-        profiles.clear();
-        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-            Profile profile = document.toObject(Profile.class);
+            profiles.clear();
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                Profile profile = document.toObject(Profile.class);
 
-            // Ensure the guid field is set even if it wasn't stored explicitly.
-            if (profile.getGuid() == null || profile.getGuid().isEmpty()) {
-                profile.setGuid(document.getId());
+                // Ensure the guid field is set even if it wasn't stored explicitly.
+                if (profile.getGuid() == null || profile.getGuid().isEmpty()) {
+                    profile.setGuid(document.getId());
+                }
+
+                profiles.add(profile);
             }
-
-            profiles.add(profile);
-        }
-        adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }).addOnFailureListener(e -> {
             Log.e(TAG, "Error loading profiles", e);
             if (getContext() != null) {
                 Toast.makeText(getContext(), "Failed to load profiles. Please try again.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            }
+        });
     }
 
     /**
@@ -165,11 +210,25 @@ public class AdminBrowseProfilesFragment extends Fragment {
         }
 
         db.collection("profiles").document(guid)
-                .delete().addOnSuccessListener(aVoid -> {profiles.remove(profile);adapter.notifyDataSetChanged();
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    profiles.remove(profile);
+                    adapter.notifyDataSetChanged();
                     Toast.makeText(getContext(), "Profile deleted.", Toast.LENGTH_SHORT).show();
                 })
-                .addOnFailureListener(e -> {Log.e(TAG, "Error deleting profile", e);
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error deleting profile", e);
                     Toast.makeText(getContext(), "Failed to delete profile. Please try again.", Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Clean up the menu provider so we don't leak it
+        if (menuProvider != null) {
+            requireActivity().removeMenuProvider(menuProvider);
+            menuProvider = null;
+        }
     }
 }

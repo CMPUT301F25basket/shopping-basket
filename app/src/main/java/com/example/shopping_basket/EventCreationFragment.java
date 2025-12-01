@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import com.google.firebase.firestore.SetOptions;
+
 
 /**
  * Fragment for creating or editing an event.
@@ -287,10 +289,10 @@ public class EventCreationFragment extends Fragment {
             // Update existing event document
             db.collection(EVENTS_COLLECTION)
                     .document(event.getEventId())
-                    .set(event)
+                    .set(event, SetOptions.merge())  // Keep existing poster field
                     .addOnSuccessListener(aVoid -> {
 
-                        // Update poster fields if we have one selected
+                        // Update poster fields if we have new one selected
                         updatePosterFieldsIfNeeded(event.getEventId());
 
                         Bundle bundle = new Bundle();
