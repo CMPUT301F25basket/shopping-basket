@@ -235,7 +235,6 @@ public class MyEventFragment extends Fragment {
      * Sets up click listeners for all interactive buttons on the screen.
      */
     private void setupClickListeners() {
-        // TODO: Implement navigation logic for each of these buttons.
 
         binding.buttonOpenLottery.setOnClickListener(v -> {
             LotteryFragment dialog = LotteryFragment.newInstance(event);
@@ -245,26 +244,42 @@ public class MyEventFragment extends Fragment {
 
         binding.buttonToEnrolledEntrants.setOnClickListener(v -> {
             // This button navigates to a screen showing the enrolled list.
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            bundle.putSerializable("list_type", "Enrolled");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         binding.buttonToSelectedEntrants.setOnClickListener(v -> {
             // This button navigates to a screen showing the selected entrants (inviteList).
             // Also let organizer see canceled entrants
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            bundle.putSerializable("list_type", "Invited");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         binding.buttonToUnselectedEntrants.setOnClickListener(v -> {
             // This button navigates to a screen showing the unselected entrants.
             // Also let organizer filter the waiting list
-        });
-
-        binding.buttonUpdateEvent.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("event", event);
-            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_eventCreationFragment, bundle);
+            bundle.putSerializable("list_type", "Waiting");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
+        });
+
+        binding.buttonToCancelledEntrants.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            bundle.putSerializable("list_type", "Cancelled");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
 
         binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
-
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            bundle.putSerializable("list_type", "All");
+            NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
         });
     }
 

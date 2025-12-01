@@ -23,6 +23,7 @@
                 android:id="@+id/my_event_poster"
                 android:layout_width="match_parent"
                 android:layout_height="330dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/image_placeholder" />
 
             <LinearLayout
@@ -221,13 +222,28 @@
                     app:cornerRadius="12dp"/>
 
                 <Button
+                    android:id="@+id/button_to_cancelled_entrants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
+                    android:text="View cancelled entrants"
+                    android:textSize="16sp"
+                    android:textColor="@color/oxford_blue"
+                    android:backgroundTint="@color/oxford_light_grey"
+                    android:insetBottom="0dp"
+                    android:minHeight="0dp"
+                    app:cornerRadius="12dp"/>
+
+                <Button
                     android:id="@+id/button_to_unselected_entrants"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto"
-                    android:text="View unselected entrants"
+                    android:text="View waitlisted entrants"
                     android:textSize="16sp"
                     android:textColor="@color/oxford_blue"
                     android:backgroundTint="@color/oxford_light_grey"
