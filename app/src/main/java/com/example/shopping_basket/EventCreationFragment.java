@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static androidx.navigation.Navigation.findNavController;
 
 import android.app.Activity;
@@ -113,8 +115,10 @@ public class EventCreationFragment extends Fragment {
         if (activity != null && activity.getSupportActionBar() != null) {
             if (event == null) {
                 activity.getSupportActionBar().setTitle("Create Event");
+                binding.buttonCreateToHome.setVisibility(GONE);
             } else {
                 activity.getSupportActionBar().setTitle("Edit Event");
+                binding.buttonCreateToHome.setVisibility(VISIBLE);
             }
         }
 
@@ -129,20 +133,16 @@ public class EventCreationFragment extends Fragment {
     private void setupCheckboxListener() {
         binding.checkboxRequireLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                binding.textInputCreateLocation.setVisibility(View.VISIBLE);
+                binding.textInputCreateLocation.setVisibility(VISIBLE);
             } else {
-                binding.textInputCreateLocation.setVisibility(View.GONE);
+                binding.textInputCreateLocation.setVisibility(GONE);
             }
         });
     }
 
     private void setupClickListeners() {
-
         binding.buttonCreateToHome.setOnClickListener(v ->
-                NavigationUI.onNavDestinationSelected(
-                        requireActivity().findViewById(R.id.home),
-                        findNavController(v)
-                )
+                        findNavController(v).popBackStack()
         );
 
         binding.buttonCreateEvent.setOnClickListener(v -> createEvent());
@@ -408,7 +408,7 @@ public class EventCreationFragment extends Fragment {
 
         // Location is not stored on Event; keep UI hidden by default
         binding.checkboxRequireLocation.setChecked(false);
-        binding.textInputCreateLocation.setVisibility(View.GONE);
+        binding.textInputCreateLocation.setVisibility(GONE);
 
         binding.buttonCreateEvent.setText("Update");
     }
