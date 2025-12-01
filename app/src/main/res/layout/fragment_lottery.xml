@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LotteryFragment"
     android:orientation="vertical"
     android:paddingHorizontal="24dp"
@@ -58,6 +59,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
-            android:text="Confirm" />
+            android:text="Confirm"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp" />
     </LinearLayout>
 </LinearLayout>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".EventFilterFragment"
     android:layout_marginTop="?attr/actionBarSize"
     android:paddingHorizontal="24dp"
@@ -122,9 +123,13 @@
             android:text="Cancel"
             android:textSize="16sp"
             android:fontFamily="@font/roboto"
-            android:backgroundTint="@color/oxford_grey"
+            android:backgroundTint="@color/oxford_light_grey"
             android:textColor="@color/oxford_blue"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"
+            android:paddingVertical="8dp"/>
 
         <Button
             android:id="@+id/button_apply_filter"
@@ -133,6 +138,10 @@
             android:text="Apply"
             android:textSize="16sp"
             android:fontFamily="@font/roboto_medium"
-            android:backgroundTint="@color/oxford_blue"/>
+            android:backgroundTint="@color/oxford_blue"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"
+            android:paddingVertical="8dp"/>
     </LinearLayout>
 </LinearLayout>

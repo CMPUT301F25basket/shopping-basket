@@ -152,27 +152,22 @@ public class ProfileFragment extends DialogFragment {
      */
     private void setupClickListeners() {
         binding.buttonEditProfile.setOnClickListener(v -> {
-            dismiss();
             // Show the new EditProfileFragment dialog
             EditProfileFragment editProfileDialog = new EditProfileFragment();
             // Use getParentFragmentManager() to show a dialog from within another fragment
             editProfileDialog.show(getParentFragmentManager(), "EditProfileFragment");
-            // TODO: Retain when EditProfileDialog closes
         });
 
-        // TODO: Implement
-//        binding.buttonToRegistrationHistory.setOnClickListener(v -> {
-//            dismiss();
-//            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
-//            registeredEventFragment.show(getParentFragmentManager(), "RegistrationHistoryFragment");
-//        });
+        binding.buttonToRegistrationHistory.setOnClickListener(v -> {
+            dismiss();
+            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
+            registeredEventFragment.show(getParentFragmentManager(), "RegistrationHistoryFragment");
+        });
 
         binding.buttonDeleteProfile.setOnClickListener(v -> {
             dismiss();
             DeleteProfileFragment deleteProfileFragment = new DeleteProfileFragment();
             deleteProfileFragment.show(getParentFragmentManager(), "DeleteProfileFragment");
-//            RegisteredEventFragment registeredEventFragment = new RegisteredEventFragment();
-//            registeredEventFragment.show(getParentFragmentManager(), "RegistrationHistoryFragment");
         });
     }
 

@@ -57,5 +57,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     // Dependency to allow use of QR code
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("androidx.activity:activity-ktx:1.9.0")
 
 }

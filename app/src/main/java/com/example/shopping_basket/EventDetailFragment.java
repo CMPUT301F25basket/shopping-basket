@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import static android.view.View.GONE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.shopping_basket.databinding.FragmentEventDetailBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +43,7 @@ import java.util.stream.Collectors;
  */
 public class EventDetailFragment extends Fragment {
     private Event event;
+    private String eventId;
     private Profile profile;
     private FragmentEventDetailBinding binding;
 
@@ -109,14 +113,16 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (event == null) {
-            // Navigate back if no event data is available.
-            NavHostFragment.findNavController(this).popBackStack();
-            return;
-        }
         // Access the hosting activity's action bar and set the title
         if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Event Detail");
+        }
+
+        if (event == null) {
+            // Navigate back if no event data is available.
+            NavHostFragment.findNavController(this).popBackStack();
+            // Toast.makeText(requireContext(), "Error: Event not found.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         setupEventDetail();
@@ -201,8 +207,7 @@ public class EventDetailFragment extends Fragment {
                 binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error_bg));
                 binding.buttonRegisterEvent.setText("Decline");
             } else {
-                binding.buttonRegisterEvent.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.oxford_blue));
-                binding.buttonRegisterEvent.setText("Enroll");
+                binding.buttonRegisterEvent.setVisibility(GONE);
             }
         }
     }
@@ -212,7 +217,7 @@ public class EventDetailFragment extends Fragment {
      */
     private void setupClickListeners() {
         binding.buttonDetailToHome.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
+            NavHostFragment.findNavController(this).navigate(R.id.action_eventDetailFragment_to_homeFragment);
         });
         binding.buttonRegisterEvent.setOnClickListener(v -> {
             String buttonText = binding.buttonRegisterEvent.getText().toString();

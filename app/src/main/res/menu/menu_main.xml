@@ -10,6 +10,13 @@
         android:visible="false"/>
 
     <item
+        android:id="@+id/action_qr"
+        android:icon="@drawable/qr_code_svgrepo_com"
+        android:title="Get QR code"
+        app:showAsAction="ifRoom"
+        android:visible="false" />
+
+    <item
         android:id="@+id/action_toggle_notification"
         android:icon="@drawable/bell_svgrepo_com"
         android:title="@string/action_toggle_notification"
