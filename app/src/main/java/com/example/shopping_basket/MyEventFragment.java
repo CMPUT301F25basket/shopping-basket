@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,13 +25,12 @@ import android.widget.Toast;
 
 import com.example.shopping_basket.databinding.FragmentMyEventBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 
 public class MyEventFragment extends Fragment {
 
@@ -77,16 +79,12 @@ public class MyEventFragment extends Fragment {
     }
 
     /**
-     * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} has returned.
-     * This method binds the views, populates the UI with event details, and sets up click listeners.
-     *
-     * @param view The View returned by {@link #onCreateView}.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * Called immediately after onCreateView has returned.
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Access the hosting activity's action bar and set the title
+        // Action bar title
         if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Event");
         }
@@ -130,8 +128,11 @@ public class MyEventFragment extends Fragment {
             return;
         }
 
-        FirebaseFirestore.getInstance().collection("events").document(eventId)
-                .get().addOnSuccessListener(doc -> {
+        FirebaseFirestore.getInstance()
+                .collection("events")
+                .document(eventId)
+                .get()
+                .addOnSuccessListener(doc -> {
                     if (!isAdded() || binding == null) {
                         return; // Fragment is no longer attached
                     }

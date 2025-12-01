@@ -83,41 +83,6 @@ public class InboxFragment extends Fragment {
 
         // Set visibility for the toggle notification button on toolbar
         setupMenu();
-        // Only show the notification preference toggle for NORMAL users
-        if (!adminMode) {
-            requireActivity().addMenuProvider(new MenuProvider() {
-                @Override
-                public void onCreateMenu(@NonNull Menu menu,
-                                         @NonNull MenuInflater menuInflater) {
-                    MenuItem notificationToggle =
-                            menu.findItem(R.id.action_toggle_notification);
-                    if (notificationToggle != null) {
-                        notificationToggle.setVisible(true);
-                        if (currentUser != null && currentUser.isNotificationPref()) {
-                            notificationToggle.setIcon(R.drawable.bell_svgrepo_com);
-                        } else {
-                            notificationToggle.setIcon(R.drawable.bell_off_svgrepo_com);
-                        }
-                    }
-                }
-
-                @Override
-                public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                    if (menuItem.getItemId() == R.id.action_toggle_notification
-                            && currentUser != null) {
-                        boolean currentPref = currentUser.isNotificationPref();
-                        if (currentPref) {
-                            menuItem.setIcon(R.drawable.bell_off_svgrepo_com);
-                        } else {
-                            menuItem.setIcon(R.drawable.bell_svgrepo_com);
-                        }
-                        currentUser.setNotificationPref(!currentPref);
-                        return true;
-                    }
-                    return false;
-                }
-            }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-        }
     }
 
     /**
