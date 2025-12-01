@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
             android:text="All entrants"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:checked="true"/>
 
         <RadioButton
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
             android:text="Unselected entrants (waitlisted)"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <RadioButton
             android:id="@+id/radio_selected_entrants"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
             android:text="Selected entrants"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
     </RadioGroup>
 
     <EditText

@@ -164,8 +164,12 @@ public class InboxFragment extends Fragment {
                     boolean currentPref = currentUser.isNotificationPref();
                     if (currentPref) {
                         menuItem.setIcon(R.drawable.bell_off_svgrepo_com);
+                        currentUser.setNotificationPref(false);
+                        updateNotificationPref();
                     } else {
                         menuItem.setIcon(R.drawable.bell_svgrepo_com);
+                        currentUser.setNotificationPref(true);
+                        updateNotificationPref();
                     }
                     currentUser.setNotificationPref(!currentPref);
                     return true;
@@ -174,6 +178,21 @@ public class InboxFragment extends Fragment {
             }
         };
         requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private void updateNotificationPref() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("profiles")
+                .document(currentUser.getGuid())
+                .set(currentUser)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Notification preference changed", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to change notification preference.", Toast.LENGTH_SHORT).show();
+                    Log.e("InboxFragment", "Error changing notification preference: ", e);
+                });
     }
 
     /**

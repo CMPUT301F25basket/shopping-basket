@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -47,11 +48,11 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private EventCardAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Event> filteredEvents = new ArrayList<>();
     private Profile currentUser;
     private MenuProvider menuProvider;
     private Map<String, String> eventPosters = new HashMap<>();
-
-
+    private EventFilterFragment.FilterCriteria currentFilterCriteria;
 
     /**
      * Default public constructor.
@@ -73,6 +74,13 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Initialize with a default, empty filter criteria
+        currentFilterCriteria = new EventFilterFragment.FilterCriteria();
+    }
+
     /**
      * Creates and returns the view hierarchy associated with the fragment.
      *
@@ -83,8 +91,8 @@ public class HomeFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     /**
@@ -98,24 +106,47 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentHomeBinding.bind(view);
         this.currentUser = ProfileManager.getInstance().getCurrentUserProfile();
-        eventAdapter = new EventCardAdapter(events, eventPosters);
+
+        eventAdapter = new EventCardAdapter(filteredEvents, eventPosters);
         binding.eventCardList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.eventCardList.setAdapter(eventAdapter);
-        loadEvents();
 
-        eventAdapter.setOnItemClickListener(position -> {
-            Event selectedEvent = events.get(position);
-            navigateToEventDetail(selectedEvent);
-        });
+        setupMenu();
+        setupFilterListeners();
+        setupClickListeners();
+        loadEvents();
 
         // Access the hosting activity's action bar and set the title
         if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Events");
         }
+    }
 
-        setupMenu();
+    private void setupFilterListeners() {
+        getParentFragmentManager().setFragmentResultListener("filterRequest", this, (requestKey, result) -> {
+            EventFilterFragment.FilterCriteria criteria =
+                    (EventFilterFragment.FilterCriteria) result.getSerializable("filterCriteria");
+            if (criteria != null) {
+                currentFilterCriteria = criteria;
+                applyFilters();
+            }
+        });
+    }
+    private void setupClickListeners() {
+        eventAdapter.setOnItemClickListener(position -> {
+            Event selectedEvent = filteredEvents.get(position);
+            navigateToEventDetail(selectedEvent);
+        });
+
+        binding.buttonOpenFilter.setOnClickListener(v -> {
+            EventFilterFragment dialog = new EventFilterFragment();
+            // Pass the currently active filter to the dialog so it can show the user's previous selections
+            Bundle args = new Bundle();
+            args.putSerializable("filterCriteria", currentFilterCriteria);
+            dialog.setArguments(args);
+            dialog.show(getParentFragmentManager(), "EventFilterFragment");
+        });
     }
 
     /**
@@ -125,7 +156,10 @@ public class HomeFragment extends Fragment {
      */
     private void loadEvents() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("events").get().addOnSuccessListener(queryDocumentSnapshots -> {events.clear();
+        db.collection("events")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    events.clear();
              // In admin mode we want to see every event, including past ones.
              // Regular users only see events whose registration period is still active.
                     boolean adminBrowsing = ProfileManager.getInstance().isAdminMode();
@@ -148,6 +182,7 @@ public class HomeFragment extends Fragment {
                         } else if (event.getEndDate() != null && event.getEndDate().after(new Date())) {
                             events.add(event);
                         }
+                        applyFilters();
                     }
                     eventAdapter.notifyDataSetChanged();
                 })
@@ -157,13 +192,40 @@ public class HomeFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();});
     }
 
+    /**
+     * Applies the current filter criteria to the event list.
+     */
+    private void applyFilters() {
+        filteredEvents.clear();
+
+        if (currentFilterCriteria == null || currentFilterCriteria.isDefault()) {
+            // If no filter is set, show all loaded events
+            filteredEvents.addAll(events);
+        } else {
+            // Otherwise, add only the events that match the criteria
+            for (Event event : events) {
+                if (currentFilterCriteria.matches(event)) {
+                    filteredEvents.add(event);
+                }
+            }
+            // Show feedback only when a filter is active
+            if (filteredEvents.isEmpty()) {
+                Toast.makeText(getContext(), "No events match your filters", Toast.LENGTH_SHORT).show();
+            }
+        }
+        eventAdapter.notifyDataSetChanged();
+    }
+
     private void setupMenu() {
         menuProvider = new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 // Make the admin button visible only if the current user is an admin
-                if (currentUser.isAdmin())
+                if (currentUser != null && currentUser.isAdmin()) {
                     menu.findItem(R.id.action_admin).setVisible(true);
+                } else {
+                    menu.findItem(R.id.action_admin).setVisible(false);
+                }
             }
 
             @Override
@@ -188,7 +250,7 @@ public class HomeFragment extends Fragment {
     private void navigateToEventDetail(Event event) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("event", event);
-        if (event.getOwner() != null) {
+        if (event.getOwner() != null && currentUser != null) {
             // Navigate to MyEventFragment if the current user is the event's owner
             if (Objects.equals(event.getOwner().getGuid(), currentUser.getGuid())) {
                 findNavController(requireView()).navigate(R.id.action_homeFragment_to_myEventFragment, bundle);
@@ -200,7 +262,12 @@ public class HomeFragment extends Fragment {
                 findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
             }
         } else {
-            Toast.makeText(getContext(), "Error loading event detail: no owner found", Toast.LENGTH_SHORT).show();
+            // Handle cases where owner or currentUser might be null
+            if (ProfileManager.getInstance().isAdminMode()) {
+                findNavController(requireView()).navigate(R.id.action_homeFragment_to_adminEventDetailFragment, bundle);
+            } else {
+                findNavController(requireView()).navigate(R.id.action_homeFragment_to_eventDetailFragment, bundle);
+            }
         }
     }
 
