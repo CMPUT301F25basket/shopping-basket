@@ -1,4 +1,6 @@
 package com.example.shopping_basket;
+import static androidx.navigation.Navigation.findNavController;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -151,10 +153,25 @@ public class InboxFragment extends Fragment {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 MenuItem notificationToggle = menu.findItem(R.id.action_toggle_notification);
-                if (notificationToggle != null) {
+                MenuItem adminButton = menu.findItem(R.id.action_admin);
+                boolean isAdminMode = ProfileManager.getInstance().isAdminMode();
+
+                if (isAdminMode) {
+                    // In admin mode, hide the notification toggle and show the admin icon
+                    notificationToggle.setVisible(false);
+                    adminButton.setVisible(true);
+                } else {
+                    // In user mode, show the notification toggle and hide the admin icon
+                    adminButton.setVisible(false);
                     notificationToggle.setVisible(true);
-                    if (currentUser.isNotificationPref()) notificationToggle.setIcon(R.drawable.bell_svgrepo_com);
-                    else notificationToggle.setIcon(R.drawable.bell_off_svgrepo_com);
+                    // Also set the correct bell icon based on user preference
+                    if (currentUser != null) {
+                        if (currentUser.isNotificationPref()) {
+                            notificationToggle.setIcon(R.drawable.bell_svgrepo_com);
+                        } else {
+                            notificationToggle.setIcon(R.drawable.bell_off_svgrepo_com);
+                        }
+                    }
                 }
             }
 
@@ -172,6 +189,10 @@ public class InboxFragment extends Fragment {
                         updateNotificationPref();
                     }
                     currentUser.setNotificationPref(!currentPref);
+                    return true;
+                }
+                if (menuItem.getItemId() == R.id.action_admin) {
+                    findNavController(requireView()).navigate(R.id.action_inboxFragment_to_adminMenuFragment);
                     return true;
                 }
                 return false;
