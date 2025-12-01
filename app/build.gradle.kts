@@ -26,37 +26,37 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     buildFeatures {
         viewBinding = true
-        dataBinding = true
     }
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    implementation(libs.recyclerview)
-    implementation(libs.legacy.support.v4)
-    implementation(libs.fragment)
     implementation(libs.firebase.auth)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 
+    // Firebase (BOM controls versions)
     implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-    // Dependency to allow use of QR code
-    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
-    implementation("androidx.activity:activity-ktx:1.9.0")
 
+    // QR code dependency
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // For ActivityResult APIs
+    implementation("androidx.activity:activity-ktx:1.9.0")
 }

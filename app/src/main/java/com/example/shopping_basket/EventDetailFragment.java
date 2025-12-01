@@ -96,8 +96,7 @@ public class EventDetailFragment extends Fragment {
      * @return The root view for the fragment's UI.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentEventDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -138,7 +137,9 @@ public class EventDetailFragment extends Fragment {
         binding.detailEventName.setText(event.getName());
         if (event.getDesc() != null) binding.detailEventDescription.setText(event.getDesc());
         if (event.getGuideline() != null) binding.detailEventGuideline.setText(event.getGuideline());
-        // TODO: set up eventPoster
+
+        // Actual image content is logged as metadata in the "images" collection".
+        binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
 
         // Date and time components
         binding.detailEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));

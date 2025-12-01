@@ -97,6 +97,9 @@
         <action
             android:id="@+id/action_myEventFragment_to_entrantListFragment"
             app:destination="@id/entrantListFragment" />
+        <action
+            android:id="@+id/action_myEventFragment_to_eventCreationFragment"
+            app:destination="@id/eventCreationFragment" />
     </fragment>
     <fragment
         android:id="@+id/entrantListFragment"

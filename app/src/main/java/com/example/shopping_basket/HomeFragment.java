@@ -28,6 +28,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * A {@link Fragment} that serves as the main screen of the application, displaying a list of events.
@@ -46,6 +49,9 @@ public class HomeFragment extends Fragment {
     private ArrayList<Event> events = new ArrayList<>();
     private Profile currentUser;
     private MenuProvider menuProvider;
+    private Map<String, String> eventPosters = new HashMap<>();
+
+
 
     /**
      * Default public constructor.
@@ -95,7 +101,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentHomeBinding.bind(view);
         this.currentUser = ProfileManager.getInstance().getCurrentUserProfile();
-        eventAdapter = new EventCardAdapter(events);
+        eventAdapter = new EventCardAdapter(events, eventPosters);
         binding.eventCardList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.eventCardList.setAdapter(eventAdapter);
         loadEvents();
@@ -120,21 +126,36 @@ public class HomeFragment extends Fragment {
      */
     private void loadEvents() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("events")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    events.clear();
+        db.collection("events").get().addOnSuccessListener(queryDocumentSnapshots -> {events.clear();
+             // In admin mode we want to see every event, including past ones.
+             // Regular users only see events whose registration period is still active.
+                    boolean adminBrowsing = ProfileManager.getInstance().isAdminMode();
+
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Event event = document.toObject(Event.class);
-                        // Only shows event where registration period is still in effect
-                        if (event.getEndDate() != null && event.getEndDate().after(new Date()))
+
+                        // Grab posterBase64 directly from the document
+                        String posterBase64 = document.getString("posterBase64");
+                        if (posterBase64 != null && !posterBase64.isEmpty()) {
+                            String eventId = event.getEventId();
+                            if (eventId == null || eventId.isEmpty()) {
+                                eventId = document.getId(); // fallback
+                            }
+                            eventPosters.put(eventId, posterBase64);
+                        }
+
+                        if (adminBrowsing) {
                             events.add(event);
+                        } else if (event.getEndDate() != null && event.getEndDate().after(new Date())) {
+                            events.add(event);
+                        }
                     }
                     eventAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error loading events: " + e.getMessage());
-                });
+                    Log.e("Firestore", "Error loading events", e);
+                    Toast.makeText(getContext(), "Failed to load events. Please try again.",
+                            Toast.LENGTH_SHORT).show();});
     }
 
     private void setupMenu() {
