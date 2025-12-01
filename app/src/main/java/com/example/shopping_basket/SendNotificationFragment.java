@@ -56,15 +56,6 @@ public class SendNotificationFragment extends DialogFragment {
         if (event == null) {
             dismiss();
         }
-
-        // These lists being empty imply the lottery has not been drawn, so disable all checkboxes except for "All entrants"
-        if (event.getCancelList().isEmpty() || event.getWaitingList().isEmpty()) {
-            binding.radioUnselectedEntrants.setEnabled(false);
-        }
-
-        if (event.getInviteList().isEmpty()) {
-            binding.radioSelectedEntrants.setEnabled(false);
-        }
     }
 
     /**
@@ -88,6 +79,15 @@ public class SendNotificationFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setBackgroundDrawableResource(R.drawable.dialog_rounded_corners);
+        }
+
+        // These lists being empty imply the lottery has not been drawn, so disable all checkboxes except for "All entrants"
+        if (event.getCancelList().isEmpty() || event.getWaitingList().isEmpty()) {
+            binding.radioUnselectedEntrants.setEnabled(false);
+        }
+
+        if (event.getInviteList().isEmpty()) {
+            binding.radioSelectedEntrants.setEnabled(false);
         }
         setupClickListeners();
     }

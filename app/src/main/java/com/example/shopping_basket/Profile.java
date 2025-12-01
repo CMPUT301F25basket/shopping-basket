@@ -1,12 +1,13 @@
 package com.example.shopping_basket;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
 /**
  * This class outlines the unique profile of a user
  */
-public class Profile {
+public class Profile implements Serializable {
     private String deviceId;
     private String guid;
     private String name;
