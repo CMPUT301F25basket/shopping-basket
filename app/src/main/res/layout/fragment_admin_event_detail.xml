@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/admin_event_detail"
     tools:context=".AdminEventDetailFragment">
 
@@ -139,11 +140,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/oxford_grey"
+                    android:backgroundTint="@color/oxford_light_grey"
                     android:fontFamily="@font/roboto_light"
                     android:text="Back"
                     android:textColor="@color/oxford_blue"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:insetBottom="0dp"
+                    android:minHeight="0dp"
+                    app:cornerRadius="12dp"/>
 
                 <Button
                     android:id="@+id/button_admin_delete_event"
@@ -155,7 +159,10 @@
                     android:fontFamily="@font/roboto_medium"
                     android:text="Delete"
                     android:textColor="@color/oxford_blue"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:insetBottom="0dp"
+                    android:minHeight="0dp"
+                    app:cornerRadius="12dp"/>
             </LinearLayout>
 
             <TextView

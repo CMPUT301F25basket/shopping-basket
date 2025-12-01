@@ -4,6 +4,6 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/oxford_blue</item>
-        <item name="android:windowBackground">@color/oxford_lighter</item>
+        <item name="android:windowBackground">@color/oxford_blue</item>
     </style>
 </resources>

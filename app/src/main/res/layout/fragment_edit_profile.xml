@@ -76,7 +76,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
                 android:text="Confirm"
-                android:textSize="16sp" />
+                android:textColor="@color/oxford_blue"
+                android:backgroundTint="@color/oxford_light_grey"
+                android:textSize="16sp"
+                android:insetBottom="0dp"
+                android:minHeight="0dp"
+                app:cornerRadius="12dp"
+                android:paddingVertical="8dp"/>
         </LinearLayout>
 
 </LinearLayout>

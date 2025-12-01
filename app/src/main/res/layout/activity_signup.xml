@@ -103,7 +103,7 @@
             android:id="@+id/buttonToLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
             android:text="Already have a profile?"

@@ -178,17 +178,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:backgroundTint="@color/oxford_grey"
+                app:backgroundTint="@color/oxford_light_grey"
                 android:fontFamily="@font/roboto_light"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="0dp"
+                app:cornerRadius="12dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:text="Back"
                 android:textColor="@color/oxford_blue"
-                android:textSize="16sp"
-                app:cornerRadius="12dp" />
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/button_create_event"

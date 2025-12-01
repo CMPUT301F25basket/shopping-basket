@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragment"
     android:orientation="vertical"
     android:layout_marginTop="?attr/actionBarSize"
@@ -11,8 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -22,39 +22,49 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_marginTop="24dp"
                 android:id="@+id/profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:text="John Doe"/>
 
             <TextView
                 android:id="@+id/profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light" />
+                android:fontFamily="@font/roboto_light"
+                android:text="example@email.com"
+                android:layout_marginBottom="4dp"/>
 
             <TextView
                 android:id="@+id/profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_light" />
+                android:fontFamily="@font/roboto_light"
+                android:text="0123456789"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/button_to_registration_history"
+            android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/roboto_light"
-            android:text="Registration history" />
+            android:text="Registered Events"
+            android:textSize="16sp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="end">
 
         <View
@@ -72,7 +82,10 @@
             android:fontFamily="@font/roboto_medium"
             android:text="Delete profile"
             android:textColor="@color/error"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"/>
 
         <Button
             android:id="@+id/button_edit_profile"
@@ -84,6 +97,9 @@
             android:fontFamily="@font/roboto_light"
             android:text="Edit profile"
             android:textColor="@color/oxford_blue"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            app:cornerRadius="12dp"/>
     </LinearLayout>
 </LinearLayout>

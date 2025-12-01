@@ -1,44 +1,52 @@
 package com.example.shopping_basket;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
- * An {@link AppCompatActivity} that provides a user interface for signing in.
- * <p>
- * This activity implements the app's login mechanism. It verifies a user's existence by searching for a matching
- * email in the "profiles" collection in Firestore. The activity also provides a button to navigate to the
- * {@link SignupActivity} for new users.
+ * The initial screen of the application.
+ * It attempts to automatically log in the user based on their device ID. If no existing profile is found,
+ * it provides an option to navigate to the {@link SignupActivity} to create a new profile.
  */
-// NOTE: Most of the methods for login might not be used. Instead querying for device ID might be delegated to MainActivity
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
     // UI Elements
-    private TextInputEditText editTextLoginEmail;
-    private Button buttonLogin, buttonToSignup;
+    private Button buttonGetStarted;
     private ProgressBar progressBarLogin;
-    private boolean isAutoLoginAttempted = false;
+    private ImageView appIcon;
+    // Animations
+    private Animation slideInAnimation;
+    private Animation slideOutAnimation;
 
     // Firebase
     private FirebaseFirestore db;
 
     /**
      * Called when the activity is first created.
-     * Initializes the views, Firebase instances, and sets up click listeners.
+     * Initializes the views, Firebase instances, and attempts to automatically log in the user.
      *
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
@@ -55,45 +63,47 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize Views
         initializeViews();
 
-        if (!isAutoLoginAttempted) {
-            isAutoLoginAttempted = true;
-            attemptAutoLogin();
-        }
+        // Initialize animations
+        slideInAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_in_from_left);
+        slideOutAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_right);
 
-        // Setup button click listeners
-        buttonLogin.setOnClickListener(v -> attemptLogin());
-        buttonToSignup.setOnClickListener(v -> {
-            // Navigate to the SignupActivity
-            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-            startActivity(intent);
+        // Start the initial slide-in animation for the icon
+        appIcon.startAnimation(slideInAnimation);
+
+        // Set up the "Get started" button to navigate to the SignupActivity
+        buttonGetStarted.setOnClickListener(v -> {
+            // Add a listener to navigate after the animation completes
+            slideOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+            });
+            appIcon.startAnimation(slideOutAnimation);
         });
+
+        // Attempt to log in the user automatically
+        attemptAutoLogin();
     }
 
     /**
      * Initializes all UI components from the layout file.
      */
     private void initializeViews() {
-        editTextLoginEmail = findViewById(R.id.editTextLoginEmail);
-        buttonLogin = findViewById(R.id.buttonLogin);
-        buttonToSignup = findViewById(R.id.buttonToSignup);
+        buttonGetStarted = findViewById(R.id.buttonGetStarted);
         progressBarLogin = findViewById(R.id.progressBarLogin);
-    }
-
-    /**
-     * Validates the user's input and initiates the login process by calling
-     * {@link #findProfileByEmail(String)}.
-     */
-    private void attemptLogin() {
-        String email = editTextLoginEmail.getText().toString().trim();
-
-        if (email.isEmpty()) {
-            editTextLoginEmail.setError("Email is required");
-            editTextLoginEmail.requestFocus();
-            return;
-        }
-
-        setLoading(true);
-        findProfileByEmail(email);
+        appIcon = findViewById(R.id.app_icon);
     }
 
     /**
@@ -101,11 +111,16 @@ public class LoginActivity extends AppCompatActivity {
      * that matches the current device's unique ID.
      */
     private void attemptAutoLogin() {
+        setLoading(true); // Show loading indicator while we check for a profile
         String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        // If we can't get a device ID, we can't auto-login. Show the "Get started" button.
         if (androidId == null || androidId.isEmpty()) {
+            Log.w(TAG, "Cannot attempt auto-login: Android ID is null or empty.");
             setLoading(false);
             return;
         }
+
         db.collection("profiles")
                 .whereEqualTo("deviceId", androidId)
                 .limit(1) // We only expect one match
@@ -118,44 +133,11 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "Auto-login successful for device ID: " + androidId);
                         ProfileManager.getInstance().setCurrentUserProfile(foundProfile);
                         navigateToMain(foundProfile.getName());
+                    } else {
+                        // This block runs if the task fails or if no profile is found for this device
+                        Log.d(TAG, "Auto-login failed: No profile found for this device.", task.getException());
+                        setLoading(false); // Hide the progress bar and show the "Get started" button
                     }
-                    else {
-                        Log.d(TAG, "Auto-login failed: No profile found for this device.");
-                        setLoading(false); // Hide the progress bar and show login buttons
-                    }
-                });
-    }
-
-    /**
-     * Queries the "profiles" collection in Firestore for a document matching the provided email.
-     * On success, it populates the {@link ProfileManager} and navigates to the main app.
-     * On failure or if no user is found, it displays a toast message.
-     *
-     * @param email The email address to search for in the database.
-     */
-    private void findProfileByEmail(String email) {
-        db.collection("profiles")
-                .whereEqualTo("email", email)
-                .limit(1) // We only expect one user per email
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Profile foundProfile = document.toObject(Profile.class);
-                            Log.d(TAG, "Profile found for email: " + email);
-                            // Set the found profile in the Singleton Manager
-                            ProfileManager.getInstance().setCurrentUserProfile(foundProfile);
-
-                            // Navigate to the main activity
-                            navigateToMain(foundProfile.getName());
-                            return; // Exit after finding the first match
-                        }
-                    }
-
-                    // This block runs if the task fails or if no documents are found
-                    Log.w(TAG, "Login failed. No profile found for email: " + email, task.getException());
-                    Toast.makeText(LoginActivity.this, "Login failed. No account found with that email.", Toast.LENGTH_LONG).show();
-                    setLoading(false);
                 });
     }
 
@@ -164,26 +146,67 @@ public class LoginActivity extends AppCompatActivity {
      * @param name The name of the logged-in user to display in a welcome message.
      */
     private void navigateToMain(String name) {
-        Toast.makeText(this, "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        // Clear the activity stack so the user can't go back to the login screen
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        showInfoToast(this, "Welcome back, " + name + "!");
+
+        slideOutAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                // Clear the activity stack so the user can't go back to the login screen
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish(); // Finish this activity so it's removed from the back stack
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+        });
+
+        appIcon.startAnimation(slideOutAnimation);
     }
 
     /**
-     * Toggles the loading indicator's visibility.
-     * @param isLoading true to show the progress bar, false to hide it.
+     * Toggles the visibility of the loading indicator and the "Get started" button.
+     * @param isLoading true to show the progress bar and hide the button, false otherwise.
      */
     private void setLoading(boolean isLoading) {
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         if (isLoading) {
-            progressBarLogin.setVisibility(View.VISIBLE);
-            buttonLogin.setVisibility(View.INVISIBLE);
+            progressBarLogin.setVisibility(VISIBLE);
+            buttonGetStarted.setVisibility(GONE);
         } else {
-            progressBarLogin.setVisibility(View.GONE);
-            buttonLogin.setVisibility(View.VISIBLE);
+            progressBarLogin.setVisibility(GONE);
+            buttonGetStarted.setVisibility(VISIBLE);
+            buttonGetStarted.startAnimation(fadeInAnimation);
         }
     }
-}
 
+    /**
+     * Displays a custom toast message.
+     * @param context The context to use.
+     * @param message The message to display.
+     */
+    // TODO: Make this static
+    public void showInfoToast(Context context, String message) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        View layout = inflater.inflate(R.layout.info_toast_layout, null);
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(context);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 100);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+
+        toast.show();
+    }
+}

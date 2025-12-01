@@ -24,14 +24,10 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_eventCreationFragment"
-            app:destination="@id/eventCreationFragment"
-            app:popUpTo="@id/eventCreationFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/eventCreationFragment" />
         <action
             android:id="@+id/action_homeFragment_to_inboxFragment"
-            app:destination="@id/inboxFragment"
-            app:popUpTo="@id/inboxFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/inboxFragment" />
         <action
             android:id="@+id/action_homeFragment_to_eventDetailFragment"
             app:destination="@id/eventDetailFragment" />

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -123,7 +124,10 @@ public class EventCreationFragment extends Fragment {
     private void setupClickListeners() {
         // TODO: Only enable Create button when all required fields are filled in
         binding.buttonCreateToHome.setOnClickListener(v -> {
-            findNavController(v).navigate(R.id.homeFragment);
+            NavigationUI.onNavDestinationSelected(
+                    requireActivity().findViewById(R.id.home), // The menu item to select
+                    findNavController(v)                       // The NavController to use
+            );
         });
 
         binding.buttonCreateEvent.setOnClickListener(v -> {
@@ -219,12 +223,13 @@ public class EventCreationFragment extends Fragment {
             return;
         }
         binding.textInputCreateEventName.setText(event.getName());
-        binding.textInputCreateEventDesc.setText(event.getDesc());
-        binding.textInputCreateEventGuideline.setText(event.getGuideline() != null ? event.getGuideline() : "");
+        binding.textInputCreateEventDesc.setText(event.getDesc() != null ? event.getDesc() : "No event description.");
+        binding.textInputCreateEventGuideline.setText(event.getGuideline() != null ? event.getGuideline() : "No criteria or guidelines specified.");
         binding.textInputCreateEventStart.setText(CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy"));
         binding.textInputCreateEventEnd.setText(CalendarUtils.dateFormatter(event.getStartDate(), "MM/dd/yyyy"));
         binding.textInputCreateEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(), "MM/dd/yyyy HH:mm"));
         binding.textInputCreateLimit.setText(event.getMaxReg() > 0 ? Integer.toString(event.getMaxReg()) : ""); // If maxReg is set (>0), populate the view, otherwise don't
         // binding.checkboxRequireLocation.setChecked();
+        binding.buttonCreateEvent.setText("Update");
     }
 }
