@@ -24,6 +24,7 @@ import java.util.Objects;
  * A fragment representing a list of Items.
  */
 public class EntrantListFragment extends Fragment {
+    // TODO: Back Button
     private Event event;
     private ArrayList<Profile> profiles;
     private EntrantListAdapter adapter;
