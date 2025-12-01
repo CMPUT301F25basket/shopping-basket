@@ -1,5 +1,7 @@
 package com.example.shopping_basket;
 
+import static androidx.appcompat.widget.ResourceManagerInternal.get;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -14,22 +16,52 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
  */
-public class EntrantListFragment extends Fragment {
+public class EntrantListFragment extends Fragment implements RemoveInviteFragment.RemoveCityDialogueListener{
 
     private Event event;
     private ArrayList<Profile> profiles;
     //private ArrayAdapter<Profile> adapter;
     private EntrantListAdapter adapter;
     private String entrantListTitle;
+    private boolean responseHold;
+
+    @Override
+    public void PassResponse(boolean response){
+        responseHold = response;
+    }
+
+    public AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            if(entrantListTitle.equals("Invited")) {
+                new RemoveInviteFragment().show(getChildFragmentManager(), "Remove Invite");
+                if(responseHold){
+                    event.decline(adapter.getItem(i));
+                    adapter.notifyDataSetChanged();
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference cRef = db.collection("events");
+                    DocumentReference docRef = cRef.document("shopping-basket://event/" + event.getEventURL());
+                    docRef.update("inviteList", event.getInviteList(), "cancelList", event.getCancelList());
+                }
+            }
+        }
+    };
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -114,6 +146,10 @@ public class EntrantListFragment extends Fragment {
         ListView list = new ListView(this.getContext());
         list.findViewById(R.id.list);
         list.setAdapter(adapter);
+
+        if(entrantListTitle.equals("Invited")){
+            list.setOnItemClickListener(messageClickedHandler);
+        }
 
         if (getActivity() instanceof AppCompatActivity) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(entrantListTitle);
