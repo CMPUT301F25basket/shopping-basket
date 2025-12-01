@@ -2,35 +2,50 @@ package com.example.shopping_basket;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * AdminBrowseProfilesFragment
+ *
+ * Allows an administrator to browse all profiles stored in Firestore
+ * and remove individual profiles when necessary.
  */
 public class AdminBrowseProfilesFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
+    private static final String TAG = "AdminBrowseProfiles";
+
+    // Optional argument for column count – kept from the original template
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    private RecyclerView recyclerView;
+    private UserProfileRecyclerViewAdapter adapter;
+    private final List<Profile> profiles = new ArrayList<>();
+    private FirebaseFirestore db;
+
     public AdminBrowseProfilesFragment() {
+        // Required empty public constructor
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static AdminBrowseProfilesFragment newInstance(int columnCount) {
         AdminBrowseProfilesFragment fragment = new AdminBrowseProfilesFragment();
         Bundle args = new Bundle();
@@ -42,6 +57,7 @@ public class AdminBrowseProfilesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -49,20 +65,111 @@ public class AdminBrowseProfilesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_admin_browse_profiles, container, false);
 
-        // Set the adapter
+        // Root of this layout is a RecyclerView
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
+            adapter = new UserProfileRecyclerViewAdapter(profiles, this::confirmDeleteProfile);
+            recyclerView.setAdapter(adapter);
         }
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Update the action bar title for clarity
+        if (getActivity() instanceof AppCompatActivity) {
+            ((AppCompatActivity) getActivity())
+                    .getSupportActionBar()
+                    .setTitle("Admin – Profiles");
+        }
+
+        // Load all profiles from Firestore
+        loadProfiles();
+    }
+
+    /**
+     * Fetches all profiles from the "profiles" collection and displays them.
+     */
+    private void loadProfiles() {
+        db.collection("profiles").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        profiles.clear();
+        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+            Profile profile = document.toObject(Profile.class);
+
+            // Ensure the guid field is set even if it wasn't stored explicitly.
+            if (profile.getGuid() == null || profile.getGuid().isEmpty()) {
+                profile.setGuid(document.getId());
+            }
+
+            profiles.add(profile);
+        }
+        adapter.notifyDataSetChanged();
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Error loading profiles", e);
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "Failed to load profiles. Please try again.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * Shows a confirmation dialog before deleting a profile.
+     */
+    private void confirmDeleteProfile(Profile profile) {
+        if (getContext() == null) {
+            return;
+        }
+
+        // Safeguard: prevent an admin from deleting their own profile from here.
+        Profile currentUser = ProfileManager.getInstance().getCurrentUserProfile();
+        if (currentUser != null && currentUser.getGuid().equals(profile.getGuid())) {
+            Toast.makeText(getContext(), "You cannot delete your own profile from this screen.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Delete profile")
+                .setMessage("Are you sure you want to delete " + profile.getName() + "'s profile?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteProfile(profile))
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    /**
+     * Deletes the given profile document from Firestore and removes it from the list.
+     * Implements US 03.02.01 – Remove profiles (admin).
+     */
+    private void deleteProfile(Profile profile) {
+        if (db == null || getContext() == null) {
+            return;
+        }
+
+        String guid = profile.getGuid();
+        if (guid == null || guid.isEmpty()) {
+            Toast.makeText(getContext(), "Unable to delete profile: missing user id.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("profiles").document(guid)
+                .delete().addOnSuccessListener(aVoid -> {profiles.remove(profile);adapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Profile deleted.", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {Log.e(TAG, "Error deleting profile", e);
+                    Toast.makeText(getContext(), "Failed to delete profile. Please try again.", Toast.LENGTH_SHORT).show();
+                });
     }
 }

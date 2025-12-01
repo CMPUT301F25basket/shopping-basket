@@ -75,8 +75,7 @@ public class HomeFragment extends Fragment {
      * @return The root view for the fragment's UI.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -137,21 +136,25 @@ public class HomeFragment extends Fragment {
      */
     private void loadEvents() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("events")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    events.clear();
+        db.collection("events").get().addOnSuccessListener(queryDocumentSnapshots -> {events.clear();
+             // In admin mode we want to see every event, including past ones.
+             // Regular users only see events whose registration period is still active.
+                    boolean adminBrowsing = ProfileManager.getInstance().isAdminMode();
+
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Event event = document.toObject(Event.class);
-                        // Only shows event where registration period is still in effect
-                        if (event.getEndDate() != null && event.getEndDate().after(new Date()))
+                        if (adminBrowsing) {
                             events.add(event);
+                        } else if (event.getEndDate() != null && event.getEndDate().after(new Date())) {
+                            events.add(event);
+                        }
                     }
                     eventAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error loading events: " + e.getMessage());
-                });
+                    Log.e("Firestore", "Error loading events", e);
+                    Toast.makeText(getContext(), "Failed to load events. Please try again.",
+                            Toast.LENGTH_SHORT).show();});
     }
 
     /**

@@ -28,8 +28,7 @@ public class AdminMenuFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentAdminMenuBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -45,9 +44,12 @@ public class AdminMenuFragment extends Fragment {
             bottomNav.setVisibility(View.GONE);
         }
 
-        // Access the hosting activity's action bar and set the title
-        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Admin Menu");
+        // Set action bar title
+        if (getActivity() != null
+                && ((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity())
+                    .getSupportActionBar()
+                    .setTitle("Admin Menu");
         }
 
         setupClickListeners();
@@ -56,22 +58,27 @@ public class AdminMenuFragment extends Fragment {
     private void setupClickListeners() {
         binding.buttonAdminBrowseProfiles.setOnClickListener(v -> {
             ProfileManager.getInstance().setAdminMode(true);
-            // NavHostFragment.findNavController(this).navigate(R.id.action_adminMenuFragment_to_adminBrowseProfilesFragment);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_adminMenuFragment_to_adminBrowseProfilesFragment);
         });
 
         binding.buttonAdminBrowseEvents.setOnClickListener(v -> {
             ProfileManager.getInstance().setAdminMode(true);
-            NavHostFragment.findNavController(this).navigate(R.id.action_adminMenuFragment_to_homeFragment);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_adminMenuFragment_to_homeFragment);
         });
 
+        // US 03.06.01 / US 03.03.01
         binding.buttonAdminBrowseImages.setOnClickListener(v -> {
             ProfileManager.getInstance().setAdminMode(true);
-            // NavHostFragment.findNavController(this).navigate(R.id.action_adminMenuFragment_to_adminBrowseImagesFragment);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_adminMenuFragment_to_adminBrowseImagesFragment);
         });
 
         binding.buttonAdminBrowseInbox.setOnClickListener(v -> {
             ProfileManager.getInstance().setAdminMode(true);
-            NavHostFragment.findNavController(this).navigate(R.id.action_adminMenuFragment_to_inboxFragment);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_adminMenuFragment_to_inboxFragment);
         });
 
         binding.buttonAdminToHome.setOnClickListener(v -> {
