@@ -153,6 +153,22 @@
                     app:cornerRadius="12dp"/>
 
                 <Button
+                    android:id="@+id/button_decline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/error_bg"
+                    android:fontFamily="@font/roboto_light"
+                    android:visibility="gone"
+                    android:text="Decline"
+                    android:textColor="@color/oxford_blue"
+                    android:textSize="16sp"
+                    android:insetBottom="0dp"
+                    android:minHeight="0dp"
+                    app:cornerRadius="12dp"/>
+
+                <Button
                     android:id="@+id/button_register_event"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
