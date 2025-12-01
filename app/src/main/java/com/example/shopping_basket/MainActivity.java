@@ -136,12 +136,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_profile) {
-            Log.d("MainActivity", "Profile is clicked");
             ProfileFragment profileDialog = new ProfileFragment();
             profileDialog.show(getSupportFragmentManager(), "ProfileDialogFragment");
-            return true;
-        }
-        else if (id == R.id.action_send ) {
             return true;
         }
 

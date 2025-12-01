@@ -22,12 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SendNotificationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+// TODO: Document
 public class SendNotificationFragment extends DialogFragment {
 
     private FragmentSendNotificationBinding binding;
@@ -124,7 +119,7 @@ public class SendNotificationFragment extends DialogFragment {
 
         // Check if there is anything to send to prevent an empty batch commit
         if (notifBatch == null || notifBatch.isEmpty()) {
-            Toast.makeText(getContext(), "No recipients selected.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No recipients registered or selected.", Toast.LENGTH_SHORT).show();
             return;
         }
 

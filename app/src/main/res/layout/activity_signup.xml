@@ -108,6 +108,7 @@
             android:padding="8dp"
             android:text="Already have a profile?"
             android:textAlignment="center"
+            android:visibility="gone"
             android:textColor="@color/oxford_blue" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
