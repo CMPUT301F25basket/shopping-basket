@@ -111,6 +111,8 @@ public class EventQRFragment extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
             return;
         }
+        binding.createdShortMessage.setText(event.getName());
+
         qrCodeBitmap = generateQRCode();
         if (qrCodeBitmap != null) {
             binding.eventQr.setImageBitmap(qrCodeBitmap);

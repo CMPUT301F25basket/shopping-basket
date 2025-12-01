@@ -235,6 +235,14 @@ public class MyEventFragment extends Fragment {
      * Sets up click listeners for all interactive buttons on the screen.
      */
     private void setupClickListeners() {
+        binding.buttonUpdateEvent.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+
+            NavHostFragment.findNavController(MyEventFragment.this)
+                    .navigate(R.id.action_myEventFragment_to_eventCreationFragment, bundle);
+        });
+
 
         binding.buttonOpenLottery.setOnClickListener(v -> {
             LotteryFragment dialog = LotteryFragment.newInstance(event);
