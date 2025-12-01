@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.shopping_basket.databinding.FragmentMyEventBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,6 +73,7 @@ public class MyEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         binding = FragmentMyEventBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -96,6 +98,8 @@ public class MyEventFragment extends Fragment {
         setupMenu();
 
         if (event.getEventTime().after(new Date())) {
+            binding.buttonUpdateEvent.setEnabled(true);
+        } else {
             binding.buttonUpdateEvent.setEnabled(false);
         }
 
@@ -105,140 +109,6 @@ public class MyEventFragment extends Fragment {
         setupEventDetail();
         setupClickListeners();
         setupButtonsVisibility();
-    }
-
-    /**
-     * Sets up and adds the menu provider to the activity.
-     */
-    private void setupMenu() {
-        menuProvider = new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.findItem(R.id.action_send).setVisible(true);
-                menu.findItem(R.id.action_qr).setVisible(true);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.action_send) {
-                    SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
-                    Log.d("My Event Fragment", "Clicked Send button.");
-                    dialog.show(getParentFragmentManager(), "SendNotificationFragment");
-                    return true;
-                }
-                if (menuItem.getItemId() == R.id.action_qr) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("event", event);
-                    NavHostFragment.findNavController(MyEventFragment.this)
-                            .navigate(R.id.action_myEventFragment_to_eventQRFragment, bundle);
-                    return true;
-                }
-                return false;
-            }
-        };
-        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-    }
-
-    /**
-     * Populates the UI components with data from the Event object.
-     */
-    private void setupEventDetail() {
-        // Basic info
-        binding.myEventName.setText(event.getName());
-        if (event.getDesc() != null) binding.myEventDescription.setText(event.getDesc());
-        if (event.getGuideline() != null) binding.myEventGuideline.setText(event.getGuideline());
-
-        // Date and time
-        binding.myEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(), "MM/dd/yyyy"));
-        binding.myEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(), "hh:mm a"));
-
-        // Registration status
-        renderRegistrationDuration();
-        String registrationCountText = String.format(Locale.US,
-                "%d users have registered for this event", event.getWaitListSize());
-        binding.myEventRegistrationCount.setText(registrationCountText);
-    }
-
-    /**
-     * Determines which button layout (pre/post lottery) should be visible.
-     */
-    private void setupButtonsVisibility() {
-        boolean lotteryDrawn =
-                ((event.getInviteList() != null && !event.getInviteList().isEmpty())
-                        || !event.getEnrollList().isEmpty());
-
-        if (lotteryDrawn) {
-            binding.layoutPreLottery.setVisibility(View.GONE);
-            binding.layoutPostLottery.setVisibility(View.VISIBLE);
-        } else {
-            binding.layoutPreLottery.setVisibility(View.VISIBLE);
-            binding.layoutPostLottery.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Sets up click listeners for all interactive buttons on the screen.
-     */
-    private void setupClickListeners() {
-
-        // Open lottery dialog
-        binding.buttonOpenLottery.setOnClickListener(v -> {
-            LotteryFragment dialog = LotteryFragment.newInstance(event);
-            dialog.show(getParentFragmentManager(), "LotteryFragment");
-            setupButtonsVisibility();
-        });
-
-        // Post-lottery lists
-        binding.buttonToEnrolledEntrants.setOnClickListener(v -> {
-            // Enrolled entrants
-            navigateToEntrantList("enrolled");
-        });
-
-        binding.buttonToSelectedEntrants.setOnClickListener(v -> {
-            // Selected entrants (including cancelled, if you merge lists there)
-            navigateToEntrantList("selected");
-        });
-
-        binding.buttonToUnselectedEntrants.setOnClickListener(v -> {
-            // Unselected / waiting-list entrants
-            navigateToEntrantList("unselected");
-        });
-
-        // Pre-lottery list of registered entrants
-        binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
-            navigateToEntrantList("registered");
-        });
-
-        // Edit / update this event
-        binding.buttonUpdateEvent.setOnClickListener(v -> {
-            if (event == null) {
-                Log.w("MyEventFragment", "Update clicked but event is null");
-                return;
-            }
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("event", event);
-
-            NavHostFragment.findNavController(MyEventFragment.this)
-                    .navigate(R.id.action_myEventFragment_to_eventCreationFragment, bundle);
-        });
-    }
-
-    /**
-     * Helper to navigate to EntrantListFragment with current event and list type.
-     */
-    private void navigateToEntrantList(String listType) {
-        if (event == null) {
-            Log.w("MyEventFragment", "navigateToEntrantList: event is null");
-            return;
-        }
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("event", event);
-        bundle.putString("entrant_list_type", listType);
-
-        NavHostFragment.findNavController(MyEventFragment.this)
-                .navigate(R.id.action_myEventFragment_to_entrantListFragment, bundle);
     }
 
     /**
@@ -295,6 +165,105 @@ public class MyEventFragment extends Fragment {
                         binding.myEventPoster.setImageResource(R.drawable.image_placeholder);
                     }
                 });
+    }
+
+    /**
+     * Sets up and adds the menu provider to the activity.
+     */
+    private void setupMenu() {
+        menuProvider = new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.findItem(R.id.action_send).setVisible(true);
+                menu.findItem(R.id.action_qr).setVisible(true);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_send) {
+                    SendNotificationFragment dialog = SendNotificationFragment.newInstance(event);
+                    dialog.show(getParentFragmentManager(), "SendNotificationFragment");
+                    return true;
+                }
+                if (menuItem.getItemId() == R.id.action_qr) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("event", event);
+                    NavHostFragment.findNavController(MyEventFragment.this).navigate(R.id.action_myEventFragment_to_eventQRFragment, bundle);
+                    return true;
+                }
+                return false;
+            }
+        };
+        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    /**
+     * Populates the UI components with data from the Event object.
+     */
+    private void setupEventDetail() {
+        // Basic info
+        binding.myEventName.setText(event.getName());
+        if (event.getDesc() != null) binding.myEventDescription.setText(event.getDesc());
+        if (event.getGuideline() != null) binding.myEventGuideline.setText(event.getGuideline());
+
+        // Date and time
+        binding.myEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
+        binding.myEventTime.setText(CalendarUtils.dateFormatter(event.getEventTime(),"hh:mm a"));
+
+        // Registration status
+        renderRegistrationDuration();
+        String registrationCountText = String.format(Locale.US, "%d users have registered for this event", event.getWaitListSize());
+        binding.myEventRegistrationCount.setText(registrationCountText);
+    }
+
+    /**
+     *
+     */
+    private void setupButtonsVisibility() {
+        boolean lotteryDrawn = ((event.getInviteList() != null && !event.getInviteList().isEmpty()) || !event.getEnrollList().isEmpty());
+
+        if (lotteryDrawn) {
+            binding.layoutPreLottery.setVisibility(View.GONE);
+            binding.layoutPostLottery.setVisibility(View.VISIBLE);
+        } else {
+            binding.layoutPreLottery.setVisibility(View.VISIBLE);
+            binding.layoutPostLottery.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Sets up click listeners for all interactive buttons on the screen.
+     */
+    private void setupClickListeners() {
+        // TODO: Implement navigation logic for each of these buttons.
+
+        binding.buttonOpenLottery.setOnClickListener(v -> {
+            LotteryFragment dialog = LotteryFragment.newInstance(event);
+            dialog.show(getParentFragmentManager(), "LotteryFragment");
+            setupButtonsVisibility();
+        });
+
+        binding.buttonToEnrolledEntrants.setOnClickListener(v -> {
+            // This button navigates to a screen showing the enrolled list.
+        });
+
+        binding.buttonToSelectedEntrants.setOnClickListener(v -> {
+            // This button navigates to a screen showing the selected entrants (inviteList).
+            // Also let organizer see canceled entrants
+        });
+
+        binding.buttonToUnselectedEntrants.setOnClickListener(v -> {
+            // This button navigates to a screen showing the unselected entrants.
+            // Also let organizer filter the waiting list
+        });
+
+        binding.buttonUpdateEvent.setOnClickListener(v -> {
+
+        });
+
+        binding.buttonToRegisteredEntrants.setOnClickListener(v -> {
+
+        });
     }
 
     /**

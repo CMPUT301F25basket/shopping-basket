@@ -59,4 +59,5 @@
     <string name="toggle_admin">Admin Menu</string>
     <string name="action_toggle_notification">Toggle Notification</string>
     <string name="event_poster">Event poster</string>
+    <string name="export_csv">Export CSV</string>
 </resources>

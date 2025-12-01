@@ -51,6 +51,8 @@ public class HomeFragment extends Fragment {
     private MenuProvider menuProvider;
     private Map<String, String> eventPosters = new HashMap<>();
 
+
+
     /**
      * Default public constructor.
      * Required for instantiation by the Android framework.

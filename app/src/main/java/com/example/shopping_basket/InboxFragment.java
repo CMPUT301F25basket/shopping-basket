@@ -1,6 +1,13 @@
 package com.example.shopping_basket;
-
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,13 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 
 import com.example.shopping_basket.databinding.FragmentInboxBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,11 +55,13 @@ public class InboxFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inbox, container, false);
         notificationListView = view.findViewById(R.id.inbox_fragment);
         inboxAdapter = new InboxAdapter(requireContext(), notifications);
         notificationListView.setAdapter(inboxAdapter);
+
         return view;
     }
 

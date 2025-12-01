@@ -58,9 +58,12 @@ public class SendNotificationFragment extends DialogFragment {
         }
 
         // These lists being empty imply the lottery has not been drawn, so disable all checkboxes except for "All entrants"
-        if (!event.getInviteList().isEmpty() || !event.getEnrollList().isEmpty() || !event.getCancelList().isEmpty() || !event.getWaitingList().isEmpty()) {
-            binding.radioSelectedEntrants.setEnabled(false);
+        if (event.getCancelList().isEmpty() || event.getWaitingList().isEmpty()) {
             binding.radioUnselectedEntrants.setEnabled(false);
+        }
+
+        if (event.getInviteList().isEmpty()) {
+            binding.radioSelectedEntrants.setEnabled(false);
         }
     }
 
@@ -93,6 +96,7 @@ public class SendNotificationFragment extends DialogFragment {
         binding.buttonCancelNotification.setOnClickListener(v -> dismiss());
 
         binding.radioAllEntrants.setOnClickListener(v -> {
+            // TODO: Combine all other lists except CancelList
             targetUserIds = event.getWaitingList().stream().map(Profile::getGuid).collect(Collectors.toList());
         });
 
