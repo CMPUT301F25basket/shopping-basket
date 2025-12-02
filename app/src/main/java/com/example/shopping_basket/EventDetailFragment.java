@@ -138,8 +138,7 @@ public class EventDetailFragment extends Fragment {
         if (event.getDesc() != null) binding.detailEventDescription.setText(event.getDesc());
         if (event.getGuideline() != null) binding.detailEventGuideline.setText(event.getGuideline());
 
-        // Actual image content is logged as metadata in the "images" collection".
-        binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+        loadPosterImage();
 
         // Date and time components
         binding.detailEventDate.setText(CalendarUtils.dateFormatter(event.getEventTime(),"MM/dd/yyyy"));
@@ -276,35 +275,95 @@ public class EventDetailFragment extends Fragment {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        List<String> waitingListIds = event.getWaitingList().stream()
-                .map(Profile::getGuid)
-                .collect(Collectors.toList());
-
-
-        // Convert ArrayList<Profile> to ArrayList<String> of GUIDs for Firestore
-        List<String> enrollListIds = event.getEnrollList().stream()
-                .map(Profile::getGuid)
-                .collect(Collectors.toList());
-
-        List<String> cancelListIds = event.getCancelList().stream()
-                .map(Profile::getGuid)
-                .collect(Collectors.toList());
-
-        List<String> inviteListIds = event.getInviteList().stream()
-                .map(Profile::getGuid)
-                .collect(Collectors.toList());
+//        List<String> waitingListIds = event.getWaitingList().stream()
+//                .map(Profile::getGuid)
+//                .collect(Collectors.toList());
+//
+//
+//        // Convert ArrayList<Profile> to ArrayList<String> of GUIDs for Firestore
+//        List<String> enrollListIds = event.getEnrollList().stream()
+//                .map(Profile::getGuid)
+//                .collect(Collectors.toList());
+//
+//        List<String> cancelListIds = event.getCancelList().stream()
+//                .map(Profile::getGuid)
+//                .collect(Collectors.toList());
+//
+//        List<String> inviteListIds = event.getInviteList().stream()
+//                .map(Profile::getGuid)
+//                .collect(Collectors.toList());
 
         // Update the specific fields in the Firestore document
         db.collection("events").document(event.getEventId())
                 .update(
-                        "waitingList", waitingListIds,
-                        "enrollList", enrollListIds,
-                        "cancelList", cancelListIds,
-                        "inviteList", inviteListIds
+                        "waitingList", event.getWaitingList(),
+                        "enrollList", event.getEnrollList(),
+                        "cancelList", event.getCancelList(),
+                        "inviteList", event.getInviteList()
                 )
                 .addOnSuccessListener(aVoid -> Log.d("FirestoreUpdate", "Event lists updated successfully!"))
                 .addOnFailureListener(e -> Log.e("FirestoreUpdate", "Error updating event lists", e));
     }
+
+    // In EventDetailFragment.java
+
+    /**
+     * Loads the poster image for this event from its Firestore document.
+     * The image is expected to be stored as a Base64 encoded string.
+     * If no poster is found or an error occurs, a placeholder is displayed.
+     */
+    private void loadPosterImage() {
+        if (binding == null || event == null || event.getEventId() == null) {
+            // Can't load image if binding or event ID is missing
+            if (binding != null) {
+                binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+            }
+            return;
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("events")
+                .document(event.getEventId())
+                .get()
+                .addOnSuccessListener(doc -> {
+                    // Check if the fragment is still attached to an activity
+                    if (!isAdded() || binding == null) {
+                        return;
+                    }
+
+                    if (doc != null && doc.exists()) {
+                        String posterBase64 = doc.getString("posterBase64");
+                        if (posterBase64 != null && !posterBase64.isEmpty()) {
+                            try {
+                                byte[] bytes = android.util.Base64.decode(posterBase64, android.util.Base64.DEFAULT);
+                                android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                if (bitmap != null) {
+                                    binding.detailEventPoster.setImageBitmap(bitmap);
+                                } else {
+                                    // Decoding failed, use placeholder
+                                    binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                Log.e("EventDetailFragment", "Invalid Base64 poster string", e);
+                                binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+                            }
+                        } else {
+                            // posterBase64 field is null or empty, use placeholder
+                            binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+                        }
+                    } else {
+                        // Document doesn't exist, use placeholder
+                        binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("EventDetailFragment", "Failed to load poster image.", e);
+                    if (isAdded() && binding != null) {
+                        binding.detailEventPoster.setImageResource(R.drawable.image_placeholder);
+                    }
+                });
+    }
+
 
     /**
      * Called when the view previously created by onCreateView has been detached from the fragment.

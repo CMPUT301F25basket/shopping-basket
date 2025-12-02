@@ -13,4 +13,6 @@
     android:clipToPadding="false"
     app:spanCount="2"
     tools:listitem="@layout/fragment_image_item"
-    android:layout_marginTop="?attr/actionBarSize"/>
+    android:layout_marginTop="?attr/actionBarSize"
+    android:paddingBottom="?attr/actionBarSize"
+    android:layout_marginBottom="16dp"/>
