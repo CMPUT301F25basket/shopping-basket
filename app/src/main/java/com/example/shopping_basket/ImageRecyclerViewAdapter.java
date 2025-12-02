@@ -87,10 +87,9 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
                 binding.galleryItemImage.setImageResource(R.drawable.image_placeholder);
             }
 
-            String name = poster.getEventName() != null ? poster.getEventName() : "Unknown event";
             String uploader = poster.getUploaderName() != null ? poster.getUploaderName() : "Unknown uploader";
 
-            binding.galleryItemUploaderName.setText(name + " (by " + uploader + ")");
+            binding.galleryItemUploaderName.setText("Uploaded by " + uploader);
 
             binding.buttonDeleteImage.setOnClickListener(v -> {
                 if (deleteListener != null) {

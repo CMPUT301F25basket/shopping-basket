@@ -366,27 +366,27 @@ public class MyEventFragment extends Fragment {
         long daysLeft = TimeUnit.MILLISECONDS.toDays(diffMillis);
 
         String statusText;
-        int statusColor = ContextCompat.getColor(requireContext(), R.color.oxford_blue); // Default color
+        int statusColor;
+        boolean isRegistrationOver = diffMillis <= 0;
 
-        if (daysLeft > 1) {
-            statusText = String.format(Locale.US, "Closes in %d days", daysLeft);
+        if (isRegistrationOver) {
+            statusText = "Registration period closed";
+            statusColor = ContextCompat.getColor(requireContext(), R.color.error); // Closed color
+        } else if (daysLeft < 1) { // This handles the last day (less than 24 hours left)
+            statusText = "Closes in less than a day";
+            statusColor = ContextCompat.getColor(requireContext(), R.color.error); // Urgent color
         } else if (daysLeft == 1) {
             statusText = "Closes in 1 day";
             statusColor = ContextCompat.getColor(requireContext(), R.color.error); // Urgent color
         } else {
-            statusText = "Registration period closed";
-            statusColor = ContextCompat.getColor(requireContext(), R.color.error); // Closed color
-            // After registration closes, the lottery button should be enabled.
-            binding.buttonOpenLottery.setEnabled(true);
+            statusText = String.format(Locale.US, "Closes in %d days", daysLeft);
+            statusColor = ContextCompat.getColor(requireContext(), R.color.oxford_blue); // Default color
         }
 
         binding.myEventStatus.setText(statusText);
         binding.myEventStatus.setTextColor(statusColor);
 
-        // Disable the lottery button if the registration period is still active.
-        if (daysLeft > 0) {
-            binding.buttonOpenLottery.setEnabled(false);
-        }
+        binding.buttonOpenLottery.setEnabled(isRegistrationOver);
     }
 
     /**
