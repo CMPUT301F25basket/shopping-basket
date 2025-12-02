@@ -2,6 +2,7 @@ package com.example.shopping_basket;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static android.widget.Toast.LENGTH_SHORT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -146,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param name The name of the logged-in user to display in a welcome message.
      */
     private void navigateToMain(String name) {
-        showInfoToast(this, "Welcome back, " + name + "!");
+        Toast.makeText(this, "Welcome back, " + name + "!", LENGTH_SHORT).show();
 
         slideOutAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override

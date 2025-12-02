@@ -27,10 +27,10 @@ public class Event implements Serializable {
     private Date endDate;
     //private ----- poster;
     private Date eventTime;
-    private ArrayList<Profile> waitingList;
-    private ArrayList<Profile> inviteList;
-    private ArrayList<Profile> enrollList;
-    private ArrayList<Profile> cancelList;
+    private ArrayList<Profile> waitingList = new ArrayList<>();
+    private ArrayList<Profile> inviteList = new ArrayList<>();
+    private ArrayList<Profile> enrollList = new ArrayList<>();
+    private ArrayList<Profile> cancelList = new ArrayList<>();
 
     @ServerTimestamp // Tells Firestore to automatically populate this field with the server's current timestamp
     private Date creationTimestamp; // The timestamp the Event is initialized
@@ -46,10 +46,6 @@ public class Event implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.eventTime = eventTime;
-        this.waitingList = new ArrayList<Profile>();
-        this.inviteList = new ArrayList<Profile>();
-        this.enrollList = new ArrayList<Profile>();
-        this.cancelList = new ArrayList<Profile>();
     }
 
     public Event(Profile owner, String name, String desc, String guideline, int selectNum, int maxReg, Date startDate, Date endDate, Date eventTime){
@@ -62,10 +58,6 @@ public class Event implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.eventTime = eventTime;
-        this.waitingList = new ArrayList<Profile>();
-        this.inviteList = new ArrayList<Profile>();
-        this.enrollList = new ArrayList<Profile>();
-        this.cancelList = new ArrayList<Profile>();
     }
 
     /**

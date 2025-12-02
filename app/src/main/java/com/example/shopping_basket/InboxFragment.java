@@ -36,6 +36,7 @@ import java.util.ArrayList;
  */
 public class InboxFragment extends Fragment {
     private static final String TAG = "InboxFragment";
+    private FragmentInboxBinding binding;
 
     private ListView notificationListView;
     private MenuProvider menuProvider;
@@ -59,12 +60,11 @@ public class InboxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_inbox, container, false);
-        notificationListView = view.findViewById(R.id.inbox_fragment);
+        binding = FragmentInboxBinding.inflate(inflater, container, false);
+        notificationListView = binding.notificationList;
         inboxAdapter = new InboxAdapter(requireContext(), notifications);
         notificationListView.setAdapter(inboxAdapter);
-
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -135,9 +135,18 @@ public class InboxFragment extends Fragment {
                 if (notifications.isEmpty()) {
                     if (adminMode) {
                         Log.d(TAG, "No notifications found in the system.");
+                        binding.emptyInboxDesc.setText("No notifications found");
                     } else {
                         Log.d(TAG, "No notifications found for user: " + userId);
+                        binding.emptyInboxDesc.setText("Your inbox is empty");
                     }
+                    binding.notificationList.setVisibility(View.GONE);
+                    binding.emptyInboxView.setVisibility(View.VISIBLE);
+                    binding.emptyInboxDesc.setVisibility(View.VISIBLE);
+                } else {
+                    binding.notificationList.setVisibility(View.VISIBLE);
+                    binding.emptyInboxView.setVisibility(View.GONE);
+                    binding.emptyInboxDesc.setVisibility(View.GONE);
                 }
             } else {
                 Log.e(TAG, "Error getting notifications: ", task.getException());

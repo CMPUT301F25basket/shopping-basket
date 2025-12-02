@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -111,6 +113,22 @@ public class RegisteredEventFragment extends DialogFragment {
         return view;
     }
 
+    private void setupClickListeners() {
+        registeredEventsListView.setOnItemClickListener(((parent, view, position, id) -> {
+            Event selectedEvent = registeredEventsList.get(position);
+
+            try {
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("event", selectedEvent);
+                navController.navigate(R.id.eventDetailFragment, bundle);
+                dismiss();
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to navigate to EventDetailFragment.", e);
+            }
+        }));
+    }
+
     /**
      * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} has returned.
      * This method triggers the loading of the user's registered events.
@@ -122,6 +140,7 @@ public class RegisteredEventFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadRegisteredEvents();
+        setupClickListeners();
     }
 
     /**
@@ -129,6 +148,14 @@ public class RegisteredEventFragment extends DialogFragment {
      * It queries the {@code enrollList}, {@code waitingList}, {@code inviteList}, and {@code cancelList} arrays.
      * Populates the list and notifies the adapter to refresh the UI.
      * This query requires a composite index in Firestore for each field being queried.
+     */
+    // In RegisteredEventFragment.java
+
+    /**
+     * Fetches ALL events from Firestore and filters them on the client-side to find
+     * where the user is registered. This is necessary because Firestore cannot query
+     * for a value within an array of objects.
+     * This method can be slow if there are many events in the database.
      */
     private void loadRegisteredEvents() {
         if (currentUser == null || currentUser.getGuid() == null || currentUser.getGuid().isEmpty()) {
@@ -138,44 +165,55 @@ public class RegisteredEventFragment extends DialogFragment {
         }
 
         String userGuid = currentUser.getGuid();
-
         ArrayList<Event> foundEvents = new ArrayList<>();
 
-        // List of fields to check for the user's GUID
-        String[] registrationFields = {"waitingList", "inviteList", "enrollList", "cancelList"};
-        int queryCount = registrationFields.length;
-        int[] queriesFinished = {0};
+        // Fetch ALL events. We cannot use a 'where' clause here.
+        db.collection("events")
+                .orderBy("eventTime", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        // Loop through every single event returned from the database
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Event event = document.toObject(Event.class);
 
-        for (String field: registrationFields) {
-            db.collection("events")
-                    .whereArrayContains(field + ".guid", userGuid)
-                    .orderBy("eventTime", Query.Direction.DESCENDING)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        queriesFinished[0]++;
-
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            for (QueryDocumentSnapshot document: task.getResult()) {
-                                Event event = document.toObject(Event.class);
-                                // Prevent adding the same event multiple times if user is in multiple lists
+                            // Now, perform the check in your Java code
+                            if (isUserInEvent(event, userGuid)) {
+                                // Prevent adding the same event multiple times
                                 if (!foundEvents.contains(event)) {
                                     foundEvents.add(event);
                                 }
                             }
-                        } else {
-                            // Log the error if the task failed
-                            Log.e(TAG, "Error getting events from " + field, task.getException());
                         }
+                    } else {
+                        // Log the error if the task failed
+                        Log.e(TAG, "Error getting all events for filtering.", task.getException());
+                    }
 
-                        // Check if this is the last query to finish
-                        if (queriesFinished[0] == queryCount) {
-                            // All queries are done, now sort the final combined list and update UI
-                            foundEvents.sort((e1, e2) -> e2.getEventTime().compareTo(e1.getEventTime()));
-                            updateUI(foundEvents);
-                        }
-                    });
-        }
+                    // All filtering is done, now update the UI with the events we found.
+                    // The list is already sorted by the initial query.
+                    updateUI(foundEvents);
+                });
     }
+
+    /**
+     * Helper method to check if a user's GUID exists in any of the event's participation lists.
+     * @param event The Event object to check.
+     * @param userGuid The user GUID to look for.
+     * @return true if the user is found in any list, false otherwise.
+     */
+    private boolean isUserInEvent(Event event, String userGuid) {
+        if (event == null || userGuid == null) return false;
+
+        // Check each list of Profile objects for a matching GUID
+        if (event.getWaitingList().stream().anyMatch(p -> userGuid.equals(p.getGuid()))) return true;
+        if (event.getEnrollList().stream().anyMatch(p -> userGuid.equals(p.getGuid()))) return true;
+        if (event.getInviteList().stream().anyMatch(p -> userGuid.equals(p.getGuid()))) return true;
+        if (event.getCancelList().stream().anyMatch(p -> userGuid.equals(p.getGuid()))) return true;
+
+        return false;
+    }
+
 
     /**
      * Updates the UI by clearing the adapter and adding the new list of events.
@@ -195,9 +233,11 @@ public class RegisteredEventFragment extends DialogFragment {
         if (events.isEmpty()) {
             registeredEventsListView.setVisibility(GONE);
             emptyLayout.setVisibility(VISIBLE);
+            Log.d("RegisteredEventFragment", "No event found for user " + currentUser.getGuid());
         } else {
             registeredEventsListView.setVisibility(VISIBLE);
             emptyLayout.setVisibility(GONE);
+            Log.d("RegisteredEventFragment", "Events loaded for user " + currentUser.getGuid());
         }
     }
 }
