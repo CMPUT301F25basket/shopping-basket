@@ -231,7 +231,7 @@ public class LotteryFragment extends DialogFragment {
                 textInputLayout.setError("Number must be greater than zero.");
                 return false;
             }
-            if (number > event.getMaxReg()) {
+            if (number > event.getMaxReg() && event.getMaxReg() != 0) {
                 textInputLayout.setError("Number must be smaller than the registration limit.");
                 return false;
             };
