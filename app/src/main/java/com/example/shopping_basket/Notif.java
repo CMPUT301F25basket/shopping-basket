@@ -11,6 +11,8 @@ public class Notif {
     private String message;
     private Date time;
 
+    public Notif() {}
+
     public Notif(String target, String message){
         this.target = target;
         this.message = message;
