@@ -59,7 +59,8 @@ public class InboxAdapter extends ArrayAdapter<Notif> {
         TextView notificationMessage = view.findViewById(R.id.inbox_item_message);
         TextView notificationTime = view.findViewById(R.id.inbox_item_time);
 
-        notificationMessage.setText(getFormattedTimestamp(notif));
+        notificationMessage.setText(notif.getMessage());
+        notificationTime.setText(getFormattedTimestamp(notif));
 
         return view;
     }
